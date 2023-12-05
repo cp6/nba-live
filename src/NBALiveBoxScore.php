@@ -23,7 +23,7 @@ class NBALiveBoxScore extends NBALiveBase
 
     public function process(): array
     {
-        $data = $this->ApiCall("boxscore/boxscore_{$this->game_id}");
+        $games = $this->ApiCall("https://cdn.nba.com/static/json/boxscore/boxscore_{$this->game_id}.json");
 
         $this->home_team = $data['game']['homeTeam']['statistics'];
         $this->away_team = $data['game']['awayTeam']['statistics'];

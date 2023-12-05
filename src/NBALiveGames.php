@@ -15,7 +15,7 @@ class NBALiveGames extends NBALiveBase
 
     public function getProcessGames(): array
     {
-        $games = $this->ApiCall("scoreboard/todaysScoreboard_00");
+        $games = $this->ApiCall("https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json");
 
         $total = $live = $completed = $upcoming = 0;
 

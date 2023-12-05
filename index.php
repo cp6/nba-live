@@ -3,7 +3,12 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Corbpie\NBALive;
 
-$today = new NBALive\NBALiveGames();
+$today = new NBALive\NBALiveStandings();
+
+echo json_encode($today->standings());
+
+
+exit();
 
 $today->getProcessGames();
 
