@@ -1,0 +1,28 @@
+{
+  "name": "corbpie/nbalive",
+  "description": "NBA live games API wrapper",
+  "type": "library",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "corbpie",
+      "email": "contact@corbpie.com"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/cp6/nba-live"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Corbpie\\NBALive\\": "src/"
+    }
+  }
+}
