@@ -5,16 +5,15 @@ namespace Corbpie\NBALive;
 class NBALiveSchedule extends NBALiveBase
 {
 
-    public array $scheduled = [];
+    public array $schedule = [];
 
-
-    public function scheduled(string $date = '2023-12-20'): array
+    public function __construct(string $date = '2023-12-20')
     {
         $games = $this->ApiCall("https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate={$date}&LeagueID=00");
 
         foreach ($games['resultSets'][0]['rowSet'] as $game) {
 
-            $this->scheduled[] = [
+            $this->schedule[] = [
                 'game_id' => $game[2],
                 'game_sequence' => $game[1],
                 'game_status' => $game[3],
@@ -29,7 +28,6 @@ class NBALiveSchedule extends NBALiveBase
 
         }
 
-        return $this->scheduled;
     }
 
 }

@@ -12,22 +12,18 @@ class NBALiveTeam extends NBALiveBase
     public function __construct(int $team_id = 1610612754)
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdetails?TeamID={$team_id}");
-    }
 
-    public function getTeam(): array
-    {
-        $d = $this->data['resultSets']['0']['rowSet'][0];
+        $team = $this->data['resultSets']['0']['rowSet'][0];
 
         $this->details = [
-            'id' => $d[0],
-            'name' => $d[2],
-            'short_name' => $d[1],
-            'city' => $d[4],
-            'arena' => $d[5],
-            'year_founded' => $d[3],
+            'id' => $team[0],
+            'name' => $team[2],
+            'short_name' => $team[1],
+            'city' => $team[4],
+            'arena' => $team[5],
+            'year_founded' => $team[3],
         ];
 
-        return $this->details;
     }
 
 }

@@ -8,6 +8,8 @@ use DateTimeZone;
 
 class NBALiveGames extends NBALiveBase
 {
+    public array $summary = [];
+
     public array $all_games = [];
 
     public array $upcoming_games = [];
@@ -16,7 +18,7 @@ class NBALiveGames extends NBALiveBase
 
     public array $completed_games = [];
 
-    public function getProcessGames(): array
+    public function __construct()
     {
         $games = $this->ApiCall("https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json");
 
@@ -40,15 +42,15 @@ class NBALiveGames extends NBALiveBase
             }
         }
 
-        return [
+        $this->summary = [
             'date' => $games['scoreboard']['gameDate'],
             'all_games' => $total,
             'live_games' => $live,
             'completed_games' => $completed,
             'upcoming_games' => $upcoming,
         ];
-
     }
+
 
     public function gameFormatter(array $games): array
     {

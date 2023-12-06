@@ -11,9 +11,9 @@ class NBALiveStandings extends NBALiveBase
 
     public array $west_standings = [];
 
-    public function standings(string $date = '2023-12-20')
+    public function __construct(string $season = self::CURRENT_SEASON)
     {
-        $teams = $this->ApiCall("https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season=" . self::CURRENT_SEASON . "&SeasonType=Regular+Season&SeasonYear=");
+        $teams = $this->ApiCall("https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season={$season}&SeasonType=Regular+Season&SeasonYear=");
 
         $league = $east = $west = 0;
 
@@ -64,7 +64,6 @@ class NBALiveStandings extends NBALiveBase
 
         }
 
-        return $this->standings;
     }
 
 }

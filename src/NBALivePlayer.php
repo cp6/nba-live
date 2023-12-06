@@ -16,43 +16,38 @@ class NBALivePlayer extends NBALiveBase
     public function __construct(int $player_id = 202331)
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/commonplayerinfo?LeagueID=&PlayerID={$player_id}");
-    }
 
-    public function getPlayer(): array
-    {
-        $d = $this->data['resultSets']['0']['rowSet'][0];
+        $p = $this->data['resultSets']['0']['rowSet'][0];
 
         $this->details = [
-            'id' => $d[0],
-            'first_name' => $d[1],
-            'last_name' => $d[2],
-            'short_name' => $d[5],
-            'slug' => $d[6],
-            'birthdate' => str_replace("T00:00:00", "", $d[7]),
-            'age' => (new DateTime('now'))->diff(new DateTime($d[7]))->y,
-            'school' => $d[8],
-            'last_aff' => $d[10],
-            'country' => $d[9],
-            'height' => $d[11],
-            'height_cm' => $this->feetInchesToCm($d[11]),
-            'weight' => (int)$d[12],
-            'weight_kg' => (int)number_format((int)$d[12] * 0.45359237, 0),
-            'seasons' => $d[13],
-            'jersey' => (int)$d[14],
-            'position' => $d[15],
-            'status' => $d[16],
-            'current_team_id' => $d[18],
-            'current_team_name' => $d[19],
-            'current_team_short' => $d[20],
-            'from_year' => $d[24],
-            'to_year' => $d[25],
-            'draft_year' => (int)$d[29],
-            'draft_round' => (int)$d[30],
-            'draft_number' => (int)$d[31],
-            'played_current_season' => $d[17] === 'Y',
+            'id' => $p[0],
+            'first_name' => $p[1],
+            'last_name' => $p[2],
+            'short_name' => $p[5],
+            'slug' => $p[6],
+            'birthdate' => str_replace("T00:00:00", "", $p[7]),
+            'age' => (new DateTime('now'))->diff(new DateTime($p[7]))->y,
+            'school' => $p[8],
+            'last_aff' => $p[10],
+            'country' => $p[9],
+            'height' => $p[11],
+            'height_cm' => $this->feetInchesToCm($p[11]),
+            'weight' => (int)$p[12],
+            'weight_kg' => (int)number_format((int)$p[12] * 0.45359237, 0),
+            'seasons' => $p[13],
+            'jersey' => (int)$p[14],
+            'position' => $p[15],
+            'status' => $p[16],
+            'current_team_id' => $p[18],
+            'current_team_name' => $p[19],
+            'current_team_short' => $p[20],
+            'from_year' => $p[24],
+            'to_year' => $p[25],
+            'draft_year' => (int)$p[29],
+            'draft_round' => (int)$p[30],
+            'draft_number' => (int)$p[31],
+            'played_current_season' => $p[17] === 'Y',
         ];
-
-        return $this->details;
     }
 
     public function getSeasons(int $player_id = 202331): array
@@ -75,6 +70,5 @@ class NBALivePlayer extends NBALiveBase
         }
         return (int)number_format(($array[0] * 30.48), 0);
     }
-
 
 }
