@@ -4,9 +4,12 @@ namespace Corbpie\NBALive;
 
 use DateInterval;
 use DateTime;
+use DateTimeZone;
 
 class NBALiveGames extends NBALiveBase
 {
+    public array $all_games = [];
+
     public array $upcoming_games = [];
 
     public array $live_games = [];
@@ -19,8 +22,10 @@ class NBALiveGames extends NBALiveBase
 
         $total = $live = $completed = $upcoming = 0;
 
+        $this->all_games = $games['scoreboard']['games'];
+
         if (isset($games['scoreboard'])) {
-            foreach ($games['scoreboard']['games'] as $game) {
+            foreach ($this->all_games as $game) {
                 if ($game['gameStatus'] === 2) {
                     $this->live_games[] = $game;
                     $live++;
@@ -52,23 +57,25 @@ class NBALiveGames extends NBALiveBase
         foreach ($games as $game) {
             $formatted_time_left = ($game['gameClock'] === '') ? null : sprintf('%02d:%02d', (new DateInterval(strstr($game['gameClock'], '.', true) . "S"))->i, (new DateInterval(strstr($game['gameClock'], '.', true) . "S"))->s);
             $formatted[] = [
+                'status' => $game['gameStatus'],
+                'starting_in' => ($game['gameStatus'] === 1) ? $this->startingIn($game['gameTimeUTC']) : null,
                 'game_id' => $game['gameId'],
                 'game_code' => $game['gameCode'],
-                'margin' => ($game['homeTeam']['score'] > $game['awayTeam']['score']) ? ($game['homeTeam']['score'] - $game['awayTeam']['score']) : ($game['awayTeam']['score'] - $game['homeTeam']['score']),
-                'home_score' => $game['homeTeam']['score'],
-                'away_score' => $game['awayTeam']['score'],
-                'time_left_string' => $game['gameStatusText'],
-                'time_left' => $formatted_time_left,
+                'margin' => ($game['gameStatus'] === 1) ? null : (($game['homeTeam']['score'] > $game['awayTeam']['score']) ? ($game['homeTeam']['score'] - $game['awayTeam']['score']) : ($game['awayTeam']['score'] - $game['homeTeam']['score'])),
+                'home_score' => ($game['gameStatus'] === 1) ? null : $game['homeTeam']['score'],
+                'away_score' => ($game['gameStatus'] === 1) ? null : $game['awayTeam']['score'],
+                'time_left_string' => ($game['gameStatus'] === 1) ? null : $game['gameStatusText'],
+                'time_left' => ($game['gameStatus'] === 1) ? null : $formatted_time_left,
                 'seconds_left' => ($formatted_time_left === null) ? 0 : array_sum(array_map(function ($v, $i) {
                     return ($i === 0) ? $v * 60 : $v;
                 }, explode(':', $formatted_time_left), range(0, 1))),
-                'period' => $game['period'],
+                'period' => ($game['gameStatus'] === 1) ? null : $game['period'],
                 'home_team' => [
                     'id' => $game['homeTeam']['teamId'],
                     'name' => $game['homeTeam']['teamName'],
                     'short' => $game['homeTeam']['teamTricode'],
-                    'in_bonus' => !(($game['homeTeam']['inBonus'] === '0')),
-                    'timeouts_remaining' => $game['homeTeam']['timeoutsRemaining'],
+                    'in_bonus' => !(($game['homeTeam']['inBonus'] === '0' || is_null($game['homeTeam']['inBonus']))),
+                    'timeouts_remaining' => ($game['gameStatus'] === 1) ? null : $game['homeTeam']['timeoutsRemaining'],
                     'wins' => $game['homeTeam']['wins'],
                     'losses' => $game['homeTeam']['losses'],
                     'seed' => $game['homeTeam']['seed']
@@ -77,13 +84,13 @@ class NBALiveGames extends NBALiveBase
                     'id' => $game['awayTeam']['teamId'],
                     'name' => $game['awayTeam']['teamName'],
                     'short' => $game['awayTeam']['teamTricode'],
-                    'in_bonus' => !(($game['awayTeam']['inBonus'] === '0')),
-                    'timeouts_remaining' => $game['awayTeam']['timeoutsRemaining'],
+                    'in_bonus' => !(($game['awayTeam']['inBonus'] === '0' || is_null($game['awayTeam']['inBonus']))),
+                    'timeouts_remaining' => ($game['gameStatus'] === 1) ? null : $game['awayTeam']['timeoutsRemaining'],
                     'wins' => $game['awayTeam']['wins'],
                     'losses' => $game['awayTeam']['losses'],
                     'seed' => $game['awayTeam']['seed']
                 ],
-                'periods' => [
+                'periods' => ($game['gameStatus'] === 1) ? [] : [
                     'one' => [
                         [
                             'home_score' => $game['homeTeam']['periods'][0]['score'] ?? null,
@@ -135,6 +142,18 @@ class NBALiveGames extends NBALiveBase
         }
 
         return $formatted;
+    }
+
+    public function startingIn(string $utc_datetime): ?string
+    {
+        $utc_datetime = new DateTime($utc_datetime, new DateTimeZone('UTC'));
+        $current_time = new DateTime('now', new DateTimeZone('UTC'));
+
+        if ($current_time >= $utc_datetime) {//Datetime has passed
+            return null;
+        }
+
+        return $current_time->diff($utc_datetime)->format('%H:%I');
     }
 
 }
