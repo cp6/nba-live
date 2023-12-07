@@ -3,7 +3,7 @@
 namespace Corbpie\NBALive;
 
 
-class NBALiveBoxScore extends NBALiveBase
+class NBABoxScore extends NBABase
 {
 
     public string $game_id;
@@ -22,7 +22,7 @@ class NBALiveBoxScore extends NBALiveBase
     {
         $this->game_id = $game_id;
 
-        $this->data = $this->ApiCall("https://cdn.nba.com/static/json/boxscore/boxscore_{$this->game_id}.json");
+        $this->data = $this->ApiCall("https://cdn.nba.com/static/json/liveData/boxscore/boxscore_{$game_id}.json");
 
         $this->home_team = $this->data['game']['homeTeam']['statistics'];
         $this->away_team = $this->data['game']['awayTeam']['statistics'];

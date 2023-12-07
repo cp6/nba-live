@@ -2,7 +2,7 @@
 
 namespace Corbpie\NBALive;
 
-class NBALiveLeagueLeaders extends NBALiveBase
+class NBALeagueLeaders extends NBABase
 {
 
     public array $data = [];

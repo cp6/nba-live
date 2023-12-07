@@ -6,7 +6,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 
-class NBALiveGames extends NBALiveBase
+class NBAToday extends NBABase
 {
     public array $summary = [];
 

@@ -4,7 +4,7 @@ namespace Corbpie\NBALive;
 
 use DateTime;
 
-class NBALivePlayer extends NBALiveBase
+class NBAPlayer extends NBABase
 {
 
     public array $data = [];
@@ -48,18 +48,16 @@ class NBALivePlayer extends NBALiveBase
             'draft_number' => (int)$p[31],
             'played_current_season' => $p[17] === 'Y',
         ];
-    }
 
-    public function getSeasons(int $player_id = 202331): array
-    {
-        foreach ($this->data['resultSets']['2']['rowSet'] as $season) {
-            $this->seasons[] = [
-                'type' => (int)$season[0][0],
-                'year' => (int)substr($season[0], 1)
-            ];
+        if (isset($this->data['resultSets']['2']['rowSet'])) {
+            foreach ($this->data['resultSets']['2']['rowSet'] as $season) {
+                $this->seasons[] = [
+                    'type' => (int)$season[0][0],
+                    'year' => (int)substr($season[0], 1)
+                ];
+            }
         }
 
-        return $this->seasons;
     }
 
     public function feetInchesToCm(string $feetInches): int
