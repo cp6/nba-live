@@ -12,6 +12,7 @@ so you only get what you need but also in a handy manner.
 - [Boxscore](#boxscore)
 - [Play by play](#play-by-play)
 - [Rotations](#game-rotations)
+- [Game summary](#game-summary)
 - [Standings](#standings)
 - [Schedule](#schedule)
 - [Player](#player-data)
@@ -1389,6 +1390,44 @@ Output
 ]
 ```
 
+### Game summary
+
+```php
+$sum = new NBALive\NBAGameSummary("0022301203");
+
+//Creates these arrays
+$sum->home;
+$sum->away;
+$sum->refs;
+$sum->inactive;
+$sum->home_line_score;
+$sum->away_line_score;
+$sum->last_meeting;
+$sum->statuses;
+
+//Int
+$sum->attendance;
+```
+
+Output for `$sum->away`
+
+```json
+{
+  "team_id": 1610612756,
+  "team_name_short": "PHX",
+  "pts_paint": 42,
+  "pts_second_chance": 10,
+  "pts_fast_break": 27,
+  "largest_lead": 3,
+  "lead_changes": 14,
+  "times_tied": 11,
+  "team_turnovers": 2,
+  "total_turnovers": 22,
+  "team_rebounds": 11,
+  "pts_off_to": 25
+}
+```
+
 ### League leaders
 
 ```php
@@ -1400,7 +1439,7 @@ $type = 'Regular+Season'
 $ll = new NBALive\NBALeagueLeaders($stat, $mode, $season, $type);
 
 //Creates the array
-$ll->$details;
+$ll->details;
 ```
 
 ### Player data
