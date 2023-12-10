@@ -218,6 +218,9 @@ Will return:
 ```php
 $boxscore = new NBALive\NBABoxScore('0022301214');
 
+//Or set game id with
+$boxscore->game_id = "0022301214";
+
 //Creates the arrays
 $boxscore->home_team;
 $boxscore->away_team;
@@ -1132,6 +1135,9 @@ Player example:
 ```php
 $pbp = new NBALive\NBAPlayByPlay('0022301214');
 
+//Or set game id with
+$pbp->game_id = "0022301214";
+
 //Creates the arrays
 $pbp->all_plays;
 $pbp->plays_count;
@@ -1151,6 +1157,9 @@ $pbp->scoreLine();
 
 ```php
 $rotations = new NBALive\NBARotations("0022301203");
+
+//Or set game id with
+$rotations->game_id = "0022301203";
 
 //Creates the array
 $pbp->details;
@@ -1395,6 +1404,9 @@ Output
 ```php
 $sum = new NBALive\NBAGameSummary("0022301203");
 
+//Or set game id with
+$sum->game_id = "0022301203";
+
 //Creates these arrays
 $sum->home;
 $sum->away;
@@ -1446,6 +1458,9 @@ $ll->details;
 
 ```php
 $player = new NBALive\NBAPlayer(202331);
+
+//Or set player id with
+$player->player_id = 202331;
 
 //Creates the arrays
 $player->details;
@@ -1681,6 +1696,10 @@ Seasons:
 
 ```php
 $team = new NBALive\NBATeam(1610612757);
+
+
+//Or set team id with
+$team->team_id = 1610612757;
 
 //Creates the array
 $team->details;
