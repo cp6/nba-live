@@ -8,9 +8,13 @@ class NBARotations extends NBABase
 
     public array $details = [];
 
-    public function __construct(string $game_id)
+    public function __construct(string $game_id = '')
     {
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/gamerotation?GameID={$game_id}&LeagueID=00");
+        if (!isset($this->game_id)) {
+            $this->game_id = $game_id;
+        }
+
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/gamerotation?GameID={$this->game_id}&LeagueID=00");
 
         foreach ($this->data['resultSets'][0]['rowSet'] as $r) {
 

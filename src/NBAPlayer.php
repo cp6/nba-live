@@ -13,9 +13,13 @@ class NBAPlayer extends NBABase
 
     public array $seasons = [];
 
-    public function __construct(int $player_id = 202331)
+    public function __construct(int $player_id = 0)
     {
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/commonplayerinfo?LeagueID=&PlayerID={$player_id}");
+        if (!isset($this->player_id)) {
+            $this->player_id = $player_id;
+        }
+
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/commonplayerinfo?LeagueID=&PlayerID={$this->player_id}");
 
         $p = $this->data['resultSets']['0']['rowSet'][0];
 

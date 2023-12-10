@@ -9,9 +9,13 @@ class NBATeam extends NBABase
 
     public array $details = [];
 
-    public function __construct(int $team_id = 1610612754)
+    public function __construct(int $team_id = 0)
     {
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdetails?TeamID={$team_id}");
+        if (!isset($this->team_id)) {
+            $this->team_id = $team_id;
+        }
+
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdetails?TeamID={$this->team_id}");
 
         $team = $this->data['resultSets']['0']['rowSet'][0];
 

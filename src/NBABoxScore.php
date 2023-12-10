@@ -6,8 +6,6 @@ namespace Corbpie\NBALive;
 class NBABoxScore extends NBABase
 {
 
-    public string $game_id;
-
     public array $data = [];
 
     public array $home_players = [];
@@ -18,11 +16,13 @@ class NBABoxScore extends NBABase
 
     public array $away_team = [];
 
-    public function __construct(string $game_id)
+    public function __construct(string $game_id = '')
     {
-        $this->game_id = $game_id;
+        if (!isset($this->game_id)) {
+            $this->game_id = $game_id;
+        }
 
-        $this->data = $this->ApiCall("https://cdn.nba.com/static/json/liveData/boxscore/boxscore_{$game_id}.json");
+        $this->data = $this->ApiCall("https://cdn.nba.com/static/json/liveData/boxscore/boxscore_{$this->game_id}.json");
 
         $this->home_team = $this->data['game']['homeTeam']['statistics'];
         $this->away_team = $this->data['game']['awayTeam']['statistics'];

@@ -25,9 +25,13 @@ class NBAGameSummary extends NBABase
 
     public array $statuses = [];
 
-    public function __construct(string $game_id)
+    public function __construct(string $game_id = '')
     {
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoresummaryv2?GameID={$game_id}");
+        if (!isset($this->game_id)) {
+            $this->game_id = $game_id;
+        }
+
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoresummaryv2?GameID={$this->game_id}");
 
         if (isset($this->data['resultSets'][1]['rowSet'][1])) {
             $this->home = [

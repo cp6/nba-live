@@ -36,6 +36,12 @@ class NBABase
 
     public bool|string $response_body = '';
 
+    public string $game_id;
+
+    public int $player_id;
+
+    public int $team_id;
+
     protected function ApiCall(string $url): array
     {
         $this->url = $url;

@@ -13,9 +13,13 @@ class NBAPlayByPlay extends NBABase
 
     public int $plays_count;
 
-    public function __construct(string $game_id)
+    public function __construct(string $game_id = '')
     {
-        $data = $this->ApiCall("https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_{$game_id}.json");
+        if (!isset($this->game_id)) {
+            $this->game_id = $game_id;
+        }
+
+        $data = $this->ApiCall("https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_{$this->game_id}.json");
 
         $this->all_plays = $data['game']['actions'];
         $this->last_10_plays = array_slice($this->all_plays, -10);
