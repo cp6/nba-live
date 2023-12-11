@@ -8,12 +8,12 @@ so you only get what you need but also in a handy manner.
 ## Table of contents
 
 - [Installing](#installing)
-- [Todays games](#todays-games)
-- [Boxscore](#boxscore)
+- [Today's games](#todays-games)
+- [Box score](#boxscore)
 - [Play by play](#play-by-play)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
-- [Hustle box score](#game-summary)
+- [Hustle box score](#hustle-box-score)
 - [Standings](#standings)
 - [Schedule](#schedule)
 - [Player](#player-data)
