@@ -13,6 +13,7 @@ so you only get what you need but also in a handy manner.
 - [Play by play](#play-by-play)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
+- [Hustle box score](#game-summary)
 - [Standings](#standings)
 - [Schedule](#schedule)
 - [Player](#player-data)
@@ -1397,6 +1398,44 @@ Output
     "date_time_utc": "2023-12-21 03:00:00"
   }
 ]
+```
+
+### Hustle box score
+
+```php
+$hustle = new NBALive\NBABoxScoreHustle("0022301203");
+
+//Or set game id with
+$hustle->game_id = "0022301203";
+
+//Creates these arrays
+$hustle->home_players;
+$hustle->away_team;
+$hustle->home_team;
+$hustle->away_team;
+```
+Team array output
+
+```json
+{
+  "minutes": "240.000000:00",
+  "points": 106,
+  "contestedShots": 33,
+  "contestedShots2pt": 21,
+  "contestedShots3pt": 12,
+  "deflections": 17,
+  "chargesDrawn": 0,
+  "screenAssists": 9,
+  "screenAssistPoints": 20,
+  "looseBallsRecoveredOffensive": 4,
+  "looseBallsRecoveredDefensive": 0,
+  "looseBallsRecoveredTotal": 4,
+  "offensiveBoxOuts": 2,
+  "defensiveBoxOuts": 3,
+  "boxOutPlayerTeamRebounds": 5,
+  "boxOutPlayerRebounds": 4,
+  "boxOuts": 5
+}
 ```
 
 ### Game summary
