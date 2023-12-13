@@ -16,6 +16,7 @@ so you only get what you need but also in a handy manner.
 - [Hustle box score](#hustle-box-score)
 - [Standings](#standings)
 - [Schedule](#schedule)
+- [Player year over year](#player-year-over-year)
 - [Player](#player-data)
 - [Team](#team)
 - [League leaders](#league-leaders)
@@ -1491,6 +1492,24 @@ $ll = new NBALive\NBALeagueLeaders($stat, $mode, $season, $type);
 
 //Creates the array
 $ll->details;
+```
+
+### Player year over year
+
+```php
+$yoy = new NBALive\NBAPlayerYearOverYear();
+$yoy->player_id = 202331;//Required
+$yoy->per_mode = 'PerGame';
+//Set this if you want to get a specific season:
+$yoy->season = '2019-20';
+
+//Must run fetch()
+$yoy->fetch();
+
+//Creates the arrays
+$ll->details;
+//For the specific season
+$ll->season_array;
 ```
 
 ### Player data
