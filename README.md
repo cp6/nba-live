@@ -217,6 +217,8 @@ Will return:
 
 ### Boxscore
 
+NBA API Live CDN box score version
+
 ```php
 $boxscore = new NBALive\NBABoxScore('0022301214');
 
