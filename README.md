@@ -1,4 +1,4 @@
-# NBA CDN API Wrapper
+# NBA API Wrapper
 
 A PHP wrapper for accessing NBA API endpoints including live games. This wrapper formats a lot of the returned data
 so you only get what you need but also in a handy and readable manner.
