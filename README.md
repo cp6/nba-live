@@ -1264,6 +1264,12 @@ $schedule = new NBALive\NBASchedule('2023-12-20');
 
 //Creates the array
 $schedule->schedule;
+
+
+//Get tomorrow's games
+$tomorrow = (new DateTimeImmutable('tomorrow', new DateTimeZone('America/New_York')))->format('Y-m-d');
+
+$schedule = new NBALive\NBASchedule($tomorrow);
 ```
 
 Output
