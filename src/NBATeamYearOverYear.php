@@ -4,170 +4,59 @@ namespace Corbpie\NBALive;
 
 class NBATeamYearOverYear extends NBABase
 {
-
     public array $data = [];
-
-    public array $season_array = [];
 
     public array $details = [];
 
+    public array $latest = [];
 
-    public int $team_id;
-
-    public string $season_type = 'Totals';
-
-    public string $per_mode = 'Regular+Season';
-
-
-    public function fetch(): array
+    public function __construct(int $team_id, string $per_mode = 'Totals', string $season_type = 'Regular+Season')
     {
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode={$this->per_mode}&SeasonType={$this->season_type}&TeamID={$this->team_id}");
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode={$per_mode}&SeasonType={$season_type}&TeamID={$team_id}");
 
         if (isset($this->data['resultSets']['0']['rowSet'])) {
             foreach ($this->data['resultSets']['0']['rowSet'] as $values) {
-                $this->season_array = [
-                    'group_set' => $values[0],
-                    'group_value' => $values[1],
-                    'team_id' => $values[2],
-                    'team_abbreviation' => $values[3],
-                    'max_game_date' => $values[4],
-                    'gp' => $values[5],
-                    'w' => $values[6],
-                    'l' => $values[7],
-                    'w_pct' => $values[8],
-                    'min' => $values[9],
-                    'fgm' => $values[10],
-                    'fga' => $values[11],
-                    'fg_pct' => $values[12],
-                    'fg3m' => $values[13],
-                    'fg3a' => $values[14],
-                    'fg3_pct' => $values[15],
-                    'ftm' => $values[16],
-                    'fta' => $values[17],
-                    'ft_pct' => $values[18],
-                    'oreb' => $values[19],
-                    'dreb' => $values[20],
-                    'reb' => $values[21],
-                    'ast' => $values[22],
-                    'tov' => $values[23],
-                    'stl' => $values[24],
-                    'blk' => $values[25],
-                    'blka' => $values[26],
-                    'pf' => $values[27],
-                    'pfd' => $values[28],
-                    'pts' => $values[29],
-                    'plus_minus' => $values[30],
-                    'nba_fantasy_pts' => $values[31],
-                    'dd2' => $values[32],
-                    'td3' => $values[33],
-                    'wnba_fantasy_pts' => $values[34],
-                    'gp_rank' => $values[35],
-                    'w_rank' => $values[36],
-                    'l_rank' => $values[37],
-                    'w_pct_rank' => $values[38],
-                    'min_rank' => $values[39],
-                    'fgm_rank' => $values[40],
-                    'fga_rank' => $values[41],
-                    'fg_pct_rank' => $values[42],
-                    'fg3m_rank' => $values[43],
-                    'fg3a_rank' => $values[44],
-                    'fg3_pct_rank' => $values[45],
-                    'ftm_rank' => $values[46],
-                    'fta_rank' => $values[47],
-                    'ft_pct_rank' => $values[48],
-                    'oreb_rank' => $values[49],
-                    'dreb_rank' => $values[50],
-                    'reb_rank' => $values[51],
-                    'ast_rank' => $values[52],
-                    'tov_rank' => $values[53],
-                    'stl_rank' => $values[54],
-                    'blk_rank' => $values[55],
-                    'blka_rank' => $values[56],
-                    'pf_rank' => $values[57],
-                    'pfd_rank' => $values[58],
-                    'pts_rank' => $values[59],
-                    'plus_minus_rank' => $values[60],
-                    'nba_fantasy_pts_rank' => $values[61],
-                    'dd2_rank' => $values[62],
-                    'td3_rank' => $values[63],
-                    'wnba_fantasy_pts_rank' => $values[64]
-                ];
-            }
-        }
-
-        if (isset($this->data['resultSets']['1']['rowSet'])) {
-            foreach ($this->data['resultSets']['1']['rowSet'] as $values) {
                 $this->details[] = [
-                    'group_set' => $values[0],
-                    'group_value' => $values[1],
-                    'team_id' => $values[2],
-                    'team_abbreviation' => $values[3],
-                    'max_game_date' => $values[4],
-                    'gp' => $values[5],
-                    'w' => $values[6],
-                    'l' => $values[7],
-                    'w_pct' => $values[8],
-                    'min' => $values[9],
-                    'fgm' => $values[10],
-                    'fga' => $values[11],
-                    'fg_pct' => $values[12],
-                    'fg3m' => $values[13],
-                    'fg3a' => $values[14],
-                    'fg3_pct' => $values[15],
-                    'ftm' => $values[16],
-                    'fta' => $values[17],
-                    'ft_pct' => $values[18],
-                    'oreb' => $values[19],
-                    'dreb' => $values[20],
-                    'reb' => $values[21],
-                    'ast' => $values[22],
-                    'tov' => $values[23],
-                    'stl' => $values[24],
-                    'blk' => $values[25],
-                    'blka' => $values[26],
-                    'pf' => $values[27],
-                    'pfd' => $values[28],
-                    'pts' => $values[29],
-                    'plus_minus' => $values[30],
-                    'nba_fantasy_pts' => $values[31],
-                    'dd2' => $values[32],
-                    'td3' => $values[33],
-                    'wnba_fantasy_pts' => $values[34],
-                    'gp_rank' => $values[35],
-                    'w_rank' => $values[36],
-                    'l_rank' => $values[37],
-                    'w_pct_rank' => $values[38],
-                    'min_rank' => $values[39],
-                    'fgm_rank' => $values[40],
-                    'fga_rank' => $values[41],
-                    'fg_pct_rank' => $values[42],
-                    'fg3m_rank' => $values[43],
-                    'fg3a_rank' => $values[44],
-                    'fg3_pct_rank' => $values[45],
-                    'ftm_rank' => $values[46],
-                    'fta_rank' => $values[47],
-                    'ft_pct_rank' => $values[48],
-                    'oreb_rank' => $values[49],
-                    'dreb_rank' => $values[50],
-                    'reb_rank' => $values[51],
-                    'ast_rank' => $values[52],
-                    'tov_rank' => $values[53],
-                    'stl_rank' => $values[54],
-                    'blk_rank' => $values[55],
-                    'blka_rank' => $values[56],
-                    'pf_rank' => $values[57],
-                    'pfd_rank' => $values[58],
-                    'pts_rank' => $values[59],
-                    'plus_minus_rank' => $values[60],
-                    'nba_fantasy_pts_rank' => $values[61],
-                    'dd2_rank' => $values[62],
-                    'td3_rank' => $values[63],
-                    'wnba_fantasy_pts_rank' => $values[64]
+                    'team_id' => $values[0],
+                    'city' => $values[1],
+                    'name' => $values[2],
+                    'year' => $values[3],
+                    'gp' => $values[4],
+                    'w' => $values[5],
+                    'l' => $values[6],
+                    'w_pct' => $values[7],
+                    'conf_rank' => $values[8],
+                    'div_rank' => $values[9],
+                    'po_wins' => $values[10],
+                    'po_loses' => $values[11],
+                    'conf_count' => $values[12],
+                    'div_count' => $values[13],
+                    'finals_appearance' => $values[14],
+                    'fgm' => $values[15],
+                    'fga' => $values[16],
+                    'fg_pct' => $values[17],
+                    'fg3m' => $values[18],
+                    'fg3a' => $values[19],
+                    'fg3_pct' => $values[20],
+                    'ftm' => $values[21],
+                    'fta' => $values[22],
+                    'ft_pct' => $values[23],
+                    'oreb' => $values[24],
+                    'dreb' => $values[25],
+                    'reb' => $values[26],
+                    'ast' => $values[27],
+                    'pf' => $values[28],
+                    'stl' => $values[29],
+                    'tov' => $values[30],
+                    'blk' => $values[31],
+                    'pts' => $values[32],
+                    'pts_rank' => $values[33]
                 ];
             }
+
+            $this->latest = end($this->data['resultSets']['0']['rowSet']);
         }
 
-        return $this->data;
     }
 
 }
