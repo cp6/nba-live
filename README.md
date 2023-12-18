@@ -15,6 +15,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Game summary](#game-summary)
 - [Hustle box score](#hustle-box-score)
 - [Standings](#standings)
+- [Team year over year](#team-year-over-year)
 - [Schedule](#schedule)
 - [Player year over year](#player-year-over-year)
 - [Player](#player-data)
@@ -1244,6 +1245,16 @@ Outputs
     "usg_pct": 0.5
   }
 ]
+```
+
+### Team year over year
+
+```php
+$team_yoy = new NBALive\NBATeamYearOverYear(1610612746);
+
+//Creates the arrays
+$team_yoy->details;
+$team_yoy->latest;
 ```
 
 ### Standings
