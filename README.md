@@ -13,6 +13,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Play by play](#play-by-play)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
+- [Defensive box score](#defensive-box-score)
 - [Hustle box score](#hustle-box-score)
 - [Standings](#standings)
 - [Team year over year](#team-year-over-year)
@@ -1157,6 +1158,20 @@ $pbp->teamOnly(1610612746);
 //Get a score line/worm
 $pbp->scoreLine();
 ```
+
+### Defensive box score
+
+```php
+$defensive = new NBALive\NBABoxScoreDefensive("0022301203");
+
+//Or set game id with
+$defensive->game_id = "0022301203";
+
+//Creates the arrays
+$defensive->home_players;
+$defensive->away_players;
+```
+
 
 ### Game rotations
 
