@@ -2,8 +2,6 @@
 
 namespace Corbpie\NBALive;
 
-use Corbpie\NBALive\NBABase;
-
 class NBABoxScoreFilters extends NBABase
 {
     public int $range_type = 2;
