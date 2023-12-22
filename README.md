@@ -13,6 +13,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Play by play](#play-by-play)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
+- [Scoring box score](#scoring-box-score)
 - [Defensive box score](#defensive-box-score)
 - [Hustle box score](#hustle-box-score)
 - [Standings](#standings)
@@ -1170,6 +1171,22 @@ $defensive->game_id = "0022301203";
 //Creates the arrays
 $defensive->home_players;
 $defensive->away_players;
+```
+
+### Scoring box score
+
+```php
+$scoring = new NBALive\NBABoxScoreScoring("0022301203");
+
+//Or set game id with
+$scoring->game_id = "0022301203";
+
+//Creates the arrays
+$scoring->home_players;
+$scoring->away_players;
+
+$scoring->home_team;
+$scoring->away_team;
 ```
 
 
