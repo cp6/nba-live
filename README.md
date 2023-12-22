@@ -1189,6 +1189,22 @@ $scoring->home_team;
 $scoring->away_team;
 ```
 
+### Misc box score
+
+```php
+$misc = new NBALive\NBABoxScoreMisc("0022301203");
+
+//Or set game id with
+$misc->game_id = "0022301203";
+
+//Creates the arrays
+$misc->home_players;
+$misc->away_players;
+
+$misc->home_team;
+$misc->away_team;
+```
+
 
 ### Game rotations
 
