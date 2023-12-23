@@ -16,6 +16,10 @@ class NBABoxScore extends NBABase
 
     public array $away_team = [];
 
+    public int $home_tid;
+
+    public int $away_tid;
+
     public function __construct(string $game_id = '')
     {
         if (!isset($this->game_id)) {
@@ -29,6 +33,10 @@ class NBABoxScore extends NBABase
 
         $this->home_players = $this->data['game']['homeTeam']['players'];
         $this->away_players = $this->data['game']['awayTeam']['players'];
+
+        $this->home_tid = $this->data['game']['homeTeam']['teamId'];
+        $this->away_tid = $this->data['game']['awayTeam']['teamId'];
+
     }
 
 }
