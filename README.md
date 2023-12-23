@@ -21,6 +21,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Standings](#standings)
 - [Team year over year](#team-year-over-year)
 - [Schedule](#schedule)
+- [Player on off](#player-on-off)
 - [Player year over year](#player-year-over-year)
 - [Player](#player-data)
 - [Team](#team)
@@ -1239,7 +1240,6 @@ $misc->home_team;
 $misc->away_team;
 ```
 
-
 ### Game rotations
 
 ```php
@@ -1516,6 +1516,7 @@ $hustle->away_team;
 $hustle->home_team;
 $hustle->away_team;
 ```
+
 Team array output
 
 ```json
@@ -1611,6 +1612,158 @@ $yoy->fetch();
 $yoy->details;
 //For the specific season
 $yoy->season_array;
+```
+
+### Player on off
+
+```php
+$on_off = new NBALive\NBATeamPlayerOnOff();
+$on_off->team_id = 1610612746;
+$on_off->season = '2023-24';
+
+//Must run fetch()
+$yoy->fetch();
+
+//Creates the arrays
+$yoy->on;
+$yoy->off;
+
+//Get a specific player on and off
+$on_off->player(201587);
+
+//This build and returns:
+$on_off->player_only;
+```
+
+Output for `$on_off->player_only`
+
+```json
+{
+  "on": {
+    "player_id": 202331,
+    "player": "George, Paul",
+    "team_id": 1610612746,
+    "team": "LAC",
+    "season": "2023-24",
+    "season_type": "Regular Season",
+    "per_mode": "Totals",
+    "status": "ON",
+    "gp": 26,
+    "w": 15,
+    "l": 11,
+    "w_pct": 0.577,
+    "min": 899.96,
+    "fgm": 826,
+    "fga": 1638,
+    "fg_pct": 0.504,
+    "fg3m": 244,
+    "fg3a": 591,
+    "fg3_pct": 0.413,
+    "ftm": 353,
+    "fta": 443,
+    "ft_pct": 0.797,
+    "oreb": 179,
+    "dreb": 635,
+    "reb": 814,
+    "ast": 504,
+    "pf": 363,
+    "pfd": 393,
+    "stl": 162,
+    "tov": 236,
+    "blk": 95,
+    "blka": 85,
+    "pts": 2249,
+    "plus_minus": 184,
+    "gp_rank": 5,
+    "w_rank": 5,
+    "l_rank": 18,
+    "w_pct_rank": 17,
+    "min_rank": 2,
+    "fgm_rank": 2,
+    "fga_rank": 2,
+    "fg_pct_rank": 2,
+    "fg3m_rank": 1,
+    "fg3a_rank": 2,
+    "fg3_pct_rank": 5,
+    "ftm_rank": 2,
+    "fta_rank": 2,
+    "ft_pct_rank": 9,
+    "oreb_rank": 2,
+    "dreb_rank": 2,
+    "reb_rank": 2,
+    "ast_rank": 2,
+    "pf_rank": 21,
+    "pfd_rank": 2,
+    "stl_rank": 2,
+    "tov_rank": 20,
+    "blk_rank": 2,
+    "blka_rank": 21,
+    "pts_rank": 2,
+    "plus_minus_rank": 2
+  },
+  "off": {
+    "player_id": 202331,
+    "player": "George, Paul",
+    "team_id": 1610612746,
+    "team": "LAC",
+    "season": "2023-24",
+    "season_type": "Regular Season",
+    "per_mode": "Totals",
+    "status": "OFF",
+    "gp": 28,
+    "w": 17,
+    "l": 11,
+    "w_pct": 0.607,
+    "min": 449.04,
+    "fgm": 370,
+    "fga": 822,
+    "fg_pct": 0.45,
+    "fg3m": 107,
+    "fg3a": 327,
+    "fg3_pct": 0.327,
+    "ftm": 180,
+    "fta": 223,
+    "ft_pct": 0.807,
+    "oreb": 118,
+    "dreb": 299,
+    "reb": 417,
+    "ast": 207,
+    "pf": 202,
+    "pfd": 175,
+    "stl": 72,
+    "tov": 135,
+    "blk": 55,
+    "blka": 46,
+    "pts": 1027,
+    "plus_minus": -30,
+    "gp_rank": 1,
+    "w_rank": 1,
+    "l_rank": 9,
+    "w_pct_rank": 7,
+    "min_rank": 16,
+    "fgm_rank": 16,
+    "fga_rank": 16,
+    "fg_pct_rank": 22,
+    "fg3m_rank": 17,
+    "fg3a_rank": 16,
+    "fg3_pct_rank": 22,
+    "ftm_rank": 16,
+    "fta_rank": 16,
+    "ft_pct_rank": 5,
+    "oreb_rank": 16,
+    "dreb_rank": 16,
+    "reb_rank": 16,
+    "ast_rank": 16,
+    "pf_rank": 7,
+    "pfd_rank": 16,
+    "stl_rank": 16,
+    "tov_rank": 7,
+    "blk_rank": 16,
+    "blka_rank": 5,
+    "pts_rank": 16,
+    "plus_minus_rank": 21
+  }
+}
 ```
 
 ### Player data
