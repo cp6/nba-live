@@ -16,6 +16,8 @@ so you only get what you need but also in a handy and readable manner.
 - [Scoring box score](#scoring-box-score)
 - [Defensive box score](#defensive-box-score)
 - [Hustle box score](#hustle-box-score)
+- [Usage box score](#usage-box-score)
+- [Tracking box score](#tracking-box-score)
 - [Standings](#standings)
 - [Team year over year](#team-year-over-year)
 - [Schedule](#schedule)
@@ -1193,6 +1195,38 @@ $scoring->away_team;
 
 ```php
 $misc = new NBALive\NBABoxScoreMisc("0022301203");
+
+//Or set game id with
+$misc->game_id = "0022301203";
+
+//Creates the arrays
+$misc->home_players;
+$misc->away_players;
+
+$misc->home_team;
+$misc->away_team;
+```
+
+### Usage box score
+
+```php
+$misc = new NBALive\NBABoxScoreUsage("0022301203");
+
+//Or set game id with
+$misc->game_id = "0022301203";
+
+//Creates the arrays
+$misc->home_players;
+$misc->away_players;
+
+$misc->home_team;
+$misc->away_team;
+```
+
+### Tracking box score
+
+```php
+$misc = new NBALive\NBABoxScoreTracking("0022301203");
 
 //Or set game id with
 $misc->game_id = "0022301203";
