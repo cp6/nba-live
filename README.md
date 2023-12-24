@@ -3,7 +3,6 @@
 A PHP wrapper for accessing NBA API endpoints including live games. This wrapper formats a lot of the returned data
 so you only get what you need but also in a handy and readable manner.
 
-
 [![Generic badge](https://img.shields.io/badge/version-1.2-blue.svg)]()
 
 
@@ -24,6 +23,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Game matchups](#box-score-matchups)
 - [Usage box score](#usage-box-score)
 - [4 factors box score](#4-factors-box-score)
+- [Advanced box score](#advanced-box-score)
 - [Tracking box score](#tracking-box-score)
 - [Team lineups](#team-lineups)
 - [Standings](#standings)
@@ -1282,6 +1282,22 @@ $misc->away_team;
 
 ```php
 $misc = new NBALive\NBABoxScore4Factors("0022301203");
+
+//Or set game id with
+$misc->game_id = "0022301203";
+
+//Creates the arrays
+$misc->home_players;
+$misc->away_players;
+
+$misc->home_team;
+$misc->away_team;
+```
+
+### Advanced box score
+
+```php
+$misc = new NBALive\NBABoxScoreAdvanced("0022301203");
 
 //Or set game id with
 $misc->game_id = "0022301203";
