@@ -17,8 +17,10 @@ so you only get what you need but also in a handy and readable manner.
 - [Scoring box score](#scoring-box-score)
 - [Defensive box score](#defensive-box-score)
 - [Hustle box score](#hustle-box-score)
+- [Game matchups](#box-score-matchups)
 - [Usage box score](#usage-box-score)
 - [Tracking box score](#tracking-box-score)
+- [Team lineups](#team-lineups)
 - [Standings](#standings)
 - [Team year over year](#team-year-over-year)
 - [Schedule](#schedule)
@@ -1285,6 +1287,22 @@ $misc->away_players;
 
 $misc->home_team;
 $misc->away_team;
+```
+
+### Team lineups
+
+```php
+$lineups = new NBALive\NBATeamLineups();
+
+$lineups->team_id = 1610612746;
+$lineups->players_amount = 5;
+$lineups->fetch();
+
+//Creates the array
+$lineups->details;
+
+//Get lineups that contain a certain player only
+$lineups->playerOnly(202695)
 ```
 
 ### Game rotations
