@@ -11,6 +11,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Today's games](#todays-games)
 - [Box score](#boxscore)
 - [Play by play](#play-by-play)
+- [Play by play V3](#play-by-play-v3)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
 - [Scoring box score](#scoring-box-score)
@@ -1161,6 +1162,33 @@ $pbp->teamOnly(1610612746);
 
 //Get a score line/worm
 $pbp->scoreLine();
+```
+
+### Play by play V3
+
+```php
+$game_id = '0022300372';
+$start_qtr = 1;
+$end_qtr = 1;
+
+$pbp_v3 = new NBALive\NBAPlayByPlayV3($game_id, $start_qtr, $end_qtr);
+
+//Creates the arrays
+$pbp_v3->all_plays;
+$pbp_v3->plays_count;
+$pbp_v3->last_10_plays;
+
+//Player only plays
+$pbp_v3->playerOnly(202331);
+
+//Team only plays
+$pbp_v3->teamOnly(1610612746);
+
+//Scored only plays
+$pbp_v3->scoredOnly();
+
+//Get a score streaks for both teams
+$pbp_v3->scoreStreaks();
 ```
 
 ### Defensive box score
