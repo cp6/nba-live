@@ -42,6 +42,11 @@ class NBABase
 
     public int $team_id;
 
+    public function __construct()
+    {
+        header('Content-Type: application/json');
+    }
+
     protected function ApiCall(string $url): array
     {
         $this->url = $url;
