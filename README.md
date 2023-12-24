@@ -3,6 +3,10 @@
 A PHP wrapper for accessing NBA API endpoints including live games. This wrapper formats a lot of the returned data
 so you only get what you need but also in a handy and readable manner.
 
+
+[![Generic badge](https://img.shields.io/badge/version-1.2-blue.svg)]()
+
+
 ---
 
 ## Table of contents
@@ -1295,6 +1299,7 @@ $misc->away_team;
 $lineups = new NBALive\NBATeamLineups();
 
 $lineups->team_id = 1610612746;
+$lineups->season = '2019-20';//Optional if NOT set will just be current season
 $lineups->players_amount = 5;
 $lineups->fetch();
 
