@@ -23,6 +23,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Hustle box score](#hustle-box-score)
 - [Game matchups](#box-score-matchups)
 - [Usage box score](#usage-box-score)
+- [4 factors box score](#4-factors-box-score)
 - [Tracking box score](#tracking-box-score)
 - [Team lineups](#team-lineups)
 - [Standings](#standings)
@@ -1265,6 +1266,22 @@ $misc->away_team;
 
 ```php
 $misc = new NBALive\NBABoxScoreUsage("0022301203");
+
+//Or set game id with
+$misc->game_id = "0022301203";
+
+//Creates the arrays
+$misc->home_players;
+$misc->away_players;
+
+$misc->home_team;
+$misc->away_team;
+```
+
+### 4 factors box score
+
+```php
+$misc = new NBALive\NBABoxScore4Factors("0022301203");
 
 //Or set game id with
 $misc->game_id = "0022301203";
