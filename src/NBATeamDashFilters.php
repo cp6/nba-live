@@ -18,10 +18,9 @@ class NBATeamDashFilters extends NBABase
     public string $pace_adjust = 'N';
     public string $per_mode = 'Totals';
     public int $period = 0;
-    public int $team_id;
     public string $plus_minus = 'N';
     public string $rank = 'N';
-    public string $season = '';
+    public string $season = NBABase::CURRENT_SEASON;
     public string $season_segment = '';
     public string $season_type = 'Regular Season';
     public string $shot_clock_range = '';
@@ -31,6 +30,7 @@ class NBATeamDashFilters extends NBABase
     public function build(): string
     {
         $params = [
+            'TeamId' => $this->team_id,
             'DateFrom' => $this->date_from,
             'DateTo' => $this->date_to,
             'GameSegment' => $this->game_segment,
@@ -45,7 +45,6 @@ class NBATeamDashFilters extends NBABase
             'PaceAdjust' => $this->pace_adjust,
             'PerMode' => $this->per_mode,
             'Period' => $this->period,
-            'PlayerID' => $this->player_id,
             'PlusMinus' => $this->plus_minus,
             'Rank' => $this->rank,
             'Season' => $this->season,
