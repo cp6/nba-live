@@ -82,17 +82,19 @@ class NBAPlayByPlayV3 extends NBABase
         $period = 1;
         $last_score_tid = null;
 
-        $team1_tid = $team1_score = $team1_start = $team1_end = null;
-        $team2_tid = $team2_score = $team2_start = $team2_end = null;
+        $team1_tid = $team1_name = $team1_score = $team1_start = $team1_end = null;
+        $team2_tid = $team2_name = $team2_score = $team2_start = $team2_end = null;
 
         foreach ($this->all_plays as $play) {
             //Set team IDs
             if ($play['teamId'] !== 0) {
                 if (is_null($team1_tid)) {
                     $team1_tid = $play['teamId'];
+                    $team1_name = $play['teamTricode'];
                 }
                 if (!is_null($team1_tid) && is_null($team2_tid) && $team1_tid !== $play['teamId']) {
                     $team2_tid = $play['teamId'];
+                    $team2_name = $play['teamTricode'];
                 }
             }
 
@@ -103,8 +105,8 @@ class NBAPlayByPlayV3 extends NBABase
 
                 //Reset streaks at end of each qtr
                 if ($period !== $play['period']) {
-                    $team1_tid = $team1_score = $team1_start = $team1_end = null;
-                    $team2_tid = $team2_score = $team2_start = $team2_end = null;
+                    $team1_tid = $team1_name = $team1_score = $team1_start = $team1_end = null;
+                    $team2_tid = $team1_name = $team2_score = $team2_start = $team2_end = null;
                 }
 
                 //Missed
@@ -149,6 +151,7 @@ class NBAPlayByPlayV3 extends NBABase
 
                         $this->streaks[] = [
                             'team_id' => $team2_tid,
+                            'team_name' => $team2_name,
                             'points' => $team2_score,
                             'period' => $period,
                             'start' => $team2_start,
@@ -160,6 +163,7 @@ class NBAPlayByPlayV3 extends NBABase
 
                         $this->streaks[] = [
                             'team_id' => $team1_tid,
+                            'team_name' => $team1_name,
                             'points' => $team1_score,
                             'period' => $period,
                             'start' => $team1_start,
