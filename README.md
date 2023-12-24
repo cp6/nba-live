@@ -1204,6 +1204,25 @@ $defensive->home_players;
 $defensive->away_players;
 ```
 
+### Box score matchups
+
+```php
+$matchups = new NBALive\NBABoxScoreMatchups("0022301203");
+
+//Or set game id with
+$matchups->game_id = "0022301203";
+
+//Creates the arrays
+$matchups->home_players;
+$matchups->away_players;
+
+//Get just a certain players matchups
+$matchups->playerOnly(1629684);
+
+//Get all matchups for a player
+$matchups->playerMatchedWith(201935);
+```
+
 ### Scoring box score
 
 ```php
