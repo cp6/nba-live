@@ -11,6 +11,7 @@ so you only get what you need but also in a handy and readable manner.
 ## Table of contents
 
 - [Installing](#installing)
+- [Debugging](#debugging)
 - [Today's games](#todays-games)
 - [Box score](#boxscore)
 - [Play by play](#play-by-play)
@@ -44,6 +45,18 @@ Install with composer:
 
 ```
 composer require corbpie/nba-live
+```
+
+### Debugging
+
+Anytime an API call is made you can access debug parameters for the request
+
+```php
+$this->url;
+$this->response_code;
+$this->response_size;
+$this->connect_time;
+$this->ip;
 ```
 
 ### Todays games
