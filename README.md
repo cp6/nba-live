@@ -13,6 +13,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Installing](#installing)
 - [Debugging](#debugging)
 - [Today's games](#todays-games)
+- [Game time seconds formatted](#game-time-seconds-formatted)
 - [Box score](#boxscore)
 - [Play by play](#play-by-play)
 - [Play by play V3](#play-by-play-v3)
@@ -241,6 +242,26 @@ Will return:
     "game_time_et": "2023-12-06 22:00:00"
   }
 ]
+```
+
+### Game time seconds formatted
+
+```php
+$game_time = new NBALive\NBABase();
+$game_time->secondsToFormattedGameTime(800);
+```
+
+Outputs
+
+```json
+{
+  "period": 2,
+  "period_string": "Q2",
+  "seconds": 800,
+  "seconds_period": 80,
+  "seconds_period_string": "10:40",
+  "full_string": "Q2 10:40"
+}
 ```
 
 ### Boxscore

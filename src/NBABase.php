@@ -78,4 +78,75 @@ class NBABase
         ];
     }
 
+    public static function secondsToFormattedGameTime(float $seconds): array
+    {
+        $seconds = round($seconds);
+        if ($seconds <= 720) {
+            $period = 1;
+            $period_txt = "Q1";
+            $seconds_in = $seconds;
+            $seconds_out = 720 - $seconds_in;
+            $string = gmdate('i:s', $seconds_in);
+            $seconds_period_string = gmdate('i:s', $seconds_out);
+        } else if ($seconds <= 1440) {
+            $period = 2;
+            $period_txt = "Q2";
+            $seconds_in = $seconds - 720;
+            $seconds_out = 720 - $seconds_in;
+            $string = gmdate('i:s', $seconds_in);
+            $seconds_period_string = gmdate('i:s', $seconds_out);
+        } else if ($seconds <= 2160) {
+            $period = 3;
+            $period_txt = "Q3";
+            $seconds_in = $seconds - 1440;
+            $seconds_out = 1440 - ($seconds - 720);
+            $string = gmdate('i:s', $seconds_in);
+            $seconds_period_string = gmdate('i:s', $seconds_out);
+        } else if ($seconds <= 2880) {
+            $period = 4;
+            $period_txt = "Q4";
+            $seconds_in = $seconds - 2160;
+            $seconds_out = 2160 - ($seconds - 720);
+            $string = gmdate('i:s', $seconds_in);
+            $seconds_period_string = gmdate('i:s', $seconds_out);
+        } else if ($seconds <= 3180) {
+            $period = 5;//OT1
+            $period_txt = "OT1";
+            $seconds_in = $seconds - 2880;
+            $seconds_out = 2880 - ($seconds - 300);
+            $string = gmdate('i:s', $seconds_in);
+            $seconds_period_string = gmdate('i:s', $seconds_out);
+        } else if ($seconds <= 3480) {
+            $period = 6;//OT2
+            $period_txt = "OT2";
+            $seconds_in = $seconds - 3180;
+            $seconds_out = 3180 - ($seconds - 300);
+            $string = gmdate('i:s', $seconds_in);
+            $seconds_period_string = gmdate('i:s', $seconds_out);
+        } else if ($seconds <= 3780) {
+            $period = 7;//OT3
+            $period_txt = "OT3";
+            $seconds_in = $seconds - 3480;
+            $seconds_out = 3480 - ($seconds - 300);
+            $string = gmdate('i:s', $seconds_in);
+            $seconds_period_string = gmdate('i:s', $seconds_out);
+        } else {
+            $period = 8;//OT4
+            $period_txt = "OT4";
+            $seconds_in = $seconds - 3780;
+            $seconds_out = 3780 - ($seconds - 300);
+            $string = gmdate('i:s', $seconds_in);
+            $seconds_period_string = gmdate('i:s', $seconds_out);
+        }
+
+        return [
+            'period' => $period,
+            'period_string' => $period_txt,
+            'seconds' => $seconds,
+            'seconds_period' => $seconds_in,
+            'seconds_period_string' => $seconds_period_string,
+            'full_string' => $period_txt . ' ' . $seconds_period_string
+        ];
+    }
+
 }
