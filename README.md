@@ -1269,7 +1269,7 @@ $bs->fetch();
 
 //Preset filter (Qtr 4)
 $bs->game_id = '0022300372';
-$bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$bs->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
 $bs->fetch();
 
 //Custom filter
@@ -1279,6 +1279,7 @@ $bs->start_period = 4;
 $bs->start_range = 0;
 $bs->end_range = 28800;
 $bs->end_period = 4;
+$bs->filter = $bs->build();
 $bs->fetch();
 
 //Creates the arrays
@@ -1332,10 +1333,25 @@ $matchups->playerMatchedWith(201935);
 ### Scoring box score
 
 ```php
-$scoring = new NBALive\NBABoxScoreScoring("0022301203");
+$scoring = new NBALive\NBABoxScoreScoring();
+//Whole game
+$scoring->game_id = '0022300372';
+$scoring->fetch();
 
-//Or set game id with
-$scoring->game_id = "0022301203";
+//Preset filter (Qtr 4)
+$scoring->game_id = '0022300372';
+$scoring->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$scoring->fetch();
+
+//Custom filter
+$scoring->game_id = '0022300372';
+$scoring->range_type = 1;
+$scoring->start_period = 4;
+$scoring->start_range = 0;
+$scoring->end_range = 28800;
+$scoring->end_period = 4;
+$scoring->filter = $bs->build();
+$scoring->fetch();
 
 //Creates the arrays
 $scoring->home_players;
@@ -1348,10 +1364,25 @@ $scoring->away_team;
 ### Misc box score
 
 ```php
-$misc = new NBALive\NBABoxScoreMisc("0022301203");
+$misc = new NBALive\NBABoxScoreMisc();
+//Whole game
+$misc->game_id = '0022300372';
+$misc->fetch();
 
-//Or set game id with
-$misc->game_id = "0022301203";
+//Preset filter (Qtr 4)
+$misc->game_id = '0022300372';
+$misc->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$misc->fetch();
+
+//Custom filter
+$misc->game_id = '0022300372';
+$misc->range_type = 1;
+$misc->start_period = 4;
+$misc->start_range = 0;
+$misc->end_range = 28800;
+$misc->end_period = 4;
+$misc->filter = $bs->build();
+$misc->fetch();
 
 //Creates the arrays
 $misc->home_players;
@@ -1364,65 +1395,125 @@ $misc->away_team;
 ### Usage box score
 
 ```php
-$misc = new NBALive\NBABoxScoreUsage("0022301203");
+$usage = new NBALive\NBABoxScoreUsage();
+//Whole game
+$usage->game_id = '0022300372';
+$usage->fetch();
 
-//Or set game id with
-$misc->game_id = "0022301203";
+//Preset filter (Qtr 4)
+$usage->game_id = '0022300372';
+$usage->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$usage->fetch();
+
+//Custom filter
+$usage->game_id = '0022300372';
+$usage->range_type = 1;
+$usage->start_period = 4;
+$usage->start_range = 0;
+$usage->end_range = 28800;
+$usage->end_period = 4;
+$usage->filter = $bs->build();
+$usage->fetch();
 
 //Creates the arrays
-$misc->home_players;
-$misc->away_players;
+$usage->home_players;
+$usage->away_players;
 
-$misc->home_team;
-$misc->away_team;
+$usage->home_team;
+$usage->away_team;
 ```
 
 ### 4 factors box score
 
 ```php
-$misc = new NBALive\NBABoxScore4Factors("0022301203");
+$fourfactors = new NBALive\NBABoxScore4Factors("0022301203");
+//Whole game
+$fourfactors->game_id = '0022300372';
+$fourfactors->fetch();
 
-//Or set game id with
-$misc->game_id = "0022301203";
+//Preset filter (Qtr 4)
+$fourfactors->game_id = '0022300372';
+$fourfactors->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$fourfactors->fetch();
+
+//Custom filter
+$fourfactors->game_id = '0022300372';
+$fourfactors->range_type = 1;
+$fourfactors->start_period = 4;
+$fourfactors->start_range = 0;
+$fourfactors->end_range = 28800;
+$fourfactors->end_period = 4;
+$fourfactors->filter = $bs->build();
+$fourfactors->fetch();
 
 //Creates the arrays
-$misc->home_players;
-$misc->away_players;
+$fourfactors->home_players;
+$fourfactors->away_players;
 
-$misc->home_team;
-$misc->away_team;
+$fourfactors->home_team;
+$fourfactors->away_team;
 ```
 
 ### Advanced box score
 
 ```php
-$misc = new NBALive\NBABoxScoreAdvanced("0022301203");
+$adv = new NBALive\NBABoxScoreAdvanced();
+//Whole game
+$adv->game_id = '0022300372';
+$adv->fetch();
 
-//Or set game id with
-$misc->game_id = "0022301203";
+//Preset filter (Qtr 4)
+$adv->game_id = '0022300372';
+$adv->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$adv->fetch();
+
+//Custom filter
+$adv->game_id = '0022300372';
+$adv->range_type = 1;
+$adv->start_period = 4;
+$adv->start_range = 0;
+$adv->end_range = 28800;
+$adv->end_period = 4;
+$adv->filter = $bs->build();
+$adv->fetch();
 
 //Creates the arrays
-$misc->home_players;
-$misc->away_players;
+$adv->home_players;
+$adv->away_players;
 
-$misc->home_team;
-$misc->away_team;
+$adv->home_team;
+$adv->away_team;
 ```
 
 ### Tracking box score
 
 ```php
-$misc = new NBALive\NBABoxScoreTracking("0022301203");
+$tracking = new NBALive\NBABoxScoreTracking();
+//Whole game
+$tracking->game_id = '0022300372';
+$tracking->fetch();
 
-//Or set game id with
-$misc->game_id = "0022301203";
+//Preset filter (Qtr 4)
+$tracking->game_id = '0022300372';
+$tracking->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$tracking->fetch();
+
+//Custom filter
+$tracking->game_id = '0022300372';
+$tracking->range_type = 1;
+$tracking->start_period = 4;
+$tracking->start_range = 0;
+$tracking->end_range = 28800;
+$tracking->end_period = 4;
+$tracking->filter = $bs->build();
+$tracking->fetch();
 
 //Creates the arrays
-$misc->home_players;
-$misc->away_players;
+$tracking->home_players;
+$tracking->away_players;
 
-$misc->home_team;
-$misc->away_team;
+$tracking->home_team;
+$tracking->away_team;
 ```
 
 ### Team lineups

@@ -29,7 +29,7 @@ class NBABoxScoreTraditional extends NBABoxScoreFilters
 
     public function fetch(): array
     {
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoretraditionalv3?" . $this->build() . "&GameID={$this->game_id}");
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoretraditionalv3?{$this->filters}&GameID={$this->game_id}");
 
         $this->home_players = $this->data['boxScoreTraditional']['homeTeam']['players'];
         $this->away_players = $this->data['boxScoreTraditional']['awayTeam']['players'];

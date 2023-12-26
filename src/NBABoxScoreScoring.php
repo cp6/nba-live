@@ -15,12 +15,8 @@ class NBABoxScoreScoring extends NBABoxScoreFilters
 
     public array $away_team = [];
 
-    public function __construct(string $game_id = '')
+    public function fetch(): array
     {
-        if (!isset($this->game_id)) {
-            $this->game_id = $game_id;
-        }
-
         $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscorescoringv3?" . $this->build() . "&GameID={$this->game_id}");
 
         $this->home_players = $this->data['boxScoreScoring']['homeTeam']['players'];
@@ -29,6 +25,7 @@ class NBABoxScoreScoring extends NBABoxScoreFilters
         $this->home_team = $this->data['boxScoreScoring']['homeTeam']['statistics'];
         $this->away_team = $this->data['boxScoreScoring']['awayTeam']['statistics'];
 
+        return $this->data;
     }
 
 }
