@@ -20,6 +20,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Play by play V2](#play-by-play-v2)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
+- [Tradition box score](#traditional-box-score)
 - [Scoring box score](#scoring-box-score)
 - [Defensive box score](#defensive-box-score)
 - [Hustle box score](#hustle-box-score)
@@ -1256,6 +1257,44 @@ $pbp_v2->teamOnly(1610612746);
 //Scored only plays
 $pbp_v2->scoredOnly();
 
+```
+
+### Traditional box score
+
+```php
+$bs = new NBALive\NBABoxScoreTraditional();
+//Whole game
+$bs->game_id = '0022300372';
+$bs->fetch();
+
+//Preset filter (Qtr 4)
+$bs->game_id = '0022300372';
+$bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$bs->fetch();
+
+//Custom filter
+$bs->game_id = '0022300372';
+$bs->range_type = 1;
+$bs->start_period = 4;
+$bs->start_range = 0;
+$bs->end_range = 28800;
+$bs->end_period = 4;
+$bs->fetch();
+
+//Creates the arrays
+$bs->teams;
+$bs->teams_starters;
+$bs->teams_bench;
+
+$bs->home_team;
+$bs->home_players;
+$bs->home_starters;
+$bs->home_bench;
+
+$bs->away_team;
+$bs->away_players;
+$bs->away_starters;
+$bs->away_bench;
 ```
 
 ### Defensive box score
