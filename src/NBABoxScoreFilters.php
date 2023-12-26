@@ -6,13 +6,20 @@ class NBABoxScoreFilters extends NBABase
 {
     public int $range_type = 1;//Use 1 for filtering
 
-    public int $start_period = 1;//Start Q1
+    public int $start_period = 0;//Start Q1
 
     public int $start_range = 0;//Start at 0 seconds
 
     public int $end_period = 7;//Cover up to 3 OTs
 
     public int $end_range = 3900;//End after 65 minutes of game time
+
+    public string $filters = "endPeriod=4&endRange=28800&rangeType=1&startPeriod=0&startRange=0";
+
+    public function __construct()
+    {
+        $this->filters = "endPeriod={$this->end_period}&endRange={$this->end_range}&rangeType={$this->range_type}&startPeriod={$this->start_period}&startRange={$this->start_range}";
+    }
 
     public function build(): string
     {
