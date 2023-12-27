@@ -21,7 +21,8 @@ class NBAPlayerDashFilters extends NBABase
     public int $player_id;
     public string $plus_minus = 'N';
     public string $rank = 'N';
-    public string $season = '';
+
+    public string $season = NBABase::CURRENT_SEASON;
     public string $season_segment = '';
     public string $season_type = 'Regular Season';
     public string $shot_clock_range = '';
