@@ -35,6 +35,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Schedule](#schedule)
 - [Player on off](#player-on-off)
 - [Player year over year](#player-year-over-year)
+- [Player shooting](#player-shooting)
 - [Player](#player-data)
 - [Team](#team)
 - [League leaders](#league-leaders)
@@ -2057,6 +2058,25 @@ Output for `$on_off->player_only`
     "plus_minus_rank": 21
   }
 }
+```
+
+### Player shooting
+
+```php
+$player = new NBALive\NBAPlayerShooting();
+
+//Or set player id with
+$player->player_id = 202331;
+$player->season = '2019-20';
+
+//Creates the arrays
+$player->shot_5ft = [];
+$player->shot_8ft = [];
+$player->shot_area = [];
+$player->assisted = [];
+$player->shot_types_summary = [];
+$player->shot_types = [];
+$player->assisted_by = [];
 ```
 
 ### Player data
