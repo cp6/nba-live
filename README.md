@@ -32,6 +32,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Team lineups](#team-lineups)
 - [Standings](#standings)
 - [Team year over year](#team-year-over-year)
+- [Team roster](#team-roster)
 - [Schedule](#schedule)
 - [Player on off](#player-on-off)
 - [Player year over year](#player-year-over-year)
@@ -1874,6 +1875,16 @@ Output for `$sum->away`
   "team_rebounds": 11,
   "pts_off_to": 25
 }
+```
+
+### Team roster
+
+```php
+$roster = new NBALive\NBARosters(1610612754, '2014-15');
+
+//Creates the array
+$roster->players;
+$roster->coaches;
 ```
 
 ### League leaders
