@@ -17,7 +17,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Box score](#boxscore)
 - [Play by play](#play-by-play)
 - [Play by play V3](#play-by-play-v3)
-- [Play by play V2](#play-by-play-v2)a
+- [Play by play V2](#play-by-play-v2)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
 - [Tradition box score](#traditional-box-score)
@@ -2386,6 +2386,6 @@ $shots->season = '2023-24';
 //Get only players from a team with
 $shots->team_id = 1610612757;
 
-//Creates the arrays depending on distance_range
+//Creates the array
 $shots->details;
 ```
