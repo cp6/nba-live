@@ -64,13 +64,4 @@ class NBAPlayer extends NBABase
 
     }
 
-    public function feetInchesToCm(string $feetInches): int
-    {
-        $array = explode('-', $feetInches);
-        if (isset($array[1])) {
-            return (int)number_format(($array[0] * 30.48) + ($array[1] * 2.54), 0);
-        }
-        return (int)number_format(($array[0] * 30.48), 0);
-    }
-
 }
