@@ -19,17 +19,21 @@ class NBARosters extends NBABase
             foreach ($this->data['resultSets'][0]['rowSet'] as $p) {
                 $this->players[] = [
                     'player_id' => $p[14],
-                    'season' => $p[1],
+                    'year' => (int)$p[1],
+                    'season' => $season,
+                    'team_id' => $team_id,
                     'player' => $p[3],
                     'nickname' => $p[4],
                     'slug' => $p[5],
-                    'number' => $p[6],
+                    'number' => (int)$p[6],
                     'position' => $p[7],
                     'height' => $p[8],
+                    'height_cm' => $this->feetInchesToCm($p[8]),
                     'weight' => $p[9],
-                    'birthdate' => $p[10],
+                    'weight_kg' => (int)number_format((int)$p[9] * 0.45359237, 0),
+                    'birthdate' => \DateTime::createFromFormat('M d, Y', $p[10])->format('Y-m-d'),
                     'age' => $p[11],
-                    'exp' => $p[12],
+                    'exp' => ($p[12] !== 'R')? (int)$p[12] : 0,
                     'school' => $p[13],
                     'how_acquired' => $p[15]
                 ];
