@@ -41,6 +41,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Team](#team)
 - [League leaders](#league-leaders)
 - [League player shot locations](#league-player-shot-locations)
+- [League player shots](#league-player-shots)
 
 ---
 
@@ -2374,4 +2375,17 @@ $shots->distance_range = '8ft Range';
 $shots->zone;
 $shots->range_5ft;
 $shots->range_8ft;
+```
+
+### League player shots
+
+```php
+$shots = new NBALive\NBALeaguePlayerShotPts();
+$shots->season = '2023-24';
+
+//Get only players from a team with
+$shots->team_id = 1610612757;
+
+//Creates the arrays depending on distance_range
+$shots->details;
 ```
