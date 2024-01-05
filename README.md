@@ -41,6 +41,7 @@ so you only get what you need but also in a handy and readable manner.
 - [Player](#player-data)
 - [Team](#team)
 - [League leaders](#league-leaders)
+- [League player match ups](#league-player-match-ups)
 - [League player shot locations](#league-player-shot-locations)
 - [League player shots](#league-player-shots)
 
@@ -1162,6 +1163,25 @@ Outputs
   "arena": "Moda Center",
   "year_founded": 1970
 }
+```
+
+### League player match ups
+
+```php
+$match_ups = new NBALive\NBAMatchups();
+$match_ups->season = '2023-24';
+
+//Get only players from a team with
+$match_ups->off_team_id = 1610612757;
+
+//Get only certain player
+$match_ups->off_player_id = 202331;
+
+//Call fetch
+$match_ups->fetch();
+
+//Creates the array
+$match_ups->details;
 ```
 
 
