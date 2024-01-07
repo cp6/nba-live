@@ -60,11 +60,11 @@ composer require corbpie/nba-live
 Anytime an API call is made you can access debug parameters for the request
 
 ```php
-$this->url;
-$this->response_code;
-$this->response_size;
-$this->connect_time;
-$this->ip;
+$this->url;//The final compiled URL used in the call
+$this->response_code;//Returned HTTP response code
+$this->response_size;//The size of the response
+$this->connect_time;//Time it took to connect
+$this->ip;//The IP of the API endpoint that was connected to
 ```
 
 ### Todays games
@@ -83,7 +83,7 @@ $formatted = $today->gameFormatter($today->live_games);
 ```
 
 
-### Game time seconds formatted
+### Game time seconds formatted (Helper function)
 
 ```php
 $game_time = new NBALive\NBABase();
