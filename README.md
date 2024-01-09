@@ -660,6 +660,9 @@ $schedule->schedule;
 $tomorrow = (new DateTimeImmutable('tomorrow', new DateTimeZone('America/New_York')))->format('Y-m-d');
 
 $schedule = new NBALive\NBASchedule($tomorrow);
+
+//Get upcoming games for a team in next 7 days
+$schedule->upcomingGames(1610612746);
 ```
 
 Output
