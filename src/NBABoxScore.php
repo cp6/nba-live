@@ -39,4 +39,16 @@ class NBABoxScore extends NBABase
 
     }
 
+    public function sortAsc(array $players_data, string $key = 'points'): array
+    {
+        usort($players_data, fn($a, $b) => $a['statistics'][$key] <=> $b['statistics'][$key]);
+        return $players_data;
+    }
+
+    public function sortDesc(array $players_data, string $key = 'points'): array
+    {
+        usort($players_data, fn($a, $b) => $b['statistics'][$key] <=> $a['statistics'][$key]);
+        return $players_data;
+    }
+
 }
