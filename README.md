@@ -119,6 +119,9 @@ $boxscore->away_team;
 
 $boxscore->home_players;
 $boxscore->away_players;
+
+$boxscore->sortAsc($boxscore->home_players, 'points');
+$boxscore->sortDesc($boxscore->home_players, 'points');
 ```
 
 Team example:
@@ -300,6 +303,9 @@ $bs->away_team;
 $bs->away_players;
 $bs->away_starters;
 $bs->away_bench;
+
+$bs->sortAsc($bs->home_players, 'fieldGoalsAttempted');
+$bs->sortDesc($bs->home_players, 'fieldGoalsMade');
 ```
 
 ### Defensive box score
