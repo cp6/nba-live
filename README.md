@@ -5,7 +5,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 
 [![Generic badge](https://img.shields.io/badge/Version-1.2-blue.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/Updated-05.01.2024-green.svg)]()
+[![Generic badge](https://img.shields.io/badge/Updated-10.01.2024-green.svg)]()
 
 ---
 
