@@ -9,7 +9,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 
 ---
 
-## Table of contents
+## Table of contents / index
 
 - [Installing](#installing)
 - [Debugging](#debugging)
