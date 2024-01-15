@@ -41,6 +41,29 @@ class NBATeamInfo extends NBABase
             'max_year' => $info[15],
         ];
 
+        $ranks = $this->data['resultSets'][1]['rowSet'][0];
+
+        $this->ranks = [
+            'team_id' => $this->team_id,
+            'season' => $ranks[1],
+            'pts_ranks' => $ranks[2],
+            'pts_pg' => $ranks[3],
+            'reb_rank' => $ranks[4],
+            'reb_pg' => $ranks[5],
+            'ast_rank' => $ranks[6],
+            'ast_pg' => $ranks[8],
+            'opp_pts_rank' => $ranks[9],
+            'opp_pts_pg' => $ranks[10],
+        ];
+
+        $seasons = $this->data['resultSets'][2]['rowSet'];
+
+        foreach ($seasons as $season){
+            $this->seasons[] = [
+                'season' => $season[0]
+            ];
+        }
+
     }
 
 }
