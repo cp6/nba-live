@@ -34,6 +34,8 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Standings](#standings)
 - [Team year over year](#team-year-over-year)
 - [Team roster](#team-roster)
+- [Team info](#team-info)
+- [Team game logs](#team-game-logs)
 - [Schedule](#schedule)
 - [Player on off](#player-on-off)
 - [Player year over year](#player-year-over-year)
@@ -651,6 +653,32 @@ $standings = new NBALive\NBAStandings('2023-24');
 $standings->standings;
 $standings->east_standings;
 $standings->west_standings;
+```
+
+### Team info
+
+```php
+$team = new NBALive\NBATeamInfo(1610612746);
+
+//Creates the arrays
+$team->info;
+$team->ranks;
+$team->seasons;
+```
+
+### Team game logs
+
+```php
+$logs = new NBALive\NBATeamGameLogs();
+$logs->team_id = 1610612746;
+$logs->season = '2023-24';//Optional
+$logs->fetch();
+
+//Creates the array
+$logs->games;
+
+//Last X games
+$logs->lastXGames(10);//Last 10 games only
 ```
 
 ### Schedule
