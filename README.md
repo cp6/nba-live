@@ -41,6 +41,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Player year over year](#player-year-over-year)
 - [Player shooting](#player-shooting)
 - [Player](#player-data)
+- [Player awards](#player-awards)
 - [Team](#team)
 - [League leaders](#league-leaders)
 - [League player match ups](#league-player-match-ups)
@@ -1174,6 +1175,15 @@ Details:
   "draft_number": 10,
   "played_current_season": true
 }
+```
+
+### Player awards
+
+```php
+$awards = new NBALive\NBAPlayerAwards(202331);
+
+//Creates the array
+$player->awards;
 ```
 
 ### Team
