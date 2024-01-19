@@ -47,6 +47,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [League player match ups](#league-player-match-ups)
 - [League player shot locations](#league-player-shot-locations)
 - [League player shots](#league-player-shots)
+- [Video events](#video-events)
 
 ---
 
@@ -1263,4 +1264,13 @@ $shots->team_id = 1610612757;
 
 //Creates the array
 $shots->details;
+```
+
+### Video events
+
+```php
+$ve = new NBALive\NBAVideoEvents(1, '0022300568');
+
+//Creates the array
+$ve->details;
 ```
