@@ -2,8 +2,6 @@
 
 namespace Corbpie\NBALive;
 
-use DateTime;
-
 class NBAVideoEvents extends NBABase
 {
     public array $data = [];
