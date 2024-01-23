@@ -42,6 +42,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Player shooting](#player-shooting)
 - [Player](#player-data)
 - [Player awards](#player-awards)
+- [Player career](#player-career)
 - [Team](#team)
 - [League leaders](#league-leaders)
 - [League player match ups](#league-player-match-ups)
@@ -1185,6 +1186,26 @@ $awards = new NBALive\NBAPlayerAwards(202331);
 
 //Creates the array
 $player->awards;
+```
+
+### Player career
+
+```php
+$awards = new NBALive\NBAPlayerCareer(202331, 'Totals');
+
+//Creates the arrays
+$player->season_totals_regular;
+$player->career_totals_regular;
+$player->season_totals_post;
+$player->career_totals_post;
+$player->season_totals_all_star;
+$player->career_totals_all_star;
+$player->season_totals_college;
+$player->career_totals_college;
+$player->season_totals_showcase;
+$player->career_totals_showcase;
+$player->season_rankings_regular;
+$player->season_rankings_post;
 ```
 
 ### Team
