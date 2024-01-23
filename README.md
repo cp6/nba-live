@@ -3,9 +3,9 @@
 A PHP wrapper for accessing various NBA API endpoints including live games. This wrapper formats a lot of the returned data
 so you only get what you need but also in a handy, easily readable and accessible manner.
 
-[![Generic badge](https://img.shields.io/badge/Version-1.3-blue.svg)]()
+[![Generic badge](https://img.shields.io/badge/Version-1.4-blue.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/Updated-17.01.2024-green.svg)]()
+[![Generic badge](https://img.shields.io/badge/Updated-24.01.2024-green.svg)]()
 
 ---
 
@@ -19,6 +19,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Play by play](#play-by-play)
 - [Play by play V3](#play-by-play-v3)
 - [Play by play V2](#play-by-play-v2)
+- [Play by play V1](#play-by-play-v1)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
 - [Tradition box score](#traditional-box-score)
@@ -268,6 +269,26 @@ $pbp_v2->teamOnly(1610612746);
 
 //Scored only plays
 $pbp_v2->scoredOnly();
+
+```
+
+
+### Play by play V1
+
+```php
+$game_id = '0022300372';
+$start_qtr = 1;
+$end_qtr = 1;
+
+$pbp_v1 = new NBALive\NBAPlayByPlayV1($game_id, $start_qtr, $end_qtr);
+
+//Creates the arrays
+$pbp_v1->all_plays;
+$pbp_v1->plays_count;
+$pbp_v1->last_10_plays;
+
+//Scored only plays
+$pbp_v1->scoredOnly();
 
 ```
 
