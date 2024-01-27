@@ -55,7 +55,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 
 ### Installing
 
-Install with composer:
+Install easily with composer:
 
 ```
 composer require corbpie/nba-live
