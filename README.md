@@ -569,6 +569,24 @@ $lineups->details;
 $lineups->playerOnly(202695)
 ```
 
+### Team Dash pts shots
+
+```php
+$team_shots = new NBALive\NBATeamDashPtShots();
+
+$team_shots->team_id = 1610612746;
+$team_shots->season = '2019-20';//Optional if NOT set will just be current season
+$team_shots->fetch();
+
+//Creates the arrays
+$team_shots->general_shooting;
+$team_shots->shot_clock_shooting;
+$team_shots->dribble_shooting;
+$team_shots->closest_defender_shooting;
+$team_shots->closest_defender_10ft_shooting;
+$team_shots->touch_time_shooting;
+```
+
 ### Game rotations
 
 ```php
