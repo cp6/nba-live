@@ -32,6 +32,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Advanced box score](#advanced-box-score)
 - [Tracking box score](#tracking-box-score)
 - [Team lineups](#team-lineups)
+- [Team shots dash](#team-dash-pts-shots)
 - [Standings](#standings)
 - [Team year over year](#team-year-over-year)
 - [Team roster](#team-roster)
