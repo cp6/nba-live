@@ -1,11 +1,11 @@
 # NBA API Wrapper
 
-A PHP wrapper for accessing various NBA API endpoints including live games. This wrapper formats a lot of the returned data
+A PHP wrapper for accessing the many various NBA API endpoints including live games. This API wrapper formats a lot of the returned data
 so you only get what you need but also in a handy, easily readable and accessible manner.
 
 [![Generic badge](https://img.shields.io/badge/Version-1.4-blue.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/Updated-26.01.2024-green.svg)]()
+[![Generic badge](https://img.shields.io/badge/Updated-29.01.2024-green.svg)]()
 
 ---
 
