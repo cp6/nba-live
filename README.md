@@ -5,7 +5,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 
 [![Generic badge](https://img.shields.io/badge/Version-1.4-blue.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/Updated-29.01.2024-green.svg)]()
+[![Generic badge](https://img.shields.io/badge/Updated-31.01.2024-green.svg)]()
 
 ---
 
@@ -20,6 +20,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Play by play V3](#play-by-play-v3)
 - [Play by play V2](#play-by-play-v2)
 - [Play by play V1](#play-by-play-v1)
+- [Play by play clips](#play-by-play-clips)
 - [Rotations](#game-rotations)
 - [Game summary](#game-summary)
 - [Tradition box score](#traditional-box-score)
