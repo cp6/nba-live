@@ -20,6 +20,29 @@ class NBAPlayoffPicture extends NBABase
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playoffpicture?LeagueID=00&SeasonID=$season");
 
+        if (isset($this->data['resultSets'][0]['rowSet'][0])) {
+
+        }
+
+        if (isset($this->data['resultSets'][1]['rowSet'][0])) {
+
+        }
+
+        if (isset($this->data['resultSets'][2]['rowSet'][0])) {
+
+        }
+
+        if (isset($this->data['resultSets'][3]['rowSet'][0])) {
+
+        }
+
+        if (isset($this->data['resultSets'][4]['rowSet'][0])) {
+
+        }
+
+        if (isset($this->data['resultSets'][5]['rowSet'][0])) {
+
+        }
 
     }
 
