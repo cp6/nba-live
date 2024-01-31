@@ -293,6 +293,19 @@ $pbp_v1->scoredOnly();
 
 ```
 
+### Play by play clips
+
+```php
+$game_id = '0022300372';
+$event_number = 89;
+
+$play_clip = new NBALive\NBAPlayByPlayClips($game_id, $event_number);
+
+//Creates the arrays
+$play_clip->media;
+$play_clip->details;
+```
+
 ### Traditional box score
 
 ```php
