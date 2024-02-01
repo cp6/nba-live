@@ -46,6 +46,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Player](#player-data)
 - [Player awards](#player-awards)
 - [Player career](#player-career)
+- [Playoff picture](#playoff-picture)
 - [Team](#team)
 - [League leaders](#league-leaders)
 - [League player match ups](#league-player-match-ups)
@@ -1260,6 +1261,13 @@ $player->season_totals_showcase;
 $player->career_totals_showcase;
 $player->season_rankings_regular;
 $player->season_rankings_post;
+```
+
+### Playoff picture
+
+```php
+$playoffs = new NBALive\NBAPlayoffPicture('22019');
+
 ```
 
 ### Team
