@@ -39,6 +39,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Team roster](#team-roster)
 - [Team info](#team-info)
 - [Team game logs](#team-game-logs)
+- [Team franchise players](#team-franchise-players)
 - [Schedule](#schedule)
 - [Player on off](#player-on-off)
 - [Player year over year](#player-year-over-year)
@@ -737,6 +738,15 @@ $logs->games;
 
 //Last X games
 $logs->lastXGames(10);//Last 10 games only
+```
+
+### Team franchise players
+
+```php
+$players = new NBALive\NBAFranchisePlayers(1610612746);
+
+//Creates the array
+$players->players;
 ```
 
 ### Schedule
