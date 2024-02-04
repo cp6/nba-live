@@ -6,6 +6,7 @@ use DateInterval;
 
 class NBAPlayByPlay extends NBABase
 {
+    public array $data = [];
 
     public array $all_plays = [];
 
@@ -19,11 +20,13 @@ class NBAPlayByPlay extends NBABase
             $this->game_id = $game_id;
         }
 
-        $data = $this->ApiCall("https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_{$this->game_id}.json");
+        $this->data = $this->ApiCall("https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_{$this->game_id}.json");
 
-        $this->all_plays = $data['game']['actions'];
-        $this->last_10_plays = array_slice($this->all_plays, -10);
-        $this->plays_count = count($this->all_plays);
+        if (isset($this->data['game'])) {
+            $this->all_plays = $this->data['game']['actions'];
+            $this->last_10_plays = array_slice($this->all_plays, -10);
+            $this->plays_count = count($this->all_plays);
+        }
 
     }
 
