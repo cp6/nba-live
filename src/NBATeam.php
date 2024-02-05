@@ -17,16 +17,18 @@ class NBATeam extends NBABase
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdetails?TeamID={$this->team_id}");
 
-        $team = $this->data['resultSets']['0']['rowSet'][0];
+        if (isset($this->data['resultSets'][0]['rowSet'][0])) {
+            $team = $this->data['resultSets']['0']['rowSet'][0];
 
-        $this->details = [
-            'id' => $team[0],
-            'name' => $team[2],
-            'short_name' => $team[1],
-            'city' => $team[4],
-            'arena' => $team[5],
-            'year_founded' => $team[3],
-        ];
+            $this->details = [
+                'id' => $team[0],
+                'name' => $team[2],
+                'short_name' => $team[1],
+                'city' => $team[4],
+                'arena' => $team[5],
+                'year_founded' => $team[3],
+            ];
+        }
 
     }
 
