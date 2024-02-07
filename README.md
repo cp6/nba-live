@@ -49,6 +49,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Player career](#player-career)
 - [Playoff picture](#playoff-picture)
 - [Team](#team)
+- [Teams years](#teams-years)
 - [League leaders](#league-leaders)
 - [League player match ups](#league-player-match-ups)
 - [League player shot locations](#league-player-shot-locations)
@@ -1291,6 +1292,15 @@ $team->team_id = 1610612757;
 
 //Creates the array
 $team->details;
+```
+
+### Teams years
+
+```php
+$teams = new NBALive\NBATeamYears();
+
+//Creates the array
+$teams->teams;
 ```
 
 Outputs
