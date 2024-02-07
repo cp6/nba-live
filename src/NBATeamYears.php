@@ -13,13 +13,15 @@ class NBATeamYears extends NBABase
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/commonteamyears?LeagueID={$league_id}");
 
-        foreach ($this->data['resultSets'][0]['rowSet'] as $team){
-            $this->teams[] = [
-                'team_id' => $team[1],
-                'team' => $team[4],
-                'min_year' => (int)$team[2],
-                'max_year' => (int)$team[3],
-            ];
+        if (isset($this->data['resultSets'][0]['rowSet'])) {
+            foreach ($this->data['resultSets'][0]['rowSet'] as $team) {
+                $this->teams[] = [
+                    'team_id' => $team[1],
+                    'team' => $team[4],
+                    'min_year' => (int)$team[2],
+                    'max_year' => (int)$team[3],
+                ];
+            }
         }
 
     }
