@@ -35,6 +35,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Team lineups](#team-lineups)
 - [Team shots dash](#team-dash-pts-shots)
 - [Standings](#standings)
+- [League game log](#league-game-log)
 - [Team year over year](#team-year-over-year)
 - [Team roster](#team-roster)
 - [Team info](#team-info)
@@ -713,6 +714,15 @@ $standings = new NBALive\NBAStandings('2023-24');
 $standings->standings;
 $standings->east_standings;
 $standings->west_standings;
+```
+
+### League game log
+
+```php
+$gl = new NBALive\NBALeagueGameLog();
+
+//Creates the array
+$gl->games;
 ```
 
 ### Team info
