@@ -145,6 +145,7 @@ class NBABase
             'seconds' => $seconds,
             'seconds_period' => $seconds_in,
             'seconds_period_string' => $seconds_period_string,
+            'string' => $string,
             'full_string' => $period_txt . ' ' . $seconds_period_string
         ];
     }
