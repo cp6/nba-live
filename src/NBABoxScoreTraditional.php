@@ -32,31 +32,33 @@ class NBABoxScoreTraditional extends NBABoxScoreFilters
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoretraditionalv3?{$this->filters}&GameID={$this->game_id}");
 
-        $this->home_players = $this->data['boxScoreTraditional']['homeTeam']['players'];
-        $this->away_players = $this->data['boxScoreTraditional']['awayTeam']['players'];
+        if (isset($this->data['boxScoreTraditional'])) {
+            $this->home_players = $this->data['boxScoreTraditional']['homeTeam']['players'];
+            $this->away_players = $this->data['boxScoreTraditional']['awayTeam']['players'];
 
-        $this->home_team = $this->data['boxScoreTraditional']['homeTeam']['statistics'];
-        $this->home_starters = $this->data['boxScoreTraditional']['homeTeam']['starters'];
-        $this->home_bench = $this->data['boxScoreTraditional']['homeTeam']['bench'];
+            $this->home_team = $this->data['boxScoreTraditional']['homeTeam']['statistics'];
+            $this->home_starters = $this->data['boxScoreTraditional']['homeTeam']['starters'];
+            $this->home_bench = $this->data['boxScoreTraditional']['homeTeam']['bench'];
 
-        $this->away_team = $this->data['boxScoreTraditional']['awayTeam']['statistics'];
-        $this->away_starters = $this->data['boxScoreTraditional']['awayTeam']['starters'];
-        $this->away_bench = $this->data['boxScoreTraditional']['awayTeam']['bench'];
+            $this->away_team = $this->data['boxScoreTraditional']['awayTeam']['statistics'];
+            $this->away_starters = $this->data['boxScoreTraditional']['awayTeam']['starters'];
+            $this->away_bench = $this->data['boxScoreTraditional']['awayTeam']['bench'];
 
-        $this->teams = [
-            'home' => $this->home_team,
-            'away' => $this->away_team
-        ];
+            $this->teams = [
+                'home' => $this->home_team,
+                'away' => $this->away_team
+            ];
 
-        $this->teams_starters = [
-            'home' => $this->home_starters,
-            'away' => $this->away_starters
-        ];
+            $this->teams_starters = [
+                'home' => $this->home_starters,
+                'away' => $this->away_starters
+            ];
 
-        $this->teams_bench = [
-            'home' => $this->home_bench,
-            'away' => $this->away_bench
-        ];
+            $this->teams_bench = [
+                'home' => $this->home_bench,
+                'away' => $this->away_bench
+            ];
+        }
 
         return $this->data;
     }
