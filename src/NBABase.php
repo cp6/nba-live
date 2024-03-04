@@ -51,7 +51,7 @@ class NBABase
     {
         $this->url = $url;
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_URL, $this->url);
         $header[0] = "Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
         $header[1] = "Accept-Language: en-us,en;q=0.5";
         curl_setopt($curl, CURLOPT_REFERER, "https://stats.nba.com/");
