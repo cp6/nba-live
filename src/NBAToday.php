@@ -58,12 +58,19 @@ class NBAToday extends NBABase
 
         foreach ($games as $game) {
             $formatted_time_left = ($game['gameClock'] === '') ? null : sprintf('%02d:%02d', (new DateInterval(strstr($game['gameClock'], '.', true) . "S"))->i, (new DateInterval(strstr($game['gameClock'], '.', true) . "S"))->s);
+
+            if ($game['homeTeam']['score'] > $game['awayTeam']['score']) {
+                $margin = $game['homeTeam']['score'] - $game['awayTeam']['score'];
+            } else {
+                $margin = $game['awayTeam']['score'] - $game['homeTeam']['score'];
+            }
+
             $formatted[] = [
                 'status' => $game['gameStatus'],
                 'starting_in' => ($game['gameStatus'] === 1) ? $this->startingIn($game['gameTimeUTC']) : null,
                 'game_id' => $game['gameId'],
                 'game_code' => $game['gameCode'],
-                'margin' => ($game['gameStatus'] === 1) ? null : (($game['homeTeam']['score'] > $game['awayTeam']['score']) ? ($game['homeTeam']['score'] - $game['awayTeam']['score']) : ($game['awayTeam']['score'] - $game['homeTeam']['score'])),
+                'margin' => ($game['gameStatus'] === 1) ? null : $margin,
                 'home_score' => ($game['gameStatus'] === 1) ? null : $game['homeTeam']['score'],
                 'away_score' => ($game['gameStatus'] === 1) ? null : $game['awayTeam']['score'],
                 'time_left_string' => ($game['gameStatus'] === 1) ? null : $game['gameStatusText'],
