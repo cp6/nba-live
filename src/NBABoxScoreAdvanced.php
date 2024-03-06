@@ -19,11 +19,13 @@ class NBABoxScoreAdvanced extends NBABoxScoreFilters
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoreadvancedv3?" . $this->build() . "&GameID={$this->game_id}");
 
-        $this->home_players = $this->data['boxScoreAdvanced']['homeTeam']['players'];
-        $this->away_players = $this->data['boxScoreAdvanced']['awayTeam']['players'];
+        if (isset($this->data['boxScoreAdvanced'])) {
+            $this->home_players = $this->data['boxScoreAdvanced']['homeTeam']['players'];
+            $this->away_players = $this->data['boxScoreAdvanced']['awayTeam']['players'];
 
-        $this->home_team = $this->data['boxScoreAdvanced']['homeTeam']['statistics'];
-        $this->away_team = $this->data['boxScoreAdvanced']['awayTeam']['statistics'];
+            $this->home_team = $this->data['boxScoreAdvanced']['homeTeam']['statistics'];
+            $this->away_team = $this->data['boxScoreAdvanced']['awayTeam']['statistics'];
+        }
 
         return $this->data;
     }
