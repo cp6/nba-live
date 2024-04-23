@@ -14,6 +14,8 @@ class NBABase
 
     public const MODE_PER48 = 'Per48';
 
+    public const CURRENT_TYPE = 'Playoffs';
+
     public const TYPE_REGULAR = 'Regular+Season';
 
     public const TYPE_PLAY_IN = 'PlayIn';
