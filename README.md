@@ -77,6 +77,10 @@ $this->response_code;//Returned HTTP response code
 $this->response_size;//The size of the response
 $this->connect_time;//Time it took to connect
 $this->ip;//The IP of the API endpoint that was connected to
+
+$this::CURRENT_SEASON;//Returns current season
+$this::PREVIOUS_SEASON;//Returns previous season
+$this::CURRENT_TYPE;//Returns current season type
 ```
 
 ### Todays games
