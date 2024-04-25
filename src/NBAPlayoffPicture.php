@@ -19,7 +19,7 @@ class NBAPlayoffPicture extends NBABase
 
     public array $west_conf_remaining_games = [];
 
-    public function __construct(string $season = '22019')
+    public function __construct(string $season = '22023')
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playoffpicture?LeagueID=00&SeasonID=$season");
 
