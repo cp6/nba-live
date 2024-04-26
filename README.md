@@ -49,6 +49,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Player awards](#player-awards)
 - [Player career](#player-career)
 - [Playoff picture](#playoff-picture)
+- [Playoff series](#playoff-series)
 - [Team](#team)
 - [Teams years](#teams-years)
 - [League leaders](#league-leaders)
@@ -1291,8 +1292,14 @@ $player->season_rankings_post;
 ### Playoff picture
 
 ```php
-$playoffs = new NBALive\NBAPlayoffPicture('22019');
+$playoffs = new NBALive\NBAPlayoffPicture('22023');
 
+```
+
+### Playoff series
+
+```php
+$playoff_series = new NBALive\NBAPlayoffSeries('2023-24');
 ```
 
 ### Team
