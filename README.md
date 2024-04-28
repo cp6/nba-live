@@ -82,6 +82,18 @@ $this->ip;//The IP of the API endpoint that was connected to
 $this::CURRENT_SEASON;//Returns current season
 $this::PREVIOUS_SEASON;//Returns previous season
 $this::CURRENT_TYPE;//Returns current season type
+
+//Mode types
+$this::MODE_PER_GAME;
+$this::MODE_TOTAL;
+$this::MODE_PER48;
+
+//Game types
+$this::TYPE_REGULAR;
+$this::TYPE_PLAY_IN;
+$this::TYPE_PLAYOFFS;
+$this::TYPE_ALL_STAR;
+$this::TYPE_PRE_SEASON;
 ```
 
 ### Todays games
