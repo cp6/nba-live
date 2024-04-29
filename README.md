@@ -3,9 +3,9 @@
 A PHP wrapper for accessing the many various NBA API endpoints including live games. This API wrapper formats a lot of the returned data
 so you only get what you need but also in a handy, easily readable and accessible manner.
 
-[![Generic badge](https://img.shields.io/badge/Version-1.5-blue.svg)]()
+[![Generic badge](https://img.shields.io/badge/Version-1.6-blue.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/Updated-08.02.2024-green.svg)]()
+[![Generic badge](https://img.shields.io/badge/Updated-29.04.2024-green.svg)]()
 
 ---
 
