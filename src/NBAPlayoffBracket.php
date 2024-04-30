@@ -62,7 +62,7 @@ class NBAPlayoffBracket extends NBABase
 
                 if ($s['seriesStatus'] === 2) {
                     $this->in_progress[] = $series;
-                } else {
+                } elseif ($s['seriesStatus'] === 3) {
                     $this->completed[] = $series;
                 }
 
