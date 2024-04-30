@@ -13,6 +13,10 @@ class NBAPlayoffBracket extends NBABase
 
     public array $west = [];
 
+    public array $completed = [];
+
+    public array $in_progress = [];
+
     public function __construct(string $season = '2023')
     {
         $this->data = $this->ApiCall("https://cdn.nba.com/static/json/staticData/brackets/{$season}/PlayoffBracket.json");
@@ -54,6 +58,12 @@ class NBAPlayoffBracket extends NBABase
                     $this->east[] = $series;
                 } else {
                     $this->west[] = $series;
+                }
+
+                if ($s['seriesStatus'] === 2) {
+                    $this->in_progress[] = $series;
+                } else {
+                    $this->completed[] = $series;
                 }
 
             }
