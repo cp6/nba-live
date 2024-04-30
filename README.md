@@ -48,6 +48,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [Player](#player-data)
 - [Player awards](#player-awards)
 - [Player career](#player-career)
+- [Playoff brackets](#playoff-brackets)
 - [Playoff picture](#playoff-picture)
 - [Playoff series](#playoff-series)
 - [Team](#team)
@@ -1300,6 +1301,21 @@ $player->career_totals_showcase;
 $player->season_rankings_regular;
 $player->season_rankings_post;
 ```
+
+### Playoff brackets
+
+```php
+$series = new NBALive\NBAPlayoffBracket('2023');
+
+$all = $series->results;
+$east = $series->east;
+$west = $series->west;
+
+$in_progress = $series->in_progress;
+$completed = $series->completed;
+```
+
+
 
 ### Playoff picture
 
