@@ -7,6 +7,9 @@ so you only get what you need but also in a handy, easily readable and accessibl
 
 [![Generic badge](https://img.shields.io/badge/Updated-04.05.2024-green.svg)]()
 
+[![Generic badge](https://img.shields.io/badge/Playoffs-gold.svg)]()
+
+
 ---
 
 ## Table of contents / index
