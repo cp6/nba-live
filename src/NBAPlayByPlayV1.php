@@ -23,21 +23,23 @@ class NBAPlayByPlayV1 extends NBABase
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playbyplay?EndPeriod={$end_period}&GameID={$this->game_id}&StartPeriod={$start_period}");
 
-        foreach ($this->data['resultSets'][0]['rowSet'] as $p) {
-            $this->all_plays[] = [
-                "game_id" => $p[0],
-                "event_num" => $p[1],
-                "event_msg_type" => $p[2],
-                "event_msg_action_type" => $p[3],
-                "period" => $p[4],
-                "wc_time_string" => $p[5],
-                "pc_time_string" => $p[6],
-                "home_description" => $p[7],
-                "neutral_description" => $p[8],
-                "visitor_description" => $p[9],
-                "score" => $p[10],
-                "score_margin" => (!is_null($p[11])) ? (int)$p[11] : null
-            ];
+        if (isset($this->data['resultSets'][0]['rowSet'])){
+            foreach ($this->data['resultSets'][0]['rowSet'] as $p) {
+                $this->all_plays[] = [
+                    "game_id" => $p[0],
+                    "event_num" => $p[1],
+                    "event_msg_type" => $p[2],
+                    "event_msg_action_type" => $p[3],
+                    "period" => $p[4],
+                    "wc_time_string" => $p[5],
+                    "pc_time_string" => $p[6],
+                    "home_description" => $p[7],
+                    "neutral_description" => $p[8],
+                    "visitor_description" => $p[9],
+                    "score" => $p[10],
+                    "score_margin" => (!is_null($p[11])) ? (int)$p[11] : null
+                ];
+            }
         }
 
         $this->last_10_plays = array_slice($this->all_plays, -10);

@@ -25,45 +25,47 @@ class NBAPlayByPlayV2 extends NBABase
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playbyplayv2?EndPeriod={$end_period}&GameID={$this->game_id}&StartPeriod={$start_period}");
 
-        foreach ($this->data['resultSets'][0]['rowSet'] as $p) {
-            $this->all_plays[] = [
-                "game_id" => $p[0],
-                "event_num" => $p[1],
-                "event_msg_type" => $p[2],
-                "event_msg_action_type" => $p[3],
-                "period" => $p[4],
-                "wc_time_string" => $p[5],
-                "pc_time_string" => $p[6],
-                "home_description" => $p[7],
-                "neutral_description" => $p[8],
-                "visitor_description" => $p[9],
-                "score" => $p[10],
-                "score_margin" => (!is_null($p[11]))? (int)$p[11] : null,
-                "person1_type" => $p[12],
-                "player1_id" => $p[13],
-                "player1_name" => $p[14],
-                "player1_team_id" => $p[15],
-                "player1_team_city" => $p[16],
-                "player1_team_nickname" => $p[17],
-                "player1_team_abbreviation" => $p[18],
-                "person2_type" => $p[19],
-                "player2_id" => $p[20],
-                "player2_name" => $p[21],
-                "player2_team_id" => $p[22],
-                "player2_team_city" => $p[23],
-                "player2_team_nickname" => $p[24],
-                "player2_team_abbreviation" => $p[25],
-                "person3_type" => $p[26],
-                "player3_id" => $p[27],
-                "player3_name" => $p[28],
-                "player3_team_id" => $p[29],
-                "player3_team_city" => $p[30],
-                "player3_team_nickname" => $p[31],
-                "player3_team_abbreviation" => $p[32],
-                "video_available_flag" => $p[33]
-            ];
+        if (isset($this->data['resultSets'][0]['rowSet'])) {
+            foreach ($this->data['resultSets'][0]['rowSet'] as $p) {
+                $this->all_plays[] = [
+                    "game_id" => $p[0],
+                    "event_num" => $p[1],
+                    "event_msg_type" => $p[2],
+                    "event_msg_action_type" => $p[3],
+                    "period" => $p[4],
+                    "wc_time_string" => $p[5],
+                    "pc_time_string" => $p[6],
+                    "home_description" => $p[7],
+                    "neutral_description" => $p[8],
+                    "visitor_description" => $p[9],
+                    "score" => $p[10],
+                    "score_margin" => (!is_null($p[11])) ? (int)$p[11] : null,
+                    "person1_type" => $p[12],
+                    "player1_id" => $p[13],
+                    "player1_name" => $p[14],
+                    "player1_team_id" => $p[15],
+                    "player1_team_city" => $p[16],
+                    "player1_team_nickname" => $p[17],
+                    "player1_team_abbreviation" => $p[18],
+                    "person2_type" => $p[19],
+                    "player2_id" => $p[20],
+                    "player2_name" => $p[21],
+                    "player2_team_id" => $p[22],
+                    "player2_team_city" => $p[23],
+                    "player2_team_nickname" => $p[24],
+                    "player2_team_abbreviation" => $p[25],
+                    "person3_type" => $p[26],
+                    "player3_id" => $p[27],
+                    "player3_name" => $p[28],
+                    "player3_team_id" => $p[29],
+                    "player3_team_city" => $p[30],
+                    "player3_team_nickname" => $p[31],
+                    "player3_team_abbreviation" => $p[32],
+                    "video_available_flag" => $p[33]
+                ];
+            }
         }
-
+        
         $this->last_10_plays = array_slice($this->all_plays, -10);
         $this->plays_count = count($this->all_plays);
 
