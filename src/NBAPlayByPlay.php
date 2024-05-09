@@ -69,7 +69,12 @@ class NBAPlayByPlay extends NBABase
                 $score_home = (int)$play['scoreHome'];
                 $score_away = (int)$play['scoreAway'];
 
-                $formatted_time_left = ($play['clock'] === '') ? null : sprintf('%02d:%02d', (new DateInterval(strstr($play['clock'], '.', true) . "S"))->i, (new DateInterval(strstr($play['clock'], '.', true) . "S"))->s);
+                if ($play['clock'] === '') {
+                    $formatted_time_left = null;
+                } else {
+                    $trim = new DateInterval(strstr($play['clock'], '.', true) . "S");
+                    $formatted_time_left = sprintf('%02d:%02d', ($trim)->i, ($trim)->s);
+                }
 
                 $scores[] = [
                     'action_number' => $play['actionNumber'],
