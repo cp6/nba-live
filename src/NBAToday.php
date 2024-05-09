@@ -22,7 +22,7 @@ class NBAToday extends NBABase
     {
         $games = $this->ApiCall("https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json");
 
-        $total = $live = $completed = $upcoming = 0;
+        $live = $completed = $upcoming = 0;
 
         $this->all_games = $games['scoreboard']['games'];
 
@@ -38,13 +38,12 @@ class NBAToday extends NBABase
                     $this->upcoming_games[] = $game;
                     $upcoming++;
                 }
-                $total++;
             }
         }
 
         $this->summary = [
             'date' => $games['scoreboard']['gameDate'],
-            'all_games' => $total,
+            'all_games' => $live + $completed + $upcoming,
             'live_games' => $live,
             'completed_games' => $completed,
             'upcoming_games' => $upcoming,
@@ -65,6 +64,14 @@ class NBAToday extends NBABase
                 $margin = $game['awayTeam']['score'] - $game['homeTeam']['score'];
             }
 
+            if (is_null($formatted_time_left)) {
+                $seconds_left = 0;
+            } else {
+                $seconds_left = array_sum(array_map(function ($v, $i) {
+                    return ($i === 0) ? $v * 60 : $v;
+                }, explode(':', $formatted_time_left), range(0, 1)));
+            }
+
             $formatted[] = [
                 'status' => $game['gameStatus'],
                 'starting_in' => ($game['gameStatus'] === 1) ? $this->startingIn($game['gameTimeUTC']) : null,
@@ -75,9 +82,7 @@ class NBAToday extends NBABase
                 'away_score' => ($game['gameStatus'] === 1) ? null : $game['awayTeam']['score'],
                 'time_left_string' => ($game['gameStatus'] === 1) ? null : $game['gameStatusText'],
                 'time_left' => ($game['gameStatus'] === 1) ? null : $formatted_time_left,
-                'seconds_left' => ($formatted_time_left === null) ? 0 : array_sum(array_map(function ($v, $i) {
-                    return ($i === 0) ? $v * 60 : $v;
-                }, explode(':', $formatted_time_left), range(0, 1))),
+                'seconds_left' => $seconds_left,
                 'period' => ($game['gameStatus'] === 1) ? null : $game['period'],
                 'home_team' => [
                     'id' => $game['homeTeam']['teamId'],
