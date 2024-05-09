@@ -22,11 +22,11 @@ class NBAMatchups extends NBABase
 
     public ?int $def_team_id = null;
 
-    public function fetch()
+    public function fetch(): array
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID={$this->def_player_id}&DefTeamID={$this->def_team_id}&LeagueID=00&OffPlayerID={$this->off_player_id}&OffTeamID={$this->off_team_id}&PerMode={$this->mode_type}&Season={$this->season}&SeasonType={$this->season_type}");
 
-        if (isset($this->data['resultSets'][0]['rowSet'][0])){
+        if (isset($this->data['resultSets'][0]['rowSet'][0])) {
             foreach ($this->data['resultSets'][0]['rowSet'] as $p) {
                 $this->details[] = [
                     'offensive_player_id' => $p[1],
@@ -59,6 +59,7 @@ class NBAMatchups extends NBABase
             }
         }
 
+        return $this->details;
     }
 
 }
