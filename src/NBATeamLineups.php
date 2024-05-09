@@ -12,7 +12,7 @@ class NBATeamLineups extends NBATeamDashFilters
 
     public array $player_only = [];
 
-    public function fetch(): void
+    public function fetch(): array
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdashlineups?GroupQuantity={$this->players_amount}&" . $this->build());
 
@@ -92,6 +92,7 @@ class NBATeamLineups extends NBATeamDashFilters
             }
         }
 
+        return $this->details;
     }
 
     public function playerOnly(int $player_id): array
