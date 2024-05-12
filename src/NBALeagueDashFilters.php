@@ -32,7 +32,6 @@ class NBALeagueDashFilters extends NBABase
     public string $player_position = '';
     public string $plus_minus = 'N';
     public string $rank = 'N';
-
     public string $season = NBABase::CURRENT_SEASON;
     public string $season_segment = '';
     public string $season_type = 'Regular Season';//(Regular Season)|(Pre Season)|(Playoffs)|(All Star)
