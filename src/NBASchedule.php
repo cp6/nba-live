@@ -48,13 +48,13 @@ class NBASchedule extends NBABase
         return $this->schedule;
     }
 
-    public function upcomingGames(int $team_id = 1610612746): array
+    public function upcomingGames(int $team_id = 1610612746, int $days_ahead = 7): array
     {
         $current_date = strtotime('today');
 
         $this->schedule = [];
 
-        for ($i = 0; $i < 7; $i++) {
+        for ($i = 0; $i < $days_ahead; $i++) {
             $dayTimestamp = strtotime("+$i day", $current_date);
             $formatted_date = date('Y-m-d', $dayTimestamp);
 
