@@ -150,6 +150,7 @@ class NBAToday extends NBABase
                 ],
                 'game_series' => $game['seriesText'],
                 'game_type' => $game['gameSubtype'],
+                'game_sub_label' => $game['gameSubLabel'],
                 'game_time_utc' => (new DateTime($game['gameTimeUTC']))->format('Y-m-d H:i:s'),
                 'game_time_et' => (new DateTime($game['gameEt']))->format('Y-m-d H:i:s')
             ];
