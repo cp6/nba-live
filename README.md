@@ -155,6 +155,9 @@ $boxscore->away_players;
 
 $boxscore->sortAsc($boxscore->home_players, 'points');
 $boxscore->sortDesc($boxscore->home_players, 'points');
+
+//Get inactive players for both teams
+$boxscore->getInactive();
 ```
 
 Team example:
