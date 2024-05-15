@@ -41,6 +41,25 @@ class NBABoxScore extends NBABase
 
     }
 
+    public function getInactive(): array
+    {
+        $home_inactive = [];
+        foreach ($this->home_players as $hp){
+            if ($hp['status'] === 'INACTIVE'){
+                $home_inactive[] = $hp;
+            }
+        }
+
+        $away_inactive = [];
+        foreach ($this->away_players as $ap){
+            if ($ap['status'] === 'INACTIVE'){
+                $away_inactive[] = $ap;
+            }
+        }
+
+        return ['home_inactive' => $home_inactive, 'away_inactive' => $away_inactive];
+    }
+
     public function sortAsc(array $players_data, string $key = 'points'): array
     {
         usort($players_data, fn($a, $b) => $a['statistics'][$key] <=> $b['statistics'][$key]);
