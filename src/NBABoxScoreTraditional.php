@@ -28,13 +28,17 @@ class NBABoxScoreTraditional extends NBABoxScoreFilters
 
     public array $teams_bench = [];
 
-    public function fetch(): array
+    public function fetch(bool $players_only = false): array
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoretraditionalv3?{$this->filters}&GameID={$this->game_id}");
 
         if (isset($this->data['boxScoreTraditional'])) {
             $this->home_players = $this->data['boxScoreTraditional']['homeTeam']['players'];
             $this->away_players = $this->data['boxScoreTraditional']['awayTeam']['players'];
+
+            if ($players_only) {//Return early
+                return $this->data;
+            }
 
             $this->home_team = $this->data['boxScoreTraditional']['homeTeam']['statistics'];
             $this->home_starters = $this->data['boxScoreTraditional']['homeTeam']['starters'];

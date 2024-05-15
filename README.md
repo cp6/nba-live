@@ -340,6 +340,9 @@ $bs = new NBALive\NBABoxScoreTraditional();
 $bs->game_id = '0022300372';
 $bs->fetch();
 
+//Use true to only get home and visit players arrays and return early
+$bs->fetch(true);
+
 //Preset filter (Qtr 4)
 $bs->game_id = '0022300372';
 $bs->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
