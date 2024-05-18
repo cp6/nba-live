@@ -104,7 +104,7 @@ $this::TYPE_ALL_STAR;
 $this::TYPE_PRE_SEASON;
 ```
 
-### Todays games
+### Todays games and live
 
 ```php
 $today = new NBALive\NBAToday();
