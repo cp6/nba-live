@@ -105,7 +105,7 @@ $this::TYPE_PRE_SEASON;
 ```
 
 ### Todays games and live
-
+<span id="todays-games"></span>
 ```php
 $today = new NBALive\NBAToday();
 
@@ -121,6 +121,7 @@ $formatted = $today->gameFormatter($today->live_games);
 
 
 ### Game time seconds formatted (Helper function)
+<span id="game-time-seconds-formatted"></span>
 
 ```php
 $game_time = new NBALive\NBABase();
@@ -799,6 +800,8 @@ $schedule = new NBALive\NBASchedule('2023-12-20');
 //Creates the array
 $schedule->schedule;
 
+//Get full season schedule for a team
+$schedule->fullForTeam(1610612746);
 
 //Get tomorrow's games
 $tomorrow = (new DateTimeImmutable('tomorrow', new DateTimeZone('America/New_York')))->format('Y-m-d');
