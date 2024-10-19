@@ -17,6 +17,56 @@ class NBASchedule extends NBABase
         $this->process($games);
     }
 
+    public function fullForTeam(int $team_id): array
+    {
+        $games = $this->ApiCall("https://cdn.nba.com/static/json/staticData/scheduleLeagueV2.json");
+
+        $data = $games['leagueSchedule']['gameDates'];
+
+        $games = [];
+
+        for ($i = 0; $i <= 173; $i++) {
+            foreach ($data[$i]['games'] as $game) {
+                if ($game['homeTeam']['teamId'] === $team_id || $game['awayTeam']['teamId'] === $team_id) {
+                    $game['time_until_game'] = $this->getTimeAway($game['gameDateTimeEst']);
+                    $games[] = $game;
+
+                }
+            }
+        }
+
+        return $games;
+    }
+
+    private function getTimeAway($dateString): ?string
+    {
+        $now = new DateTime();
+        $date = new DateTime($dateString);
+
+        if ($date < $now) {
+            return null;
+        }
+
+        $interval = $now->diff($date);
+
+        $days = $interval->d;
+        $hours = $interval->h;
+        $minutes = $interval->i;
+
+        $result = [];
+        if ($days > 0) {
+            $result[] = $days . " Day" . ($days > 1 ? "s" : "");
+        }
+        if ($hours > 0) {
+            $result[] = $hours . " Hour" . ($hours > 1 ? "s" : "");
+        }
+        if ($minutes > 0 && count($result) < 2) {
+            $result[] = $minutes . " Minute" . ($minutes > 1 ? "s" : "");
+        }
+
+        return implode(" ", $result);
+    }
+
     public function process(array $data, ?int $team_id = null): array
     {
         if (isset($this->data['resultSets'][0]['rowSet'][0])) {
@@ -46,6 +96,11 @@ class NBASchedule extends NBABase
         }
 
         return $this->schedule;
+    }
+
+    public function forTeam(int $team_tid = 1610612746): array
+    {
+        return $this->process();
     }
 
     public function upcomingGames(int $team_id = 1610612746, int $days_ahead = 7): array
