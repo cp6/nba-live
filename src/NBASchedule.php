@@ -28,8 +28,34 @@ class NBASchedule extends NBABase
         for ($i = 0; $i <= 173; $i++) {
             foreach ($data[$i]['games'] as $game) {
                 if ($game['homeTeam']['teamId'] === $team_id || $game['awayTeam']['teamId'] === $team_id) {
-                    $game['time_until_game'] = $this->getTimeAway($game['gameDateTimeEst']);
-                    $games[] = $game;
+                    $games[] = [
+                        'game_id' => $game['gameId'],
+                        'game_code' => $game['gameCode'],
+                        'game_status' => $game['gameStatus'],
+                        'game_sequence' => $game['gameSequence'],
+                        'game_datetime_est' => $game['gameTimeEst'],
+                        'game_datetime_utc' => $game['gameDateTimeUTC'],
+                        'game_datetime_home' => $game['homeTeamTime'],
+                        'game_datetime_away' => $game['awayTeamTime'],
+                        'day' => $game['day'],
+                        'week_number' => $game['weekNumber'],
+                        'home_tid' => $game['homeTeam']['teamId'],
+                        'home_name' => $game['homeTeam']['teamName'],
+                        'home_city' => $game['homeTeam']['teamCity'],
+                        'home_short' => $game['homeTeam']['teamTricode'],
+                        'home_wins' => $game['homeTeam']['wins'],
+                        'home_losses' => $game['homeTeam']['losses'],
+                        'away_tid' => $game['awayTeam']['teamId'],
+                        'away_name' => $game['awayTeam']['teamName'],
+                        'away_city' => $game['awayTeam']['teamCity'],
+                        'away_short' => $game['awayTeam']['teamTricode'],
+                        'away_wins' => $game['awayTeam']['wins'],
+                        'away_loses' => $game['awayTeam']['losses'],
+                        'arena_name' => $game['arenaName'],
+                        'arena_state' => $game['arenaState'],
+                        'arena_city' => $game['arenaCity'],
+                        'time_until_game' => $this->getTimeAway($game['gameDateTimeEst'])
+                    ];
 
                 }
             }
@@ -49,22 +75,30 @@ class NBASchedule extends NBABase
 
         $interval = $now->diff($date);
 
-        $days = $interval->d;
+        $months = $interval->y * 12 + $interval->m;
+        $weeks = floor($interval->d / 7);
+        $days = $interval->d % 7;
         $hours = $interval->h;
         $minutes = $interval->i;
 
         $result = [];
-        if ($days > 0) {
+        if ($months > 0) {
+            $result[] = $months . " Month" . ($months > 1 ? "s" : "");
+        }
+        if ($weeks > 0) {
+            $result[] = $weeks . " Week" . ($weeks > 1 ? "s" : "");
+        }
+        if ($days > 0 && count($result) < 2) {
             $result[] = $days . " Day" . ($days > 1 ? "s" : "");
         }
-        if ($hours > 0) {
+        if ($hours > 0 && count($result) < 2) {
             $result[] = $hours . " Hour" . ($hours > 1 ? "s" : "");
         }
         if ($minutes > 0 && count($result) < 2) {
             $result[] = $minutes . " Minute" . ($minutes > 1 ? "s" : "");
         }
 
-        return implode(" ", $result);
+        return implode(" ", array_slice($result, 0, 2));
     }
 
     public function process(array $data, ?int $team_id = null): array
