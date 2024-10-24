@@ -4,9 +4,9 @@ namespace Corbpie\NBALive;
 
 class NBABase
 {
-    public const CURRENT_SEASON = '2023-24';
+    public const CURRENT_SEASON = '2024-25';
 
-    public const PREVIOUS_SEASON = '2022-23';
+    public const PREVIOUS_SEASON = '2023-24';
 
     public const MODE_PER_GAME = 'PerGame';
 
@@ -14,7 +14,7 @@ class NBABase
 
     public const MODE_PER48 = 'Per48';
 
-    public const CURRENT_TYPE = 'Playoffs';
+    public const CURRENT_TYPE = 'Regular+Season';
 
     public const TYPE_REGULAR = 'Regular+Season';
 
