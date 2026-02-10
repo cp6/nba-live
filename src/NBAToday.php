@@ -6,32 +6,46 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 
+/**
+ * Retrieve today's NBA games including live, upcoming, and completed games.
+ */
 class NBAToday extends NBABase
 {
+    /** @var array Summary of today's games */
     public array $summary = [];
 
+    /** @var array All games today */
     public array $all_games = [];
 
+    /** @var array Games that haven't started yet */
     public array $upcoming_games = [];
 
+    /** @var array Games currently in progress */
     public array $live_games = [];
 
+    /** @var array Games that have finished */
     public array $completed_games = [];
 
+    /**
+     * Fetch today's games from the NBA API.
+     *
+     * @throws NBAApiException When the API request fails
+     */
     public function __construct()
     {
         $games = $this->ApiCall("https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json");
 
         $live = $completed = $upcoming = 0;
 
-        $this->all_games = $games['scoreboard']['games'];
+        $this->all_games = $games['scoreboard']['games'] ?? [];
 
         if (isset($games['scoreboard'])) {
             foreach ($this->all_games as $game) {
-                if ($game['gameStatus'] === 2) {
+                $status = $game['gameStatus'] ?? 0;
+                if ($status === self::GAME_STATUS_IN_PROGRESS) {
                     $this->live_games[] = $game;
                     $live++;
-                } elseif ($game['gameStatus'] === 3) {
+                } elseif ($status === self::GAME_STATUS_COMPLETED) {
                     $this->completed_games[] = $game;
                     $completed++;
                 } else {
@@ -42,7 +56,7 @@ class NBAToday extends NBABase
         }
 
         $this->summary = [
-            'date' => $games['scoreboard']['gameDate'],
+            'date' => $games['scoreboard']['gameDate'] ?? '',
             'all_games' => $live + $completed + $upcoming,
             'live_games' => $live,
             'completed_games' => $completed,
@@ -50,125 +64,130 @@ class NBAToday extends NBABase
         ];
     }
 
-
+    /**
+     * Format raw game data into a more usable structure.
+     *
+     * @param array $games Array of raw game data
+     * @return array Formatted game data
+     */
     public function gameFormatter(array $games): array
     {
         $formatted = [];
 
         foreach ($games as $game) {
-            $formatted_time_left = ($game['gameClock'] === '') ? null : sprintf('%02d:%02d', (new DateInterval(strstr($game['gameClock'], '.', true) . "S"))->i, (new DateInterval(strstr($game['gameClock'], '.', true) . "S"))->s);
+            $gameClock = $game['gameClock'] ?? '';
+            $formatted_time_left = null;
 
-            if ($game['homeTeam']['score'] > $game['awayTeam']['score']) {
-                $margin = $game['homeTeam']['score'] - $game['awayTeam']['score'];
-            } else {
-                $margin = $game['awayTeam']['score'] - $game['homeTeam']['score'];
+            if (!empty($gameClock)) {
+                $clockPart = strstr($gameClock, '.', true);
+                if ($clockPart) {
+                    $interval = new DateInterval($clockPart . "S");
+                    $formatted_time_left = sprintf('%02d:%02d', $interval->i, $interval->s);
+                }
             }
 
-            if (is_null($formatted_time_left)) {
-                $seconds_left = 0;
-            } else {
-                $seconds_left = array_sum(array_map(function ($v, $i) {
-                    return ($i === 0) ? $v * 60 : $v;
-                }, explode(':', $formatted_time_left), range(0, 1)));
+            $homeScore = $game['homeTeam']['score'] ?? 0;
+            $awayScore = $game['awayTeam']['score'] ?? 0;
+            $margin = abs($homeScore - $awayScore);
+            $gameStatus = $game['gameStatus'] ?? 0;
+
+            $seconds_left = 0;
+            if ($formatted_time_left !== null) {
+                $timeParts = explode(':', $formatted_time_left);
+                $seconds_left = ($timeParts[0] ?? 0) * 60 + ($timeParts[1] ?? 0);
             }
+
+            $isNotStarted = $gameStatus === self::GAME_STATUS_NOT_STARTED;
 
             $formatted[] = [
-                'status' => $game['gameStatus'],
-                'starting_in' => ($game['gameStatus'] === 1) ? $this->startingIn($game['gameTimeUTC']) : null,
-                'game_id' => $game['gameId'],
-                'game_code' => $game['gameCode'],
-                'margin' => ($game['gameStatus'] === 1) ? null : $margin,
-                'home_score' => ($game['gameStatus'] === 1) ? null : $game['homeTeam']['score'],
-                'away_score' => ($game['gameStatus'] === 1) ? null : $game['awayTeam']['score'],
-                'time_left_string' => ($game['gameStatus'] === 1) ? null : $game['gameStatusText'],
-                'time_left' => ($game['gameStatus'] === 1) ? null : $formatted_time_left,
+                'status' => $gameStatus,
+                'starting_in' => $isNotStarted ? $this->startingIn($game['gameTimeUTC'] ?? '') : null,
+                'game_id' => $game['gameId'] ?? '',
+                'game_code' => $game['gameCode'] ?? '',
+                'margin' => $isNotStarted ? null : $margin,
+                'home_score' => $isNotStarted ? null : $homeScore,
+                'away_score' => $isNotStarted ? null : $awayScore,
+                'time_left_string' => $isNotStarted ? null : ($game['gameStatusText'] ?? ''),
+                'time_left' => $isNotStarted ? null : $formatted_time_left,
                 'seconds_left' => $seconds_left,
-                'period' => ($game['gameStatus'] === 1) ? null : $game['period'],
-                'home_team' => [
-                    'id' => $game['homeTeam']['teamId'],
-                    'name' => $game['homeTeam']['teamName'],
-                    'short' => $game['homeTeam']['teamTricode'],
-                    'in_bonus' => !(($game['homeTeam']['inBonus'] === '0' || is_null($game['homeTeam']['inBonus']))),
-                    'timeouts_remaining' => ($game['gameStatus'] === 1) ? null : $game['homeTeam']['timeoutsRemaining'],
-                    'wins' => $game['homeTeam']['wins'],
-                    'losses' => $game['homeTeam']['losses'],
-                    'seed' => $game['homeTeam']['seed']
-                ],
-                'away_team' => [
-                    'id' => $game['awayTeam']['teamId'],
-                    'name' => $game['awayTeam']['teamName'],
-                    'short' => $game['awayTeam']['teamTricode'],
-                    'in_bonus' => !(($game['awayTeam']['inBonus'] === '0' || is_null($game['awayTeam']['inBonus']))),
-                    'timeouts_remaining' => ($game['gameStatus'] === 1) ? null : $game['awayTeam']['timeoutsRemaining'],
-                    'wins' => $game['awayTeam']['wins'],
-                    'losses' => $game['awayTeam']['losses'],
-                    'seed' => $game['awayTeam']['seed']
-                ],
-                'periods' => ($game['gameStatus'] === 1) ? [] : [
-                    'one' => [
-                        [
-                            'home_score' => $game['homeTeam']['periods'][0]['score'] ?? null,
-                            'away_score' => $game['awayTeam']['periods'][0]['score'] ?? null,
-                        ]
-                    ],
-                    'two' => [
-                        [
-                            'home_score' => $game['homeTeam']['periods'][1]['score'] ?? null,
-                            'away_score' => $game['awayTeam']['periods'][1]['score'] ?? null,
-                        ]
-                    ],
-                    'three' => [
-                        [
-                            'home_score' => $game['homeTeam']['periods'][2]['score'] ?? null,
-                            'away_score' => $game['awayTeam']['periods'][2]['score'] ?? null,
-                        ]
-                    ],
-                    'four' => [
-                        [
-                            'home_score' => $game['homeTeam']['periods'][3]['score'] ?? null,
-                            'away_score' => $game['awayTeam']['periods'][3]['score'] ?? null,
-                        ]
-                    ],
-                    'five' => [
-                        [
-                            'home_score' => $game['homeTeam']['periods'][4]['score'] ?? null,
-                            'away_score' => $game['awayTeam']['periods'][4]['score'] ?? null,
-                        ]
-                    ],
-                    'six' => [
-                        [
-                            'home_score' => $game['homeTeam']['periods'][5]['score'] ?? null,
-                            'away_score' => $game['awayTeam']['periods'][5]['score'] ?? null,
-                        ]
-                    ],
-                    'seven' => [
-                        [
-                            'home_score' => $game['homeTeam']['periods'][6]['score'] ?? null,
-                            'away_score' => $game['awayTeam']['periods'][6]['score'] ?? null,
-                        ]
-                    ]
-                ],
-                'game_series' => $game['seriesText'],
-                'game_type' => $game['gameSubtype'],
-                'game_sub_label' => $game['gameSubLabel'],
-                'game_time_utc' => (new DateTime($game['gameTimeUTC']))->format('Y-m-d H:i:s'),
-                'game_time_et' => (new DateTime($game['gameEt']))->format('Y-m-d H:i:s')
+                'period' => $isNotStarted ? null : ($game['period'] ?? 0),
+                'home_team' => $this->formatTeamData($game['homeTeam'] ?? [], $isNotStarted),
+                'away_team' => $this->formatTeamData($game['awayTeam'] ?? [], $isNotStarted),
+                'periods' => $isNotStarted ? [] : $this->formatPeriods($game),
+                'game_series' => $game['seriesText'] ?? '',
+                'game_type' => $game['gameSubtype'] ?? '',
+                'game_sub_label' => $game['gameSubLabel'] ?? '',
+                'game_time_utc' => isset($game['gameTimeUTC']) ? (new DateTime($game['gameTimeUTC']))->format('Y-m-d H:i:s') : '',
+                'game_time_et' => isset($game['gameEt']) ? (new DateTime($game['gameEt']))->format('Y-m-d H:i:s') : ''
             ];
         }
 
         return $formatted;
     }
 
+    /**
+     * Format team data for output.
+     *
+     * @param array $team Raw team data
+     * @param bool $isNotStarted Whether the game has started
+     * @return array Formatted team data
+     */
+    private function formatTeamData(array $team, bool $isNotStarted): array
+    {
+        $inBonus = $team['inBonus'] ?? null;
+
+        return [
+            'id' => $team['teamId'] ?? 0,
+            'name' => $team['teamName'] ?? '',
+            'short' => $team['teamTricode'] ?? '',
+            'in_bonus' => !($inBonus === '0' || $inBonus === null),
+            'timeouts_remaining' => $isNotStarted ? null : ($team['timeoutsRemaining'] ?? 0),
+            'wins' => $team['wins'] ?? 0,
+            'losses' => $team['losses'] ?? 0,
+            'seed' => $team['seed'] ?? 0
+        ];
+    }
+
+    /**
+     * Format period scores for output.
+     *
+     * @param array $game Raw game data
+     * @return array Formatted period data
+     */
+    private function formatPeriods(array $game): array
+    {
+        $periodNames = ['one', 'two', 'three', 'four', 'five', 'six', 'seven'];
+        $periods = [];
+
+        foreach ($periodNames as $index => $name) {
+            $periods[$name] = [[
+                'home_score' => $game['homeTeam']['periods'][$index]['score'] ?? null,
+                'away_score' => $game['awayTeam']['periods'][$index]['score'] ?? null,
+            ]];
+        }
+
+        return $periods;
+    }
+
+    /**
+     * Calculate time until game starts.
+     *
+     * @param string $utc_datetime Game start time in UTC
+     * @return string|null Formatted time remaining or null if game has started
+     */
     public function startingIn(string $utc_datetime): ?string
     {
+        if (empty($utc_datetime)) {
+            return null;
+        }
+
         $utc_datetime = new DateTime($utc_datetime, new DateTimeZone('UTC'));
         $current_time = new DateTime('now', new DateTimeZone('UTC'));
 
-        if ($current_time >= $utc_datetime) {//Datetime has passed
+        if ($current_time >= $utc_datetime) {
             return null;
         }
 
         return $current_time->diff($utc_datetime)->format('%H:%I');
     }
-
 }

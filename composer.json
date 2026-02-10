@@ -20,9 +20,20 @@
     "php": "^8.2",
     "ext-curl": "*"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^10.0"
+  },
   "autoload": {
     "psr-4": {
       "Corbpie\\NBALive\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Corbpie\\NBALive\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
   }
 }
