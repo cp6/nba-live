@@ -3,19 +3,20 @@
 A PHP wrapper for accessing the many various NBA API endpoints including live games. This API wrapper formats a lot of the returned data
 so you only get what you need but also in a handy, easily readable and accessible manner.
 
-[![Generic badge](https://img.shields.io/badge/Version-1.9-blue.svg)]()
+[![Generic badge](https://img.shields.io/badge/Version-2.0-blue.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/Updated-15.05.2024-green.svg)]()
+[![Generic badge](https://img.shields.io/badge/Updated-10.02.2026-green.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/Finals-gold.svg)]()
-
+[![Generic badge](https://img.shields.io/badge/PHP-8.2+-purple.svg)]()
 
 ---
 
 ## Table of contents / index
 
 - [Installing](#installing)
+- [Error handling](#error-handling)
 - [Debugging](#debugging)
+- [Testing](#testing)
 - [Today's games](#todays-games)
 - [Game time seconds formatted](#game-time-seconds-formatted)
 - [Box score](#boxscore)
@@ -72,6 +73,22 @@ Install easily with composer:
 composer require corbpie/nba-live
 ```
 
+### Error handling
+
+API failures throw an `NBAApiException` which you can catch to handle errors gracefully:
+
+```php
+use Corbpie\NBALive\NBAApiException;
+
+try {
+    $boxscore = new NBALive\NBABoxScore('invalid_game_id');
+} catch (NBAApiException $e) {
+    echo "API Error: " . $e->getMessage();
+    echo "HTTP Code: " . $e->getHttpCode();
+    print_r($e->getResponseBody()); // Decoded response if available
+}
+```
+
 ### Debugging
 
 Anytime an API call is made you can access debug parameters for the request
@@ -102,6 +119,33 @@ $this::TYPE_PLAY_IN;
 $this::TYPE_PLAYOFFS;
 $this::TYPE_ALL_STAR;
 $this::TYPE_PRE_SEASON;
+
+//Game status constants
+$this::GAME_STATUS_NOT_STARTED; // 1
+$this::GAME_STATUS_IN_PROGRESS; // 2
+$this::GAME_STATUS_COMPLETED;   // 3
+
+//Player status constants
+$this::STATUS_INACTIVE;
+$this::STATUS_ACTIVE;
+
+//Time constants (in seconds)
+$this::QUARTER_DURATION_SECONDS; // 720 (12 minutes)
+$this::OT_DURATION_SECONDS;      // 300 (5 minutes)
+```
+
+### Testing
+
+Run the test suite with:
+
+```
+composer test
+```
+
+Or directly with PHPUnit:
+
+```
+./vendor/bin/phpunit
 ```
 
 ### Todays games and live
