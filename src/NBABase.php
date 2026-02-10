@@ -9,10 +9,10 @@ namespace Corbpie\NBALive;
 class NBABase
 {
     /** @var string Current NBA season identifier */
-    public const CURRENT_SEASON = '2024-25';
+    public const CURRENT_SEASON = '2025-26';
 
     /** @var string Previous NBA season identifier */
-    public const PREVIOUS_SEASON = '2023-24';
+    public const PREVIOUS_SEASON = '2024-25';
 
     /** @var string Per game statistics mode */
     public const MODE_PER_GAME = 'PerGame';

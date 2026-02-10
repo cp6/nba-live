@@ -8,4 +8,4 @@ $call = new NBALive\NBATeamGameLogs();
 $call->team_id = 1610612754;
 $call->fetch();
 
-return json_encode($call->data);
+echo json_encode($call->data);
