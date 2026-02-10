@@ -62,6 +62,27 @@ so you only get what you need but also in a handy, easily readable and accessibl
 - [League player shot locations](#league-player-shot-locations)
 - [League player shots](#league-player-shots)
 - [Video events](#video-events)
+- [Player game logs](#player-game-logs)
+- [Player compare](#player-compare)
+- [Player next games](#player-next-games)
+- [Player vs player](#player-vs-player)
+- [Player index](#player-index)
+- [Shot chart](#shot-chart)
+- [Draft history](#draft-history)
+- [Draft combine](#draft-combine)
+- [Franchise history](#franchise-history)
+- [Franchise leaders](#franchise-leaders)
+- [All-time leaders](#all-time-leaders)
+- [Team historical leaders](#team-historical-leaders)
+- [Team dashboard](#team-dashboard)
+- [Win probability](#win-probability)
+- [Player clutch stats](#player-clutch-stats)
+- [Team clutch stats](#team-clutch-stats)
+- [League hustle stats](#league-hustle-stats)
+- [League game finder](#league-game-finder)
+- [Player fantasy profile](#player-fantasy-profile)
+- [Team game streak finder](#team-game-streak-finder)
+- [Player estimated metrics](#player-estimated-metrics)
 
 ---
 
@@ -1485,4 +1506,332 @@ $ve = new NBALive\NBAVideoEvents(1, '0022300568');
 
 //Creates the array
 $ve->details;
+```
+
+### Player game logs
+<span id="player-game-logs"></span>
+
+```php
+$logs = new NBALive\NBAPlayerGameLogs();
+$logs->player_id = 202331;
+$logs->season = '2023-24'; // Optional
+$logs->fetch();
+
+//Creates the array
+$logs->games;
+
+//Get last X games
+$logs->lastXGames(10);
+```
+
+### Player compare
+<span id="player-compare"></span>
+
+```php
+// Compare two players head-to-head
+$compare = new NBALive\NBAPlayerCompare(202331, 201566, '2023-24', 'PerGame');
+
+//Creates the arrays
+$compare->player1;
+$compare->player2;
+$compare->overall;
+```
+
+### Player next games
+<span id="player-next-games"></span>
+
+```php
+// Get upcoming games for a player
+$next = new NBALive\NBAPlayerNextGames(202331, 5, '2024-25');
+
+//Creates the array
+$next->games;
+```
+
+### Player vs player
+<span id="player-vs-player"></span>
+
+```php
+// Head-to-head matchup stats
+$vs = new NBALive\NBAPlayerVsPlayer(202331, 201566, '2023-24', 'PerGame');
+
+//Creates the arrays
+$vs->player1_overall;
+$vs->player2_overall;
+$vs->player1_on_court;
+$vs->player2_on_court;
+```
+
+### Player index
+<span id="player-index"></span>
+
+```php
+$index = new NBALive\NBAPlayerIndex();
+$index->season = '2024-25';
+$index->team_id = 1610612746; // Optional filter
+$index->country = 'USA'; // Optional filter
+$index->college = 'Duke'; // Optional filter
+$index->fetch();
+
+//Creates the array
+$index->players;
+
+//Search by name
+$results = $index->searchByName('LeBron');
+```
+
+### Shot chart
+<span id="shot-chart"></span>
+
+```php
+// Get shot chart data with coordinates
+$shots = new NBALive\NBAShotChart(202331, 0, '2023-24');
+
+//Creates the arrays
+$shots->shots;
+$shots->made_shots;
+$shots->missed_shots;
+$shots->league_averages;
+
+//Filter by zone
+$restricted = $shots->byZone('Restricted Area');
+
+//Get shooting percentage
+$pct = $shots->getShootingPct();
+```
+
+### Draft history
+<span id="draft-history"></span>
+
+```php
+// Get draft history (filter by year, team, or college)
+$draft = new NBALive\NBADraftHistory('2023', null, null);
+
+//Creates the array
+$draft->picks;
+
+//Filter by round
+$firstRound = $draft->byRound(1);
+
+//Get lottery picks only
+$lottery = $draft->lotteryPicks();
+```
+
+### Draft combine
+<span id="draft-combine"></span>
+
+```php
+// Get draft combine measurements
+$combine = new NBALive\NBADraftCombine('2024-25');
+
+//Creates the array
+$combine->players;
+
+//Sort by measurement
+$tallest = $combine->sortBy('height_w_shoes', 'desc');
+$fastest = $combine->sortBy('three_quarter_sprint', 'asc');
+```
+
+### Franchise history
+<span id="franchise-history"></span>
+
+```php
+$history = new NBALive\NBAFranchiseHistory();
+
+//Creates the arrays
+$history->active;
+$history->defunct;
+
+//Get specific franchise
+$lakers = $history->getByTeamId(1610612747);
+```
+
+### Franchise leaders
+<span id="franchise-leaders"></span>
+
+```php
+// Get all-time franchise leaders
+$leaders = new NBALive\NBAFranchiseLeaders(1610612746);
+
+//Creates the array
+$leaders->leaders;
+```
+
+### All-time leaders
+<span id="all-time-leaders"></span>
+
+```php
+// Get NBA all-time leaders for a stat category
+$allTime = new NBALive\NBAAllTimeLeaders('PTS', 'Totals', 10);
+
+//Creates the array
+$allTime->leaders;
+
+// Available categories: GP, PTS, AST, REB, STL, BLK, FGM, FGA, FG_PCT, 
+// FG3M, FG3A, FG3_PCT, FTM, FTA, FT_PCT, OREB, DREB, TOV, PF
+```
+
+### Team historical leaders
+<span id="team-historical-leaders"></span>
+
+```php
+$teamLeaders = new NBALive\NBATeamHistoricalLeaders(1610612746);
+
+//Creates the arrays
+$teamLeaders->career_leaders;
+$teamLeaders->season_leaders;
+```
+
+### Team dashboard
+<span id="team-dashboard"></span>
+
+```php
+$dashboard = new NBALive\NBATeamDashboard();
+$dashboard->team_id = 1610612746;
+$dashboard->season = '2023-24';
+$dashboard->fetch();
+
+//Creates the arrays
+$dashboard->overall;
+$dashboard->by_location; // Home vs Away
+$dashboard->by_outcome;  // Wins vs Losses
+$dashboard->by_month;
+$dashboard->by_season_segment; // Pre/Post All-Star
+```
+
+### Win probability
+<span id="win-probability"></span>
+
+```php
+// Get win probability data for a game
+$wp = new NBALive\NBAWinProbability('0022300372');
+
+//Creates the array
+$wp->probabilities;
+
+//Get biggest swings in win probability
+$swings = $wp->biggestSwings(10);
+
+//Get probability at end of each quarter
+$quarters = $wp->byQuarterEnd();
+```
+
+### Player clutch stats
+<span id="player-clutch-stats"></span>
+
+```php
+// League-wide clutch time stats (last 5 min, within 5 pts)
+$clutch = new NBALive\NBALeagueDashPlayerClutch();
+$clutch->season = '2023-24';
+$clutch->fetch();
+
+//Creates the array
+$clutch->players;
+
+//Get top clutch performers
+$topClutch = $clutch->topPerformers('pts', 10);
+```
+
+### Team clutch stats
+<span id="team-clutch-stats"></span>
+
+```php
+$teamClutch = new NBALive\NBALeagueDashTeamClutch();
+$teamClutch->season = '2023-24';
+$teamClutch->fetch();
+
+//Creates the array
+$teamClutch->teams;
+
+//Get best clutch teams
+$best = $teamClutch->bestClutchTeams(10);
+```
+
+### League hustle stats
+<span id="league-hustle-stats"></span>
+
+```php
+$hustle = new NBALive\NBALeagueHustleStats();
+$hustle->season = '2023-24';
+$hustle->fetch();
+
+//Creates the array
+$hustle->players;
+
+//Get top hustlers by stat
+$deflectors = $hustle->topHustlers('deflections', 10);
+$chargers = $hustle->topHustlers('charges_drawn', 10);
+```
+
+### League game finder
+<span id="league-game-finder"></span>
+
+```php
+$finder = new NBALive\NBALeagueGameFinder();
+$finder->season = '2023-24';
+$finder->team_id = 1610612746; // Optional
+$finder->date_from = '2024-01-01'; // Optional
+$finder->date_to = '2024-01-31'; // Optional
+$finder->outcome = 'W'; // Optional (W or L)
+$finder->fetch();
+
+//Creates the array
+$finder->games;
+
+//Get high scoring games
+$highScoring = $finder->highScoringGames(120);
+```
+
+### Player fantasy profile
+<span id="player-fantasy-profile"></span>
+
+```php
+$fantasy = new NBALive\NBAPlayerFantasyProfile();
+$fantasy->player_id = 202331;
+$fantasy->season = '2023-24';
+$fantasy->fetch();
+
+//Creates the arrays
+$fantasy->overall;
+$fantasy->last_n_games;
+$fantasy->by_opponent;
+```
+
+### Team game streak finder
+<span id="team-game-streak-finder"></span>
+
+```php
+$streaks = new NBALive\NBATeamGameStreakFinder();
+$streaks->team_id = 1610612746;
+$streaks->season = '2023-24';
+$streaks->min_games = 3;
+$streaks->streak_type = 'W'; // W for wins, L for losses
+$streaks->fetch();
+
+//Creates the array
+$streaks->streaks;
+
+//Get longest streak
+$longest = $streaks->longestStreak();
+```
+
+### Player estimated metrics
+<span id="player-estimated-metrics"></span>
+
+```php
+$metrics = new NBALive\NBAPlayerEstimatedMetrics();
+$metrics->season = '2023-24';
+$metrics->fetch();
+
+//Creates the array
+$metrics->players;
+
+//Get top players by net rating
+$topNet = $metrics->topByNetRating(10);
+
+//Get best offensive players
+$topOff = $metrics->topOffensive(10);
+
+//Get best defensive players
+$topDef = $metrics->topDefensive(10);
 ```
