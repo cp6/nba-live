@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
-final class NBALeaguePlayerShotLocations extends NBALeagueDashFilters
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
+final class NBALeaguePlayerShotLocations extends NBALeagueDashFilters implements FetchableEndpoint
 {
 
     public array $data = [];

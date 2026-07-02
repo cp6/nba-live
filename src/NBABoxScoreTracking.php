@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
 /**
  * Retrieve player tracking NBA box score statistics.
  */
-final class NBABoxScoreTracking extends NBABoxScoreFilters
+final class NBABoxScoreTracking extends NBABoxScoreFilters implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];

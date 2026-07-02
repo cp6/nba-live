@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
-final class NBATeamDashPtShots extends NBATeamDashFilters
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
+final class NBATeamDashPtShots extends NBATeamDashFilters implements FetchableEndpoint
 {
     public array $data = [];
 
@@ -20,7 +24,7 @@ final class NBATeamDashPtShots extends NBATeamDashFilters
 
     public array $touch_time_shooting = [];
 
-    public function fetch(): void
+    public function fetch(): array
     {
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdashptshots?" . $this->build());
 
@@ -192,6 +196,7 @@ final class NBATeamDashPtShots extends NBATeamDashFilters
             }
         }
 
+        return $this->data;
     }
 
 }

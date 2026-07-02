@@ -20,11 +20,12 @@ final class NBASchedule extends NBABase implements FetchableEndpoint
     /**
      * Fetch schedule for a specific date.
      *
-     * @param string $date Date in Y-m-d format (e.g., '2023-12-20')
+     * @param string|null $date Date in Y-m-d format (defaults to today, US Eastern)
      * @throws NBAApiException When the API request fails
      */
-    public function fetch(string $date = '2023-12-20'): array
+    public function fetch(?string $date = null): array
     {
+        $date ??= (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d');
 
         $games = $this->ApiCall("https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate={$date}&LeagueID=00");
 
@@ -33,7 +34,7 @@ final class NBASchedule extends NBABase implements FetchableEndpoint
         return [];
     }
 
-    public function __construct(string $date = '2023-12-20', ?NbaHttpClientInterface $httpClient = null)
+    public function __construct(?string $date = null, ?NbaHttpClientInterface $httpClient = null)
     {
         parent::__construct($httpClient);
         $this->fetch($date);

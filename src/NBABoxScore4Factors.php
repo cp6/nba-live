@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
 /**
  * Retrieve Four Factors NBA box score statistics.
  * The four factors are: effective field goal percentage, turnover percentage,
  * offensive rebounding percentage, and free throw rate.
  */
-final class NBABoxScore4Factors extends NBABoxScoreFilters
+final class NBABoxScore4Factors extends NBABoxScoreFilters implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
