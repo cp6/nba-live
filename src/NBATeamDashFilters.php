@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 class NBATeamDashFilters extends NBABase
@@ -55,9 +57,7 @@ class NBATeamDashFilters extends NBABase
             'VsDivision' => $this->vs_division,
         ];
 
-        $params = array_filter($params, function ($value) {
-            return $value !== '' && $value !== null;
-        });
+        $params = array_filter($params, static fn ($value) => $value !== '');
 
         return http_build_query($params, '', '&');
     }

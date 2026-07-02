@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAPlayByPlayV1 extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBAPlayByPlayV1 extends NBABase implements FetchableEndpoint
 {
 
     public array $data = [];
@@ -15,9 +19,10 @@ class NBAPlayByPlayV1 extends NBABase
 
     public int $plays_count;
 
-    public function __construct(string $game_id = '', int $start_period = 1, int $end_period = 4)
+    public function fetch(string $game_id = '', int $start_period = 1, int $end_period = 4): array
     {
-        if (!isset($this->game_id)) {
+
+        if ($this->game_id === '') {
             $this->game_id = $game_id;
         }
 
@@ -45,6 +50,13 @@ class NBAPlayByPlayV1 extends NBABase
         $this->last_10_plays = array_slice($this->all_plays, -10);
         $this->plays_count = count($this->all_plays);
 
+        return $this->data;
+    }
+
+    public function __construct(string $game_id = '', int $start_period = 1, int $end_period = 4, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($game_id, $start_period, $end_period);
     }
 
     public function scoredOnly(): array

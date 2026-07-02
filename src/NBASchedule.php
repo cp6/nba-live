@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 use DateTime;
 use DateTimeZone;
 
 /**
  * Retrieve NBA game schedule data.
  */
-class NBASchedule extends NBABase
+final class NBASchedule extends NBABase implements FetchableEndpoint
 {
     /** @var array Processed schedule data */
     public array $schedule = [];
@@ -19,11 +23,20 @@ class NBASchedule extends NBABase
      * @param string $date Date in Y-m-d format (e.g., '2023-12-20')
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(string $date = '2023-12-20')
+    public function fetch(string $date = '2023-12-20'): array
     {
+
         $games = $this->ApiCall("https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate={$date}&LeagueID=00");
 
         $this->process($games);
+
+        return [];
+    }
+
+    public function __construct(string $date = '2023-12-20', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($date);
     }
 
     /**

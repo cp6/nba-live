@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBATeamEstimated extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBATeamEstimated extends NBABase implements FetchableEndpoint
 {
     public array $data = [];
 
     public array $teams = [];
 
-    public function __construct($season = NBABase::CURRENT_SEASON, $season_type = NBABase::TYPE_REGULAR)
+    public function fetch($season = NBABase::CURRENT_SEASON, $season_type = NBABase::TYPE_REGULAR): array
     {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamestimatedmetrics?LeagueID=00&Season={$season}&SeasonType={$season_type}");
 
         foreach ($this->data['resultSet']['rowSet'] as $t) {
@@ -47,6 +52,13 @@ class NBATeamEstimated extends NBABase
             ];
         }
 
+        return $this->data;
+    }
+
+    public function __construct($season = NBABase::CURRENT_SEASON, $season_type = NBABase::TYPE_REGULAR, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($season, $season_type);
     }
 
     public function sortAsc(array $team_data, string $key = 'e_off_rating'): array

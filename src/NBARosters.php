@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Retrieve NBA team roster including players and coaches.
  */
-class NBARosters extends NBABase
+final class NBARosters extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -23,8 +28,13 @@ class NBARosters extends NBABase
      * @param string $season Season identifier
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(int $team_id, string $season = self::CURRENT_SEASON)
+    public function fetch(int $team_id = 0, string $season = self::CURRENT_SEASON): array
     {
+
+        if ($team_id <= 0) {
+            throw new \InvalidArgumentException('team_id is required');
+        }
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/commonteamroster?LeagueID=&Season={$season}&TeamID={$team_id}");
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {
@@ -73,5 +83,13 @@ class NBARosters extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(int $team_id, string $season = self::CURRENT_SEASON, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($team_id, $season);
     }
 }

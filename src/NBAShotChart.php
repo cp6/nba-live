@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Retrieve detailed shot chart data with coordinates.
  */
-class NBAShotChart extends NBABase
+final class NBAShotChart extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -31,12 +36,12 @@ class NBAShotChart extends NBABase
      * @param string $season_type Season type
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(
-        int $player_id = 0,
+    public function fetch(int $player_id = 0,
         int $team_id = 0,
         string $season = self::CURRENT_SEASON,
-        string $season_type = self::TYPE_REGULAR
-    ) {
+        string $season_type = self::TYPE_REGULAR): array
+    {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/shotchartdetail?AheadBehind=&ClutchTime=&ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&EndPeriod=10&EndRange=28800&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID={$player_id}&PlayerPosition=&PointDiff=&Position=&RangeType=0&RookieYear=&Season={$season}&SeasonSegment=&SeasonType={$season_type}&StartPeriod=1&StartRange=0&TeamID={$team_id}&VsConference=&VsDivision=");
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {
@@ -70,7 +75,7 @@ class NBAShotChart extends NBABase
 
                 $this->shots[] = $shot;
 
-                if (($shot['shot_made'] ?? 0) === 1) {
+                if ($shot['shot_made'] === 1) {
                     $this->made_shots[] = $shot;
                 } else {
                     $this->missed_shots[] = $shot;
@@ -91,6 +96,17 @@ class NBAShotChart extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(int $player_id = 0,
+        int $team_id = 0,
+        string $season = self::CURRENT_SEASON,
+        string $season_type = self::TYPE_REGULAR, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($player_id, $team_id, $season, $season_type);
     }
 
     /**

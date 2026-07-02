@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Retrieve complete franchise history for all NBA teams.
  */
-class NBAFranchiseHistory extends NBABase
+final class NBAFranchiseHistory extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -21,8 +26,9 @@ class NBAFranchiseHistory extends NBABase
      *
      * @throws NBAApiException When the API request fails
      */
-    public function __construct()
+    public function fetch(): array
     {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/franchisehistory?LeagueID=00");
 
         // Active franchises
@@ -38,6 +44,14 @@ class NBAFranchiseHistory extends NBABase
                 $this->defunct[] = $this->buildFranchise($f);
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch();
     }
 
     /**

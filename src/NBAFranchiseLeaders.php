@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Retrieve all-time franchise leaders for a team.
  */
-class NBAFranchiseLeaders extends NBABase
+final class NBAFranchiseLeaders extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -19,10 +24,11 @@ class NBAFranchiseLeaders extends NBABase
      * @param int $team_id Team identifier
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(int $team_id = 0)
+    public function fetch(int $team_id = 0): array
     {
+
         if ($team_id <= 0) {
-            return;
+            return [];
         }
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/franchiseleaders?LeagueID=00&TeamID={$team_id}");
@@ -49,5 +55,13 @@ class NBAFranchiseLeaders extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(int $team_id = 0, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($team_id);
     }
 }

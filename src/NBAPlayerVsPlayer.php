@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Retrieve head-to-head matchup stats between two players.
  */
-class NBAPlayerVsPlayer extends NBABase
+final class NBAPlayerVsPlayer extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -31,14 +36,14 @@ class NBAPlayerVsPlayer extends NBABase
      * @param string $per_mode Stats mode
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(
-        int $player_id = 0,
+    public function fetch(int $player_id = 0,
         int $vs_player_id = 0,
         string $season = self::CURRENT_SEASON,
-        string $per_mode = self::MODE_PER_GAME
-    ) {
+        string $per_mode = self::MODE_PER_GAME): array
+    {
+
         if ($player_id <= 0 || $vs_player_id <= 0) {
-            return;
+            return [];
         }
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode={$per_mode}&Period=0&PlayerID={$player_id}&PlusMinus=N&Season={$season}&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID={$vs_player_id}");
@@ -58,6 +63,17 @@ class NBAPlayerVsPlayer extends NBABase
         if (isset($this->data['resultSets'][3]['rowSet'][0])) {
             $this->player2_on_court = $this->buildStats($this->data['resultSets'][3]['rowSet'][0]);
         }
+
+        return $this->data;
+    }
+
+    public function __construct(int $player_id = 0,
+        int $vs_player_id = 0,
+        string $season = self::CURRENT_SEASON,
+        string $per_mode = self::MODE_PER_GAME, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($player_id, $vs_player_id, $season, $per_mode);
     }
 
     /**

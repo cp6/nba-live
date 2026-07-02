@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve scoring-focused NBA box score statistics.
  */
-class NBABoxScoreScoring extends NBABoxScoreFilters
+final class NBABoxScoreScoring extends NBABoxScoreFilters
 {
     /** @var array Raw API response data */
     public array $data = [];

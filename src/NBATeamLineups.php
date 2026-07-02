@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBATeamLineups extends NBATeamDashFilters
+final class NBATeamLineups extends NBATeamDashFilters
 {
     public int $players_amount = 5;
 
@@ -97,7 +99,7 @@ class NBATeamLineups extends NBATeamDashFilters
 
     public function playerOnly(int $player_id): array
     {
-        if (!isset($this->details)) {
+        if ($this->details === []) {
             $this->fetch();
         }
 

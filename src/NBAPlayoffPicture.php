@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAPlayoffPicture extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBAPlayoffPicture extends NBABase implements FetchableEndpoint
 {
 
     public array $data = [];
@@ -19,8 +23,9 @@ class NBAPlayoffPicture extends NBABase
 
     public array $west_conf_remaining_games = [];
 
-    public function __construct(string $season = '22023')
+    public function fetch(string $season = '22023'): array
     {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playoffpicture?LeagueID=00&SeasonID=$season");
 
         if (isset($this->data['resultSets'][0]['rowSet'][0])) {
@@ -75,6 +80,13 @@ class NBAPlayoffPicture extends NBABase
 
         }
 
+        return $this->data;
+    }
+
+    public function __construct(string $season = '22023', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($season);
     }
 
 }

@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Compare two players head-to-head statistics.
  */
-class NBAPlayerCompare extends NBABase
+final class NBAPlayerCompare extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -28,14 +33,14 @@ class NBAPlayerCompare extends NBABase
      * @param string $per_mode Stats mode (Totals, PerGame, Per36, etc.)
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(
-        int $player_id_1 = 0,
+    public function fetch(int $player_id_1 = 0,
         int $player_id_2 = 0,
         string $season = self::CURRENT_SEASON,
-        string $per_mode = self::MODE_PER_GAME
-    ) {
+        string $per_mode = self::MODE_PER_GAME): array
+    {
+
         if ($player_id_1 <= 0 || $player_id_2 <= 0) {
-            return;
+            return [];
         }
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode={$per_mode}&Period=0&PlayerIDList={$player_id_1},{$player_id_2}&PlusMinus=N&Rank=N&Season={$season}&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=");
@@ -61,6 +66,17 @@ class NBAPlayerCompare extends NBABase
                 'pts' => $o[26] ?? 0,
             ];
         }
+
+        return $this->data;
+    }
+
+    public function __construct(int $player_id_1 = 0,
+        int $player_id_2 = 0,
+        string $season = self::CURRENT_SEASON,
+        string $per_mode = self::MODE_PER_GAME, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($player_id_1, $player_id_2, $season, $per_mode);
     }
 
     /**

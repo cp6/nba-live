@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAPlayoffBracket extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBAPlayoffBracket extends NBABase implements FetchableEndpoint
 {
 
     public array $data = [];
@@ -17,8 +21,9 @@ class NBAPlayoffBracket extends NBABase
 
     public array $in_progress = [];
 
-    public function __construct(string $season = '2023')
+    public function fetch(string $season = '2023'): array
     {
+
         $this->data = $this->ApiCall("https://cdn.nba.com/static/json/staticData/brackets/{$season}/PlayoffBracket.json");
 
         if (isset($this->data['bracket']['playoffBracketSeries'][0])) {
@@ -69,6 +74,13 @@ class NBAPlayoffBracket extends NBABase
             }
         }
 
+        return $this->data;
+    }
+
+    public function __construct(string $season = '2023', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($season);
     }
 
 }

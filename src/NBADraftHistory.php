@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Retrieve NBA Draft history data.
  */
-class NBADraftHistory extends NBABase
+final class NBADraftHistory extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -21,8 +26,9 @@ class NBADraftHistory extends NBABase
      * @param string|null $college Filter by college
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(?string $season = null, ?int $team_id = null, ?string $college = null)
+    public function fetch(?string $season = null, ?int $team_id = null, ?string $college = null): array
     {
+
         $seasonFilter = $season ?? '';
         $teamFilter = $team_id ?? '';
         $collegeFilter = $college ?? '';
@@ -48,6 +54,14 @@ class NBADraftHistory extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(?string $season = null, ?int $team_id = null, ?string $college = null, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($season, $team_id, $college);
     }
 
     /**

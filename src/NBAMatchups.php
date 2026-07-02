@@ -1,9 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAMatchups extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
+final class NBAMatchups extends NBABase implements FetchableEndpoint
 {
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+    }
+
     public string $season = NBABase::CURRENT_SEASON;
 
     public string $season_type = NBABase::TYPE_REGULAR;

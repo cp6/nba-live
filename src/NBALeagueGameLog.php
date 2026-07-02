@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBALeagueGameLog extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBALeagueGameLog extends NBABase implements FetchableEndpoint
 {
     public array $data = [];
 
     public array $games = [];
 
-    public function __construct(string $season = NBABase::CURRENT_SEASON, string $season_type = NBABase::TYPE_REGULAR, string $sorter = 'DATE', string $date_from = '', string $date_to = '', $direction = 'ASC')
+    public function fetch(string $season = NBABase::CURRENT_SEASON, string $season_type = NBABase::TYPE_REGULAR, string $sorter = 'DATE', string $date_from = '', string $date_to = '', $direction = 'ASC'): array
     {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom={$date_from}&DateTo={$date_to}&Direction={$direction}&LeagueID=00&PlayerOrTeam=T&Season={$season}&SeasonType={$season_type}&Sorter={$sorter}");
 
         if (isset($this->data['resultSets'][0]['rowSet'][0])) {
@@ -47,6 +52,13 @@ class NBALeagueGameLog extends NBABase
             }
         }
 
+        return $this->data;
+    }
+
+    public function __construct(string $season = NBABase::CURRENT_SEASON, string $season_type = NBABase::TYPE_REGULAR, string $sorter = 'DATE', string $date_from = '', string $date_to = '', $direction = 'ASC', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($season, $season_type, $sorter, $date_from, $date_to, $direction);
     }
 
 }

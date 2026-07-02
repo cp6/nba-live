@@ -1,6 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Http\CurlNbaHttpClient;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+use Corbpie\NBALive\Http\NbaHttpResponse;
+use JsonException;
 
 /**
  * Base class for all NBA API wrapper classes.
@@ -41,105 +48,117 @@ class NBABase
     /** @var string Pre-season type */
     public const TYPE_PRE_SEASON = 'Pre+Season';
 
-    // Player status constants
     public const STATUS_INACTIVE = 'INACTIVE';
     public const STATUS_ACTIVE = 'ACTIVE';
 
-    // Game status constants
     public const GAME_STATUS_NOT_STARTED = 1;
     public const GAME_STATUS_IN_PROGRESS = 2;
     public const GAME_STATUS_COMPLETED = 3;
 
-    // Quarter duration in seconds
     public const QUARTER_DURATION_SECONDS = 720;
     public const OT_DURATION_SECONDS = 300;
 
-    /** @var string The URL used for the last API call */
-    public string $url;
+    public string $url = '';
 
-    /** @var int HTTP response code from the last API call */
-    public int $response_code;
+    public int $response_code = 0;
 
-    /** @var int Size of the response in bytes */
-    public int $response_size;
+    public int $response_size = 0;
 
-    /** @var float Time taken to connect in seconds */
-    public float $connect_time;
+    public float $connect_time = 0.0;
 
-    /** @var string IP address of the API endpoint */
-    public string $ip;
+    public string $ip = '';
 
-    /** @var bool|string Raw response body from the last API call */
-    public bool|string $response_body = '';
+    public string $response_body = '';
 
-    /** @var string Game identifier */
-    public string $game_id;
+    public string $game_id = '';
 
-    /** @var int Player identifier */
-    public int $player_id;
+    public int $player_id = 0;
 
-    /** @var int Team identifier */
-    public int $team_id;
+    public int $team_id = 0;
+
+    private ?NbaHttpClientInterface $httpClient = null;
+
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
+    {
+        $this->httpClient = $httpClient;
+    }
 
     /**
-     * Initialize the base class and set JSON content type header.
+     * Inject a custom HTTP client (useful for testing or PSR-18 adapters).
      */
-    public function __construct()
+    public function setHttpClient(NbaHttpClientInterface $httpClient): void
     {
-        header('Content-Type: application/json');
+        $this->httpClient = $httpClient;
+    }
+
+    protected function getHttpClient(): NbaHttpClientInterface
+    {
+        return $this->httpClient ??= new CurlNbaHttpClient();
     }
 
     /**
      * Make an API call to the NBA API.
      *
-     * @param string $url The API endpoint URL
-     * @return array Decoded JSON response
-     * @throws NBAApiException When the API request fails (non-2xx response)
+     * @return array<string, mixed> Decoded JSON response
+     * @throws NBAApiException When the API request fails (non-2xx response or transport error)
+     * @throws JsonException When the response body is not valid JSON
      */
     protected function ApiCall(string $url): array
     {
-        $this->url = $url;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $this->url);
-        $header[0] = "Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
-        $header[1] = "Accept-Language: en-us,en;q=0.5";
-        curl_setopt($curl, CURLOPT_REFERER, "https://stats.nba.com/");
-        curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0");
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($curl, CURLOPT_ENCODING, "gzip,deflate");
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $response = $this->getHttpClient()->get($url);
+        $this->applyResponseMetadata($response);
 
-        $this->response_body = curl_exec($curl);
-        $this->response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $this->response_size = curl_getinfo($curl, CURLINFO_SIZE_DOWNLOAD);
-        $this->connect_time = curl_getinfo($curl, CURLINFO_CONNECT_TIME);
-        $this->ip = curl_getinfo($curl, CURLINFO_PRIMARY_IP);
-
-        curl_close($curl);
-
-        if ($this->response_code >= 200 && $this->response_code < 300) {
-            return json_decode($this->response_body, true) ?? [];
+        if (!$response->isSuccessful()) {
+            throw new NBAApiException(
+                "NBA API request failed with HTTP code {$response->statusCode}",
+                $response->statusCode,
+                $this->decodeJson($response->body, allowInvalid: true),
+            );
         }
 
-        throw new NBAApiException(
-            "NBA API request failed with HTTP code {$this->response_code}",
-            $this->response_code,
-            json_decode($this->response_body, true)
-        );
+        return $this->decodeJson($response->body);
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws JsonException
+     */
+    private function decodeJson(string $body, bool $allowInvalid = false): array
+    {
+        if ($body === '') {
+            return [];
+        }
+
+        try {
+            $decoded = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            if ($allowInvalid) {
+                return [];
+            }
+
+            throw $exception;
+        }
+
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    private function applyResponseMetadata(NbaHttpResponse $response): void
+    {
+        $this->url = $response->url;
+        $this->response_code = $response->statusCode;
+        $this->response_size = $response->size;
+        $this->connect_time = $response->connectTime;
+        $this->ip = $response->ip;
+        $this->response_body = $response->body;
+    }
 
     /**
-     * Convert game time in seconds to a formatted game time array.
-     *
-     * @param float $seconds Total seconds elapsed in the game
      * @return array{period: int, period_string: string, seconds: float, seconds_period: int, seconds_period_string: string, string: string, full_string: string}
      */
     public static function secondsToFormattedGameTime(float $seconds): array
     {
         $seconds = round($seconds);
 
-        // Define period boundaries
         $periods = [
             1 => ['max' => self::QUARTER_DURATION_SECONDS, 'offset' => 0, 'label' => 'Q1'],
             2 => ['max' => self::QUARTER_DURATION_SECONDS * 2, 'offset' => self::QUARTER_DURATION_SECONDS, 'label' => 'Q2'],
@@ -171,61 +190,46 @@ class NBABase
             'period' => $period,
             'period_string' => $period_txt,
             'seconds' => $seconds,
-            'seconds_period' => (int)$seconds_in,
-            'seconds_period_string' => gmdate('i:s', (int)$seconds_out),
-            'string' => gmdate('i:s', (int)$seconds_in),
-            'full_string' => $period_txt . ' ' . gmdate('i:s', (int)$seconds_out)
+            'seconds_period' => (int) $seconds_in,
+            'seconds_period_string' => gmdate('i:s', (int) $seconds_out),
+            'string' => gmdate('i:s', (int) $seconds_in),
+            'full_string' => $period_txt . ' ' . gmdate('i:s', (int) $seconds_out),
         ];
     }
 
-    /**
-     * Convert height in feet-inches format to centimeters.
-     *
-     * @param string $feetInches Height in "feet-inches" format (e.g., "6-8")
-     * @return int Height in centimeters
-     */
     public function feetInchesToCm(string $feetInches): int
     {
         $array = explode('-', $feetInches);
+
         if (isset($array[1])) {
-            return (int)number_format(($array[0] * 30.48) + ($array[1] * 2.54), 0);
+            return (int) round(((int) $array[0] * 30.48) + ((int) $array[1] * 2.54));
         }
-        return (int)number_format(($array[0] * 30.48), 0);
+
+        return (int) round((int) $array[0] * 30.48);
     }
 
     /**
-     * Sort player data array in ascending order by a statistics key.
-     *
-     * @param array $players_data Array of player data
-     * @param string $key Statistics key to sort by (default: 'points')
-     * @return array Sorted player data
+     * @param list<array<string, mixed>> $players_data
+     * @return list<array<string, mixed>>
      */
     public function sortPlayersAsc(array $players_data, string $key = 'points'): array
     {
-        usort($players_data, fn($a, $b) => $a['statistics'][$key] <=> $b['statistics'][$key]);
+        usort($players_data, fn ($a, $b) => $a['statistics'][$key] <=> $b['statistics'][$key]);
+
         return $players_data;
     }
 
     /**
-     * Sort player data array in descending order by a statistics key.
-     *
-     * @param array $players_data Array of player data
-     * @param string $key Statistics key to sort by (default: 'points')
-     * @return array Sorted player data
+     * @param list<array<string, mixed>> $players_data
+     * @return list<array<string, mixed>>
      */
     public function sortPlayersDesc(array $players_data, string $key = 'points'): array
     {
-        usort($players_data, fn($a, $b) => $b['statistics'][$key] <=> $a['statistics'][$key]);
+        usort($players_data, fn ($a, $b) => $b['statistics'][$key] <=> $a['statistics'][$key]);
+
         return $players_data;
     }
 
-    /**
-     * Validate that a required string parameter is not empty.
-     *
-     * @param string $value The value to validate
-     * @param string $paramName The parameter name for error messages
-     * @throws \InvalidArgumentException When the value is empty
-     */
     protected function validateRequiredString(string $value, string $paramName): void
     {
         if (empty(trim($value))) {
@@ -233,13 +237,6 @@ class NBABase
         }
     }
 
-    /**
-     * Validate that a required integer parameter is positive.
-     *
-     * @param int $value The value to validate
-     * @param string $paramName The parameter name for error messages
-     * @throws \InvalidArgumentException When the value is not positive
-     */
     protected function validatePositiveInt(int $value, string $paramName): void
     {
         if ($value <= 0) {
@@ -247,22 +244,16 @@ class NBABase
         }
     }
 
-    /**
-     * Safely get a nested array value with a default.
-     *
-     * @param array $array The array to search
-     * @param array $keys Array of keys representing the path
-     * @param mixed $default Default value if path doesn't exist
-     * @return mixed The value at the path or the default
-     */
     protected function getNestedValue(array $array, array $keys, mixed $default = null): mixed
     {
         foreach ($keys as $key) {
             if (!is_array($array) || !array_key_exists($key, $array)) {
                 return $default;
             }
+
             $array = $array[$key];
         }
+
         return $array;
     }
 }

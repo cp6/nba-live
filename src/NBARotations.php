@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Retrieve NBA game rotation data showing player substitution patterns.
  */
-class NBARotations extends NBABase
+final class NBARotations extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -19,9 +24,10 @@ class NBARotations extends NBABase
      * @param string $game_id NBA game identifier
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(string $game_id = '')
+    public function fetch(string $game_id = ''): array
     {
-        if (!isset($this->game_id)) {
+
+        if ($this->game_id === '') {
             $this->game_id = $game_id;
         }
 
@@ -67,6 +73,19 @@ class NBARotations extends NBABase
                 'pts_diff' => $r[10] ?? 0,
                 'usg_pct' => $r[11] ?? 0,
             ];
+        }
+
+        return $this->data;
+    }
+
+    public function __construct(string $game_id = '', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+
+        if ($game_id !== '') {
+
+            $this->fetch($game_id);
+
         }
     }
 

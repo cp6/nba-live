@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 class NBALeagueDashFilters extends NBABase
@@ -62,7 +64,7 @@ class NBALeagueDashFilters extends NBABase
             'Season' => $this->season,
             'SeasonSegment' => $this->season_segment,
             'SeasonType' => $this->season_type,
-            'TeamID' => $this->team_id ?? null,
+            'TeamID' => $this->team_id > 0 ? $this->team_id : '',
             'VsConference' => $this->vs_conference,
             'VsDivision' => $this->vs_division,
             'Weight' => $this->weight,

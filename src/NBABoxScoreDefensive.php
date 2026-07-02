@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 
 /**
  * Retrieve defensive NBA box score statistics.
  */
-class NBABoxScoreDefensive extends NBABase
+final class NBABoxScoreDefensive extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -28,9 +33,10 @@ class NBABoxScoreDefensive extends NBABase
      * @param string $game_id NBA game identifier
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(string $game_id = '')
+    public function fetch(string $game_id = ''): array
     {
-        if (!isset($this->game_id)) {
+
+        if ($this->game_id === '') {
             $this->game_id = $game_id;
         }
 
@@ -39,6 +45,19 @@ class NBABoxScoreDefensive extends NBABase
         if (isset($this->data['boxScoreDefensive'])) {
             $this->home_players = $this->data['boxScoreDefensive']['homeTeam']['players'] ?? [];
             $this->away_players = $this->data['boxScoreDefensive']['awayTeam']['players'] ?? [];
+        }
+
+        return $this->data;
+    }
+
+    public function __construct(string $game_id = '', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+
+        if ($game_id !== '') {
+
+            $this->fetch($game_id);
+
         }
     }
 }

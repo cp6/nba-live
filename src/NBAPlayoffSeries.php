@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAPlayoffSeries extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBAPlayoffSeries extends NBABase implements FetchableEndpoint
 {
 
     public array $data = [];
 
     public array $results = [];
 
-    public function __construct(string $season = NBABase::CURRENT_SEASON, string $series_id = '')
+    public function fetch(string $season = NBABase::CURRENT_SEASON, string $series_id = ''): array
     {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&Season=$season&SeriesID=$series_id");
 
         if (isset($this->data['resultSets'][0]['rowSet'][0])) {
@@ -25,7 +30,13 @@ class NBAPlayoffSeries extends NBABase
             }
         }
 
+        return $this->data;
+    }
 
+    public function __construct(string $season = NBABase::CURRENT_SEASON, string $series_id = '', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($season, $series_id);
     }
 
 }
