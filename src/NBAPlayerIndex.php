@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Search and filter all NBA players.
  */
-class NBAPlayerIndex extends NBABase
+final class NBAPlayerIndex extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -15,9 +17,6 @@ class NBAPlayerIndex extends NBABase
 
     /** @var string Season filter */
     public string $season = NBABase::CURRENT_SEASON;
-
-    /** @var int|null Team ID filter */
-    public ?int $team_id = null;
 
     /** @var string|null Country filter */
     public ?string $country = null;
@@ -39,7 +38,7 @@ class NBAPlayerIndex extends NBABase
      */
     public function fetch(): array
     {
-        $teamFilter = $this->team_id ? "&TeamID={$this->team_id}" : "&TeamID=0";
+        $teamFilter = $this->team_id > 0 ? "&TeamID={$this->team_id}" : "&TeamID=0";
         $countryFilter = $this->country ? "&Country={$this->country}" : "&Country=";
         $collegeFilter = $this->college ? "&College={$this->college}" : "&College=";
         $draftFilter = $this->draft_year ? "&DraftYear={$this->draft_year}" : "&DraftYear=";

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA Draft Combine measurements and stats.
  */
-class NBADraftCombine extends NBABase
+final class NBADraftCombine extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

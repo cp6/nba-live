@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Search for games by various criteria.
  */
-class NBALeagueGameFinder extends NBABase
+final class NBALeagueGameFinder extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -18,12 +20,6 @@ class NBALeagueGameFinder extends NBABase
 
     /** @var string Season type */
     public string $season_type = NBABase::TYPE_REGULAR;
-
-    /** @var int|null Team ID filter */
-    public ?int $team_id = null;
-
-    /** @var int|null Player ID filter */
-    public ?int $player_id = null;
 
     /** @var string|null Date from filter (YYYY-MM-DD) */
     public ?string $date_from = null;
@@ -42,8 +38,8 @@ class NBALeagueGameFinder extends NBABase
      */
     public function fetch(): array
     {
-        $teamFilter = $this->team_id ? "&TeamID={$this->team_id}" : "&TeamID=";
-        $playerFilter = $this->player_id ? "&PlayerID={$this->player_id}" : "&PlayerID=";
+        $teamFilter = $this->team_id > 0 ? "&TeamID={$this->team_id}" : "&TeamID=";
+        $playerFilter = $this->player_id > 0 ? "&PlayerID={$this->player_id}" : "&PlayerID=";
         $dateFromFilter = $this->date_from ?? '';
         $dateToFilter = $this->date_to ?? '';
         $outcomeFilter = $this->outcome ?? '';

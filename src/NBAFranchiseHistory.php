@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve complete franchise history for all NBA teams.
  */
-class NBAFranchiseHistory extends NBABase
+final class NBAFranchiseHistory extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

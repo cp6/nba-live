@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    excludePaths:
+        analyse:
+            - src/NBAPlayerCareer.php
+            - src/NBAGameSummary.php
+            - src/NBAPlayerShooting.php
+    treatPhpDocTypesAsCertain: false

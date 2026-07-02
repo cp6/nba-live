@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve detailed shot chart data with coordinates.
  */
-class NBAShotChart extends NBABase
+final class NBAShotChart extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -70,7 +72,7 @@ class NBAShotChart extends NBABase
 
                 $this->shots[] = $shot;
 
-                if (($shot['shot_made'] ?? 0) === 1) {
+                if ($shot['shot_made'] === 1) {
                     $this->made_shots[] = $shot;
                 } else {
                     $this->missed_shots[] = $shot;

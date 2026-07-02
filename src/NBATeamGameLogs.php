@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA team game logs for a season.
  */
-class NBATeamGameLogs extends NBABase
+final class NBATeamGameLogs extends NBABase
 {
     // Game log API array indices
     private const IDX_GAME_ID = 1;
@@ -65,7 +67,7 @@ class NBATeamGameLogs extends NBABase
      */
     public function fetch(): array
     {
-        if (!isset($this->team_id) || $this->team_id <= 0) {
+        if ($this->team_id <= 0) {
             throw new \InvalidArgumentException('team_id must be set before calling fetch()');
         }
 

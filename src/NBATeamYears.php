@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve all NBA teams and their active years.
  */
-class NBATeamYears extends NBABase
+final class NBATeamYears extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

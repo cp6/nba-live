@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve head-to-head matchup stats between two players.
  */
-class NBAPlayerVsPlayer extends NBABase
+final class NBAPlayerVsPlayer extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

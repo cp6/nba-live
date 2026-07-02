@@ -7,7 +7,7 @@ so you only get what you need but also in a handy, easily readable and accessibl
 
 [![Generic badge](https://img.shields.io/badge/Updated-10.02.2026-green.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/PHP-8.2+-purple.svg)]()
+[![Generic badge](https://img.shields.io/badge/PHP-8.3+-purple.svg)]()
 
 ---
 
@@ -120,6 +120,20 @@ $this->response_code;//Returned HTTP response code
 $this->response_size;//The size of the response
 $this->connect_time;//Time it took to connect
 $this->ip;//The IP of the API endpoint that was connected to
+```
+
+### Custom HTTP client
+
+Inject a custom client for testing or to swap the transport layer:
+
+```php
+use Corbpie\NBALive\Http\CurlNbaHttpClient;
+use Corbpie\NBALive\NBAToday;
+
+$client = new NBAToday(new CurlNbaHttpClient(
+    connectTimeout: 5,
+    totalTimeout: 20,
+));
 ```
 
 ### Helpers

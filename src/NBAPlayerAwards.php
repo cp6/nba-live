@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAPlayerAwards extends NBABase
+final class NBAPlayerAwards extends NBABase
 {
 
     public array $data = [];
@@ -11,7 +13,7 @@ class NBAPlayerAwards extends NBABase
 
     public function __construct(int $player_id = 0)
     {
-        if (!isset($this->player_id)) {
+        if ($this->player_id <= 0) {
             $this->player_id = $player_id;
         }
 

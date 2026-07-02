@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive\Tests;
 
 use Corbpie\NBALive\NBABase;
@@ -8,19 +10,13 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for NBABase class utility methods.
  */
-class NBABaseTest extends TestCase
+final class NBABaseTest extends TestCase
 {
     private NBABase $base;
 
     protected function setUp(): void
     {
         $this->base = new class extends NBABase {
-            public function __construct()
-            {
-                // Skip header() call in tests
-            }
-
-            // Expose protected methods for testing
             public function testValidateRequiredString(string $value, string $paramName): void
             {
                 $this->validateRequiredString($value, $paramName);
@@ -81,11 +77,9 @@ class NBABaseTest extends TestCase
 
     public function testFeetInchesToCm(): void
     {
-        // 6'8" should be approximately 203 cm
         $result = $this->base->feetInchesToCm('6-8');
         $this->assertEquals(203, $result);
 
-        // 7'0" should be approximately 213 cm
         $result = $this->base->feetInchesToCm('7-0');
         $this->assertEquals(213, $result);
     }
@@ -130,7 +124,6 @@ class NBABaseTest extends TestCase
 
     public function testValidateRequiredStringPassesOnValid(): void
     {
-        // Should not throw
         $this->base->testValidateRequiredString('0022301214', 'game_id');
         $this->assertTrue(true);
     }
@@ -155,9 +148,9 @@ class NBABaseTest extends TestCase
         $array = [
             'level1' => [
                 'level2' => [
-                    'value' => 'found'
-                ]
-            ]
+                    'value' => 'found',
+                ],
+            ],
         ];
 
         $result = $this->base->testGetNestedValue($array, ['level1', 'level2', 'value']);
@@ -174,8 +167,8 @@ class NBABaseTest extends TestCase
 
     public function testConstants(): void
     {
-        $this->assertEquals('2024-25', NBABase::CURRENT_SEASON);
-        $this->assertEquals('2023-24', NBABase::PREVIOUS_SEASON);
+        $this->assertEquals('2025-26', NBABase::CURRENT_SEASON);
+        $this->assertEquals('2024-25', NBABase::PREVIOUS_SEASON);
         $this->assertEquals('PerGame', NBABase::MODE_PER_GAME);
         $this->assertEquals('Totals', NBABase::MODE_TOTAL);
         $this->assertEquals('Per48', NBABase::MODE_PER48);

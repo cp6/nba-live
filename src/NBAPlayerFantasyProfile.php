@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve fantasy basketball profile for a player.
  */
-class NBAPlayerFantasyProfile extends NBABase
+final class NBAPlayerFantasyProfile extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -33,7 +35,7 @@ class NBAPlayerFantasyProfile extends NBABase
      */
     public function fetch(): array
     {
-        if (!isset($this->player_id) || $this->player_id <= 0) {
+        if ($this->player_id <= 0) {
             throw new \InvalidArgumentException('player_id must be set before calling fetch()');
         }
 

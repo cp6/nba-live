@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve all-time franchise leaders for a team.
  */
-class NBAFranchiseLeaders extends NBABase
+final class NBAFranchiseLeaders extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

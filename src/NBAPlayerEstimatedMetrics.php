@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve estimated advanced metrics for players.
  */
-class NBAPlayerEstimatedMetrics extends NBABase
+final class NBAPlayerEstimatedMetrics extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

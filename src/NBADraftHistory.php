@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA Draft history data.
  */
-class NBADraftHistory extends NBABase
+final class NBADraftHistory extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

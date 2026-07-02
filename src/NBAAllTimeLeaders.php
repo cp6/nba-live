@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA all-time statistical leaders.
  */
-class NBAAllTimeLeaders extends NBABase
+final class NBAAllTimeLeaders extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

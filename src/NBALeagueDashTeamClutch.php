@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve clutch time statistics for teams league-wide.
  */
-class NBALeagueDashTeamClutch extends NBABase
+final class NBALeagueDashTeamClutch extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

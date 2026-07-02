@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve defensive NBA box score statistics.
  */
-class NBABoxScoreDefensive extends NBABase
+final class NBABoxScoreDefensive extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -30,7 +32,7 @@ class NBABoxScoreDefensive extends NBABase
      */
     public function __construct(string $game_id = '')
     {
-        if (!isset($this->game_id)) {
+        if ($this->game_id === '') {
             $this->game_id = $game_id;
         }
 

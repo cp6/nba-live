@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA game summary data including team stats, referees, and line scores.
  */
-class NBAGameSummary extends NBABase
+final class NBAGameSummary extends NBABase
 {
     // Result set indices
     private const RESULT_OTHER_STATS = 1;
@@ -54,7 +56,7 @@ class NBAGameSummary extends NBABase
      */
     public function __construct(string $game_id = '')
     {
-        if (!isset($this->game_id)) {
+        if ($this->game_id === '') {
             $this->game_id = $game_id;
         }
 

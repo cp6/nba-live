@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve win probability data for a game.
  */
-class NBAWinProbability extends NBABase
+final class NBAWinProbability extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

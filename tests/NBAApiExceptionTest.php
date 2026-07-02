@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive\Tests;
 
 use Corbpie\NBALive\NBAApiException;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for NBAApiException class.
  */
-class NBAApiExceptionTest extends TestCase
+final class NBAApiExceptionTest extends TestCase
 {
     public function testExceptionMessage(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 use DateInterval;
@@ -9,7 +11,7 @@ use DateTimeZone;
 /**
  * Retrieve today's NBA games including live, upcoming, and completed games.
  */
-class NBAToday extends NBABase
+final class NBAToday extends NBABase
 {
     /** @var array Summary of today's games */
     public array $summary = [];
@@ -94,7 +96,7 @@ class NBAToday extends NBABase
             $seconds_left = 0;
             if ($formatted_time_left !== null) {
                 $timeParts = explode(':', $formatted_time_left);
-                $seconds_left = ($timeParts[0] ?? 0) * 60 + ($timeParts[1] ?? 0);
+                $seconds_left = (int) ($timeParts[0] ?? 0) * 60 + (int) ($timeParts[1] ?? 0);
             }
 
             $isNotStarted = $gameStatus === self::GAME_STATUS_NOT_STARTED;

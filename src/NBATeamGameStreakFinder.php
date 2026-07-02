@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Find winning/losing streaks for teams.
  */
-class NBATeamGameStreakFinder extends NBABase
+final class NBATeamGameStreakFinder extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -36,7 +38,7 @@ class NBATeamGameStreakFinder extends NBABase
      */
     public function fetch(): array
     {
-        if (!isset($this->team_id) || $this->team_id <= 0) {
+        if ($this->team_id <= 0) {
             throw new \InvalidArgumentException('team_id must be set before calling fetch()');
         }
 

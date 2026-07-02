@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA team details.
  */
-class NBATeam extends NBABase
+final class NBATeam extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -21,7 +23,7 @@ class NBATeam extends NBABase
      */
     public function __construct(int $team_id = 0)
     {
-        if (!isset($this->team_id)) {
+        if ($this->team_id <= 0) {
             $this->team_id = $team_id;
         }
 

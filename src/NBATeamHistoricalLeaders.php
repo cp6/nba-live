@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve historical leaders for a specific team.
  */
-class NBATeamHistoricalLeaders extends NBABase
+final class NBATeamHistoricalLeaders extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

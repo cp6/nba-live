@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 class NBADashFilters extends NBABase
@@ -20,7 +22,7 @@ class NBADashFilters extends NBABase
     public int $period = 0;
     public string $plus_minus = 'N';
     public string $rank = 'N';
-    public string $season = '2023-24';
+    public string $season = NBABase::CURRENT_SEASON;
     public string $season_segment = '';
     public string $season_type = 'Regular+Season';
     public string $the_team_id = '';
@@ -54,12 +56,7 @@ class NBADashFilters extends NBABase
             'VsDivision' => $this->vs_division,
         ];
 
-        // Remove empty values from the array
-        $params = array_filter($params, function ($value) {
-            return $value !== '' && $value !== null;
-        });
-
-        // Build the query string
+        $params = array_filter($params, static fn ($value) => $value !== '');
         return http_build_query($params, '', '&');
     }
 

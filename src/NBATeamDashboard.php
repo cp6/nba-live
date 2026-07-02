@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve comprehensive team dashboard statistics.
  */
-class NBATeamDashboard extends NBABase
+final class NBATeamDashboard extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -42,7 +44,7 @@ class NBATeamDashboard extends NBABase
      */
     public function fetch(): array
     {
-        if (!isset($this->team_id) || $this->team_id <= 0) {
+        if ($this->team_id <= 0) {
             throw new \InvalidArgumentException('team_id must be set before calling fetch()');
         }
 

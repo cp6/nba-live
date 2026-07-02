@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve league-wide hustle statistics for players.
  */
-class NBALeagueHustleStats extends NBABase
+final class NBALeagueHustleStats extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

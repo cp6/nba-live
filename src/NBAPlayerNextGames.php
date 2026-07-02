@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve upcoming games for a specific player.
  */
-class NBAPlayerNextGames extends NBABase
+final class NBAPlayerNextGames extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAMatchups extends NBABase
+final class NBAMatchups extends NBABase
 {
     public string $season = NBABase::CURRENT_SEASON;
 

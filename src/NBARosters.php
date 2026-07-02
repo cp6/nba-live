@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA team roster including players and coaches.
  */
-class NBARosters extends NBABase
+final class NBARosters extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];

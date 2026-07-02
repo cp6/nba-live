@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 use DateInterval;
 
-class NBAPlayByPlayV3 extends NBABase
+final class NBAPlayByPlayV3 extends NBABase
 {
 
     public array $data = [];
@@ -24,7 +26,7 @@ class NBAPlayByPlayV3 extends NBABase
 
     public function __construct(string $game_id = '', int $start_period = 1, int $end_period = 4)
     {
-        if (!isset($this->game_id)) {
+        if ($this->game_id === '') {
             $this->game_id = $game_id;
         }
 

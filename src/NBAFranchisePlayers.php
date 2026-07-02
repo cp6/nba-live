@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAFranchisePlayers extends NBABase
+final class NBAFranchisePlayers extends NBABase
 {
 
     public array $data = [];

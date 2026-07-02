@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA league leaders for various statistical categories.
  */
-class NBALeagueLeaders extends NBABase
+final class NBALeagueLeaders extends NBABase
 {
     // League leaders API array indices
     private const IDX_PLAYER_ID = 0;

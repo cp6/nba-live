@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 use DateTime;
@@ -8,7 +10,7 @@ use DateTimeZone;
 /**
  * Retrieve NBA game schedule data.
  */
-class NBASchedule extends NBABase
+final class NBASchedule extends NBABase
 {
     /** @var array Processed schedule data */
     public array $schedule = [];

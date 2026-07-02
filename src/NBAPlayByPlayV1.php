@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBAPlayByPlayV1 extends NBABase
+final class NBAPlayByPlayV1 extends NBABase
 {
 
     public array $data = [];
@@ -17,7 +19,7 @@ class NBAPlayByPlayV1 extends NBABase
 
     public function __construct(string $game_id = '', int $start_period = 1, int $end_period = 4)
     {
-        if (!isset($this->game_id)) {
+        if ($this->game_id === '') {
             $this->game_id = $game_id;
         }
 

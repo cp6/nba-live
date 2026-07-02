@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
-class NBALeaguePlayerShotPts extends NBALeagueDashFilters
+final class NBALeaguePlayerShotPts extends NBALeagueDashFilters
 {
 
     public array $data = [];

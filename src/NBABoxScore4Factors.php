@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
@@ -7,7 +9,7 @@ namespace Corbpie\NBALive;
  * The four factors are: effective field goal percentage, turnover percentage,
  * offensive rebounding percentage, and free throw rate.
  */
-class NBABoxScore4Factors extends NBABoxScoreFilters
+final class NBABoxScore4Factors extends NBABoxScoreFilters
 {
     /** @var array Raw API response data */
     public array $data = [];

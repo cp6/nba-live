@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 use DateTime;
@@ -7,7 +9,7 @@ use DateTime;
 /**
  * Retrieve NBA player information and details.
  */
-class NBAPlayer extends NBABase
+final class NBAPlayer extends NBABase
 {
     // Player info API array indices
     private const IDX_ID = 0;
@@ -52,7 +54,7 @@ class NBAPlayer extends NBABase
      */
     public function __construct(int $player_id = 0)
     {
-        if (!isset($this->player_id)) {
+        if ($this->player_id <= 0) {
             $this->player_id = $player_id;
         }
 

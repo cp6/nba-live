@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA league standings data.
  */
-class NBAStandings extends NBABase
+final class NBAStandings extends NBABase
 {
     // Standings API array indices - documented for maintainability
     private const IDX_TEAM_ID = 2;

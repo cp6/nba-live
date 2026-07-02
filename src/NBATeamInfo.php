@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Corbpie\NBALive;
 
 /**
  * Retrieve NBA team information including basic info, rankings, and seasons.
  */
-class NBATeamInfo extends NBABase
+final class NBATeamInfo extends NBABase
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -27,7 +29,7 @@ class NBATeamInfo extends NBABase
      */
     public function __construct(int $team_id = 0)
     {
-        if (!isset($this->team_id)) {
+        if ($this->team_id <= 0) {
             $this->team_id = $team_id;
         }
 
