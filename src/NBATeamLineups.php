@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
-final class NBATeamLineups extends NBATeamDashFilters
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
+final class NBATeamLineups extends NBATeamDashFilters implements FetchableEndpoint
 {
     public int $players_amount = 5;
 

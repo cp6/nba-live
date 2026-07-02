@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Base class for box score endpoints that support time/period filtering.
  */
@@ -27,11 +29,9 @@ class NBABoxScoreFilters extends NBABase
     /** @var string Pre-built filter query string */
     public string $filters = "endPeriod=4&endRange=28800&rangeType=1&startPeriod=0&startRange=0";
 
-    /**
-     * Initialize filters with default values.
-     */
-    public function __construct()
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
     {
+        parent::__construct($httpClient);
         $this->filters = $this->build();
     }
 

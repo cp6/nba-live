@@ -1,11 +1,10 @@
 # NBA API Wrapper
 
-A PHP wrapper for accessing the many various NBA API endpoints including live games. This API wrapper formats a lot of the returned data
-so you only get what you need but also in a handy, easily readable and accessible manner.
+A PHP 8.3+ library for accessing NBA API endpoints — live games, box scores, play-by-play, standings, player stats, and more. Responses are normalized into readable arrays (and typed DTOs where available) so you get clean data without parsing raw API payloads yourself.
 
 [![Generic badge](https://img.shields.io/badge/Version-2.0-blue.svg)]()
 
-[![Generic badge](https://img.shields.io/badge/Updated-10.02.2026-green.svg)]()
+[![Generic badge](https://img.shields.io/badge/Updated-02.07.2026-green.svg)]()
 
 [![Generic badge](https://img.shields.io/badge/PHP-8.3+-purple.svg)]()
 
@@ -14,9 +13,16 @@ so you only get what you need but also in a handy, easily readable and accessibl
 ## Table of contents / index
 
 - [Installing](#installing)
+- [Requirements](#requirements)
+- [How it works](#how-it-works)
+- [Fetching data](#fetching-data)
 - [Error handling](#error-handling)
 - [Debugging](#debugging)
-- [Testing](#testing)
+- [Custom HTTP client](#custom-http-client)
+- [Response caching](#response-caching)
+- [Typed DTOs](#typed-dtos)
+- [Helpers](#helpers)
+- [Testing & development](#testing--development)
 - [Today's games](#todays-games)
 - [Game time seconds formatted](#game-time-seconds-formatted)
 - [Box score](#boxscore)
@@ -88,38 +94,213 @@ so you only get what you need but also in a handy, easily readable and accessibl
 
 ### Installing
 
-Install easily with composer:
+Install with Composer:
 
 ```
 composer require corbpie/nba-live
 ```
 
+### Requirements
+
+- PHP **8.3+**
+- `ext-curl`
+- `ext-json`
+- `psr/simple-cache` (installed automatically; bring your own cache implementation for response caching)
+
+### How it works
+
+Every NBA endpoint is a class under the `Corbpie\NBALive` namespace. Each class:
+
+1. Extends `NBABase` and implements `FetchableEndpoint`
+2. Exposes a **`fetch()`** method that calls the NBA API and populates public properties
+3. Normalizes raw API responses into easy-to-use arrays (and typed DTOs where available)
+
+Two API sources are used:
+
+| Source | Used for | Example |
+|--------|----------|---------|
+| `cdn.nba.com` | Live data (box scores, play-by-play, scoreboard) | `NBABoxScore`, `NBAToday` |
+| `stats.nba.com` | Historical stats, standings, player data | `NBAStandings`, `NBAPlayerCareer` |
+
+### Fetching data
+
+All endpoints use a consistent `fetch()` pattern. Constructors still auto-fetch for backward compatibility when you pass parameters, but the recommended approach is to configure properties and call `fetch()` explicitly.
+
+**Explicit fetch (recommended):**
+
+```php
+use Corbpie\NBALive\NBATeamGameLogs;
+
+$logs = new NBATeamGameLogs();
+$logs->team_id = 1610612754;
+$logs->season = NBATeamGameLogs::CURRENT_SEASON;
+$logs->fetch();
+
+foreach ($logs->games as $game) {
+    echo $game['pts'];
+}
+```
+
+**Constructor auto-fetch (still supported):**
+
+```php
+use Corbpie\NBALive\NBAStandings;
+
+// Fetches immediately on construction
+$standings = new NBAStandings('2025-26');
+```
+
+**Lazy fetch with game ID endpoints:**
+
+```php
+use Corbpie\NBALive\NBABoxScore;
+
+// No API call yet
+$box = new NBABoxScore();
+$box->fetch('0022500123');
+
+// Or pass the game ID in the constructor (auto-fetches)
+$box = new NBABoxScore('0022500123');
+```
+
 ### Error handling
 
-API failures throw an `NBAApiException` which you can catch to handle errors gracefully:
+API failures throw `NBAApiException`. Transport errors (timeouts, cURL failures) and invalid JSON are also surfaced as exceptions.
 
 ```php
 use Corbpie\NBALive\NBAApiException;
+use Corbpie\NBALive\NBABoxScore;
 
 try {
-    $boxscore = new NBALive\NBABoxScore('invalid_game_id');
+    $boxscore = new NBABoxScore('invalid_game_id');
 } catch (NBAApiException $e) {
-    echo "API Error: " . $e->getMessage();
-    echo "HTTP Code: " . $e->getHttpCode();
-    print_r($e->getResponseBody()); // Decoded response if available
+    echo 'API Error: ' . $e->getMessage();
+    echo 'HTTP Code: ' . $e->getHttpCode();
+    print_r($e->getResponseBody()); // Decoded response body, if available
 }
 ```
 
 ### Debugging
 
-Anytime an API call is made you can access debug parameters for the request
+After any API call, debug metadata is available on the endpoint instance:
 
 ```php
-$this->url;//The final compiled URL used in the call
-$this->response_code;//Returned HTTP response code
-$this->response_size;//The size of the response
-$this->connect_time;//Time it took to connect
-$this->ip;//The IP of the API endpoint that was connected to
+$standings = new NBAStandings();
+$standings->fetch();
+
+echo $standings->url;            // Final URL used
+echo $standings->response_code;  // HTTP status code
+echo $standings->response_size;  // Response size in bytes
+echo $standings->connect_time;   // Connection time in seconds
+echo $standings->ip;             // IP of the API endpoint
+```
+
+### Custom HTTP client
+
+Inject a custom HTTP client for testing, custom timeouts, or swapping the transport layer. All endpoint constructors accept an optional `NbaHttpClientInterface` as the last argument.
+
+```php
+use Corbpie\NBALive\Http\CurlNbaHttpClient;
+use Corbpie\NBALive\NBAToday;
+
+$client = new CurlNbaHttpClient(
+    connectTimeout: 5,
+    totalTimeout: 20,
+);
+
+$today = new NBAToday($client);
+```
+
+Available HTTP classes:
+
+| Class | Purpose |
+|-------|---------|
+| `CurlNbaHttpClient` | Default cURL transport (10s connect / 30s total timeout) |
+| `CachingNbaHttpClient` | PSR-16 caching decorator (see below) |
+| `NbaHttpResponse` | Immutable response DTO returned by the client |
+
+For unit tests, mock the client:
+
+```php
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+use Corbpie\NBALive\Http\NbaHttpResponse;
+
+final class MockClient implements NbaHttpClientInterface
+{
+    public function get(string $url): NbaHttpResponse
+    {
+        return new NbaHttpResponse(
+            url: $url,
+            statusCode: 200,
+            body: '{"scoreboard":{"games":[]}}',
+            size: 28,
+            connectTime: 0.01,
+            ip: '127.0.0.1',
+        );
+    }
+}
+
+$today = new NBAToday(new MockClient());
+```
+
+### Response caching
+
+Wrap any HTTP client with `CachingNbaHttpClient` to cache successful responses. Pass any PSR-16 `CacheInterface` implementation (Redis, filesystem, in-memory, etc.).
+
+```php
+use Corbpie\NBALive\Http\CachingNbaHttpClient;
+use Corbpie\NBALive\Http\CurlNbaHttpClient;
+use Corbpie\NBALive\NBAStandings;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Psr16Cache;
+
+$cache = new Psr16Cache(new FilesystemAdapter(namespace: 'nba-live'));
+$cachedClient = new CachingNbaHttpClient(
+    inner: new CurlNbaHttpClient(),
+    cache: $cache,
+    defaultTtl: 300, // 5 minutes
+);
+
+// Standings are cached; repeat calls within TTL skip the network
+$standings = new NBAStandings('2025-26', $cachedClient);
+```
+
+Suggested TTLs:
+
+| Data type | Suggested TTL |
+|-----------|---------------|
+| Standings, rosters | 5–15 minutes |
+| Live box scores, play-by-play | 5–15 seconds |
+| Historical stats, career data | 1–24 hours |
+
+### Typed DTOs
+
+Selected endpoints expose readonly DTO objects alongside the legacy array properties. DTOs provide typed access; `toArray()` returns the same shape as the array properties for backward compatibility.
+
+| Endpoint | DTO property | Array property | DTO class |
+|----------|-------------|----------------|-----------|
+| `NBATeamGameLogs` | `$gameLogs` | `$games` | `TeamGameLog` |
+| `NBAStandings` | `$standingEntries` | `$standings` | `TeamStanding` |
+| `NBALeagueGameFinder` | `$gameEntries` | `$games` | `LeagueGameEntry` |
+
+```php
+use Corbpie\NBALive\NBATeamGameLogs;
+
+$logs = new NBATeamGameLogs();
+$logs->team_id = 1610612754;
+$logs->fetch();
+
+// Typed access
+foreach ($logs->gameLogs as $entry) {
+    echo $entry->pts;      // int|float
+    echo $entry->wasWin;   // bool
+    echo $entry->matchup;  // string
+}
+
+// Legacy array access (unchanged)
+foreach ($logs->games as $game) {
+    echo $game['pts'];
+}
 ```
 
 ### Custom HTTP client
@@ -154,63 +335,76 @@ $logs->fetch();
 
 ### Helpers
 
+Season and utility constants on `NBABase`:
+
 ```php
-$this::CURRENT_SEASON;//Returns current season
-$this::PREVIOUS_SEASON;//Returns previous season
-$this::CURRENT_TYPE;//Returns current season type
+use Corbpie\NBALive\NBABase;
+use Corbpie\NBALive\Season;
 
-//Mode types
-$this::MODE_PER_GAME;
-$this::MODE_TOTAL;
-$this::MODE_PER48;
+NBABase::CURRENT_SEASON;  // e.g. '2025-26'
+NBABase::PREVIOUS_SEASON; // e.g. '2024-25'
+NBABase::CURRENT_TYPE;    // 'Regular+Season'
 
-//Game types
-$this::TYPE_REGULAR;
-$this::TYPE_PLAY_IN;
-$this::TYPE_PLAYOFFS;
-$this::TYPE_ALL_STAR;
-$this::TYPE_PRE_SEASON;
+// Dynamic season resolution (NBA season starts in October)
+Season::current();   // Resolves from today's date
+Season::previous();
 
-//Game status constants
-$this::GAME_STATUS_NOT_STARTED; // 1
-$this::GAME_STATUS_IN_PROGRESS; // 2
-$this::GAME_STATUS_COMPLETED;   // 3
+// Mode types
+NBABase::MODE_PER_GAME;
+NBABase::MODE_TOTAL;
+NBABase::MODE_PER48;
 
-//Player status constants
-$this::STATUS_INACTIVE;
-$this::STATUS_ACTIVE;
+// Season types
+NBABase::TYPE_REGULAR;
+NBABase::TYPE_PLAY_IN;
+NBABase::TYPE_PLAYOFFS;
+NBABase::TYPE_ALL_STAR;
+NBABase::TYPE_PRE_SEASON;
 
-//Time constants (in seconds)
-$this::QUARTER_DURATION_SECONDS; // 720 (12 minutes)
-$this::OT_DURATION_SECONDS;      // 300 (5 minutes)
+// Game status constants
+NBABase::GAME_STATUS_NOT_STARTED; // 1
+NBABase::GAME_STATUS_IN_PROGRESS; // 2
+NBABase::GAME_STATUS_COMPLETED;   // 3
+
+// Player status constants
+NBABase::STATUS_INACTIVE;
+NBABase::STATUS_ACTIVE;
+
+// Time constants (in seconds)
+NBABase::QUARTER_DURATION_SECONDS; // 720 (12 minutes)
+NBABase::OT_DURATION_SECONDS;      // 300 (5 minutes)
+
+// Game clock formatting
+NBABase::secondsToFormattedGameTime(800);
 ```
 
-### Testing
+### Testing & development
 
-Run the test suite with:
+```bash
+composer test     # Run PHPUnit (31 tests)
+composer analyse  # Run PHPStan static analysis (level 5)
+```
 
-```
-composer test
-```
-
-Or directly with PHPUnit:
-
-```
-./vendor/bin/phpunit
-```
+CI runs on GitHub Actions against PHP 8.3 and 8.4.
 
 ### Todays games and live
 <span id="todays-games"></span>
-```php
-$today = new NBALive\NBAToday();
 
-//Creates the arrays
+```php
+use Corbpie\NBALive\NBAToday;
+
+$today = new NBAToday(); // Auto-fetches today's scoreboard
+
+// Game lists by status
 $today->all_games;
 $today->live_games;
 $today->upcoming_games;
 $today->completed_games;
 
-//Format this data
+// Summary counts
+$today->summary; // date, all_games, live_games, completed_games, upcoming_games
+
+// Format raw game data into a readable structure
 $formatted = $today->gameFormatter($today->live_games);
 ```
 
@@ -219,8 +413,9 @@ $formatted = $today->gameFormatter($today->live_games);
 <span id="game-time-seconds-formatted"></span>
 
 ```php
-$game_time = new NBALive\NBABase();
-$game_time->secondsToFormattedGameTime(800);
+use Corbpie\NBALive\NBABase;
+
+NBABase::secondsToFormattedGameTime(800);
 ```
 
 Outputs
@@ -238,25 +433,34 @@ Outputs
 
 ### Boxscore
 
-NBA API Live CDN box score version
+NBA API Live CDN box score version.
 
 ```php
-$boxscore = new NBALive\NBABoxScore('0022301214');
+use Corbpie\NBALive\NBABoxScore;
 
-//Or set game id with
-$boxscore->game_id = "0022301214";
+// Auto-fetch via constructor
+$boxscore = new NBABoxScore('0022500123');
 
-//Creates the arrays
+// Or fetch explicitly
+$boxscore = new NBABoxScore();
+$boxscore->fetch('0022500123');
+
+// Or set game_id then fetch
+$boxscore = new NBABoxScore();
+$boxscore->game_id = '0022500123';
+$boxscore->fetch();
+
+// Team and player data
 $boxscore->home_team;
 $boxscore->away_team;
-
 $boxscore->home_players;
 $boxscore->away_players;
 
+// Sort players by a stat key
 $boxscore->sortAsc($boxscore->home_players, 'points');
 $boxscore->sortDesc($boxscore->home_players, 'points');
 
-//Get inactive players for both teams
+// Inactive players for both teams
 $boxscore->getInactive();
 ```
 
@@ -835,12 +1039,25 @@ $team_yoy->latest;
 ### Standings
 
 ```php
-$standings = new NBALive\NBAStandings('2023-24');
+use Corbpie\NBALive\NBAStandings;
 
-//Creates the arrays
+// Auto-fetch via constructor
+$standings = new NBAStandings('2025-26');
+
+// Or fetch explicitly (re-fetches on demand)
+$standings = new NBAStandings();
+$standings->season = '2025-26';
+$standings->fetch();
+
+// Array access (backward compatible)
 $standings->standings;
 $standings->east_standings;
 $standings->west_standings;
+
+// Typed DTO access
+foreach ($standings->standingEntries as $entry) {
+    echo $entry->team . ': ' . $entry->wins . '-' . $entry->losses;
+}
 ```
 
 ### League game log
@@ -866,16 +1083,21 @@ $team->seasons;
 ### Team game logs
 
 ```php
-$logs = new NBALive\NBATeamGameLogs();
-$logs->team_id = 1610612746;
-$logs->season = '2023-24';//Optional
+use Corbpie\NBALive\NBATeamGameLogs;
+
+$logs = new NBATeamGameLogs();
+$logs->team_id = 1610612754;
+$logs->season = '2025-26'; // Optional, defaults to CURRENT_SEASON
 $logs->fetch();
 
-//Creates the array
+// Array access (backward compatible)
 $logs->games;
+$logs->lastXGames(10); // Last 10 games
 
-//Last X games
-$logs->lastXGames(10);//Last 10 games only
+// Typed DTO access
+foreach ($logs->gameLogs as $entry) {
+    echo $entry->gameDate . ' ' . $entry->matchup . ' — ' . $entry->pts . ' pts';
+}
 ```
 
 ### Team franchise players
@@ -1797,19 +2019,24 @@ $chargers = $hustle->topHustlers('charges_drawn', 10);
 <span id="league-game-finder"></span>
 
 ```php
-$finder = new NBALive\NBALeagueGameFinder();
-$finder->season = '2023-24';
-$finder->team_id = 1610612746; // Optional
-$finder->date_from = '2024-01-01'; // Optional
-$finder->date_to = '2024-01-31'; // Optional
-$finder->outcome = 'W'; // Optional (W or L)
+use Corbpie\NBALive\NBALeagueGameFinder;
+
+$finder = new NBALeagueGameFinder();
+$finder->season = '2025-26';
+$finder->team_id = 1610612754;   // Optional
+$finder->date_from = '2025-01-01'; // Optional
+$finder->date_to = '2025-01-31';   // Optional
+$finder->outcome = 'W';            // Optional (W or L)
 $finder->fetch();
 
-//Creates the array
+// Array access (backward compatible)
 $finder->games;
+$finder->highScoringGames(120);
 
-//Get high scoring games
-$highScoring = $finder->highScoringGames(120);
+// Typed DTO access
+foreach ($finder->gameEntries as $game) {
+    echo $game->matchup . ': ' . $game->pts . ' pts';
+}
 ```
 
 ### Player fantasy profile

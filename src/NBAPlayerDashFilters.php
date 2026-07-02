@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 class NBAPlayerDashFilters extends NBABase
 {
     public string $date_from = '';
@@ -30,6 +32,11 @@ class NBAPlayerDashFilters extends NBABase
     public string $shot_clock_range = '';
     public string $vs_conference = '';
     public string $vs_division = '';
+
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+    }
 
     public function build(): string
     {

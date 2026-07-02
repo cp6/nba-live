@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
-final class NBAPlayerYearOverYear extends NBAPlayerDashFilters
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
+final class NBAPlayerYearOverYear extends NBAPlayerDashFilters implements FetchableEndpoint
 {
 
     public array $data = [];

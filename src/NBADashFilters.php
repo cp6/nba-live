@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 class NBADashFilters extends NBABase
 {
     public string $date_from = '';
@@ -28,6 +30,11 @@ class NBADashFilters extends NBABase
     public string $the_team_id = '';
     public string $vs_conference = '';
     public string $vs_division = '';
+
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+    }
 
     public function build(): string
     {
