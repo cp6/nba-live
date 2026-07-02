@@ -127,13 +127,29 @@ $this->ip;//The IP of the API endpoint that was connected to
 Inject a custom client for testing or to swap the transport layer:
 
 ```php
+use Corbpie\NBALive\Http\CachingNbaHttpClient;
 use Corbpie\NBALive\Http\CurlNbaHttpClient;
-use Corbpie\NBALive\NBAToday;
+use Corbpie\NBALive\NBABoxScore;
+use Psr\SimpleCache\CacheInterface;
 
-$client = new NBAToday(new CurlNbaHttpClient(
-    connectTimeout: 5,
-    totalTimeout: 20,
-));
+$boxScore = new NBABoxScore();
+$boxScore->fetch('0022500123');
+
+$cachedClient = new CachingNbaHttpClient(
+    inner: new CurlNbaHttpClient(),
+    cache: $cacheImplementation,
+    defaultTtl: 300,
+);
+```
+
+### Explicit fetch()
+
+All endpoints now expose a `fetch()` method. Constructors still auto-fetch for backward compatibility when parameters are provided, but you can also configure properties and call `fetch()` manually:
+
+```php
+$logs = new NBALive\NBATeamGameLogs();
+$logs->team_id = 1610612754;
+$logs->fetch();
 ```
 
 ### Helpers

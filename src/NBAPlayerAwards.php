@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
-final class NBAPlayerAwards extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBAPlayerAwards extends NBABase implements FetchableEndpoint
 {
 
     public array $data = [];
 
     public array $awards = [];
 
-    public function __construct(int $player_id = 0)
+    public function fetch(int $player_id = 0): array
     {
+
         if ($this->player_id <= 0) {
             $this->player_id = $player_id;
         }
@@ -37,6 +40,13 @@ final class NBAPlayerAwards extends NBABase
             }
         }
 
+        return $this->data;
+    }
+
+    public function __construct(int $player_id = 0, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($player_id);
     }
 
 }

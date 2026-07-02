@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Retrieve all NBA teams and their active years.
  */
-final class NBATeamYears extends NBABase
+final class NBATeamYears extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -21,8 +24,9 @@ final class NBATeamYears extends NBABase
      * @param string $league_id League identifier (default: '00' for NBA)
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(string $league_id = '00')
+    public function fetch(string $league_id = '00'): array
     {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/commonteamyears?LeagueID={$league_id}");
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {
@@ -35,5 +39,13 @@ final class NBATeamYears extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(string $league_id = '00', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($league_id);
     }
 }

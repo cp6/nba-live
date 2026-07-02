@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Retrieve NBA game summary data including team stats, referees, and line scores.
  */
-final class NBAGameSummary extends NBABase
+final class NBAGameSummary extends NBABase implements FetchableEndpoint
 {
     // Result set indices
     private const RESULT_OTHER_STATS = 1;
@@ -54,8 +57,9 @@ final class NBAGameSummary extends NBABase
      * @param string $game_id NBA game identifier
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(string $game_id = '')
+    public function fetch(string $game_id = ''): array
     {
+
         if ($this->game_id === '') {
             $this->game_id = $game_id;
         }
@@ -69,6 +73,19 @@ final class NBAGameSummary extends NBABase
         $this->parseAttendance();
         $this->parseLastMeeting();
         $this->parseStatuses();
+
+        return $this->data;
+    }
+
+    public function __construct(string $game_id = '', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+
+        if ($game_id !== '') {
+
+            $this->fetch($game_id);
+
+        }
     }
 
     /**

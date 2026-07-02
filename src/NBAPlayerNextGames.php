@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Retrieve upcoming games for a specific player.
  */
-final class NBAPlayerNextGames extends NBABase
+final class NBAPlayerNextGames extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -23,10 +26,11 @@ final class NBAPlayerNextGames extends NBABase
      * @param string $season Season identifier
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(int $player_id = 0, int $num_games = 5, string $season = self::CURRENT_SEASON)
+    public function fetch(int $player_id = 0, int $num_games = 5, string $season = self::CURRENT_SEASON): array
     {
+
         if ($player_id <= 0) {
-            return;
+            return [];
         }
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playernextngames?LeagueID=00&NumberOfGames={$num_games}&PlayerID={$player_id}&Season={$season}&SeasonType=Regular+Season");
@@ -47,5 +51,13 @@ final class NBAPlayerNextGames extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(int $player_id = 0, int $num_games = 5, string $season = self::CURRENT_SEASON, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($player_id, $num_games, $season);
     }
 }

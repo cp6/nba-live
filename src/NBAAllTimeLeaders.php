@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Retrieve NBA all-time statistical leaders.
  */
-final class NBAAllTimeLeaders extends NBABase
+final class NBAAllTimeLeaders extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -24,12 +27,12 @@ final class NBAAllTimeLeaders extends NBABase
      * @param string $season_type Season type
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(
-        string $stat_category = 'PTS',
+    public function fetch(string $stat_category = 'PTS',
         string $per_mode = self::MODE_TOTAL,
         int $top_x = 10,
-        string $season_type = self::TYPE_REGULAR
-    ) {
+        string $season_type = self::TYPE_REGULAR): array
+    {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode={$per_mode}&SeasonType={$season_type}&TopX={$top_x}");
 
         // Map stat category to result set index
@@ -52,5 +55,16 @@ final class NBAAllTimeLeaders extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(string $stat_category = 'PTS',
+        string $per_mode = self::MODE_TOTAL,
+        int $top_x = 10,
+        string $season_type = self::TYPE_REGULAR, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($stat_category, $per_mode, $top_x, $season_type);
     }
 }

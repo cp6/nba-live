@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Retrieve win probability data for a game.
  */
-final class NBAWinProbability extends NBABase
+final class NBAWinProbability extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -24,10 +27,11 @@ final class NBAWinProbability extends NBABase
      * @param string $game_id Game identifier
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(string $game_id = '')
+    public function fetch(string $game_id = ''): array
     {
+
         if (empty($game_id)) {
-            return;
+            return [];
         }
 
         $this->game_id = $game_id;
@@ -53,6 +57,19 @@ final class NBAWinProbability extends NBABase
                     'isvisible' => $p[14] ?? 0,
                 ];
             }
+        }
+
+        return $this->data;
+    }
+
+    public function __construct(string $game_id = '', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+
+        if ($game_id !== '') {
+
+            $this->fetch($game_id);
+
         }
     }
 

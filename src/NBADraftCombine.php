@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Retrieve NBA Draft Combine measurements and stats.
  */
-final class NBADraftCombine extends NBABase
+final class NBADraftCombine extends NBABase implements FetchableEndpoint
 {
     /** @var array Raw API response data */
     public array $data = [];
@@ -21,8 +24,9 @@ final class NBADraftCombine extends NBABase
      * @param string $season Draft year
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(string $season = self::CURRENT_SEASON)
+    public function fetch(string $season = self::CURRENT_SEASON): array
     {
+
         // Extract year from season format (e.g., "2024-25" -> "2024")
         $year = explode('-', $season)[0];
 
@@ -52,6 +56,14 @@ final class NBADraftCombine extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(string $season = self::CURRENT_SEASON, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($season);
     }
 
     /**

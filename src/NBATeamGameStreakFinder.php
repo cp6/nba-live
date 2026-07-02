@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Find winning/losing streaks for teams.
  */
-final class NBATeamGameStreakFinder extends NBABase
+final class NBATeamGameStreakFinder extends NBABase implements FetchableEndpoint
 {
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+    }
+
     /** @var array Raw API response data */
     public array $data = [];
 

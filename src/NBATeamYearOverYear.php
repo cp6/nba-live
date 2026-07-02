@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
-final class NBATeamYearOverYear extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBATeamYearOverYear extends NBABase implements FetchableEndpoint
 {
     public array $data = [];
 
@@ -12,8 +14,13 @@ final class NBATeamYearOverYear extends NBABase
 
     public array $latest = [];
 
-    public function __construct(int $team_id, string $per_mode = 'Totals', string $season_type = 'Regular+Season')
+    public function fetch(int $team_id = 0, string $per_mode = 'Totals', string $season_type = 'Regular+Season'): array
     {
+
+        if ($team_id <= 0) {
+            throw new \InvalidArgumentException('team_id is required');
+        }
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode={$per_mode}&SeasonType={$season_type}&TeamID={$team_id}");
 
         if (isset($this->data['resultSets']['0']['rowSet'])) {
@@ -59,6 +66,13 @@ final class NBATeamYearOverYear extends NBABase
             $this->latest = end($this->data['resultSets']['0']['rowSet']);
         }
 
+        return $this->data;
+    }
+
+    public function __construct(int $team_id, string $per_mode = 'Totals', string $season_type = 'Regular+Season', ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($team_id, $per_mode, $season_type);
     }
 
 }

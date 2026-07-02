@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 use DateTime;
 
 /**
  * Retrieve NBA player information and details.
  */
-final class NBAPlayer extends NBABase
+final class NBAPlayer extends NBABase implements FetchableEndpoint
 {
     // Player info API array indices
     private const IDX_ID = 0;
@@ -52,8 +54,9 @@ final class NBAPlayer extends NBABase
      * @param int $player_id NBA player identifier
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(int $player_id = 0)
+    public function fetch(int $player_id = 0): array
     {
+
         if ($this->player_id <= 0) {
             $this->player_id = $player_id;
         }
@@ -105,5 +108,13 @@ final class NBAPlayer extends NBABase
                 }
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(int $player_id = 0, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($player_id);
     }
 }

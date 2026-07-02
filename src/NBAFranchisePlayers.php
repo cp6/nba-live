@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
-final class NBAFranchisePlayers extends NBABase
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+final class NBAFranchisePlayers extends NBABase implements FetchableEndpoint
 {
 
     public array $data = [];
@@ -12,8 +14,9 @@ final class NBAFranchisePlayers extends NBABase
     public array $players = [];
 
 
-    public function __construct(int $team_id = 202331, string $per_mode = NBABase::MODE_TOTAL, string $season_type = NBABase::TYPE_REGULAR)
+    public function fetch(int $team_id = 202331, string $per_mode = NBABase::MODE_TOTAL, string $season_type = NBABase::TYPE_REGULAR): array
     {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/franchiseplayers?LeagueID=00&PerMode={$per_mode}&SeasonType={$season_type}&TeamID={$team_id}");
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {
@@ -48,6 +51,13 @@ final class NBAFranchisePlayers extends NBABase
             }
         }
 
+        return $this->data;
+    }
+
+    public function __construct(int $team_id = 202331, string $per_mode = NBABase::MODE_TOTAL, string $season_type = NBABase::TYPE_REGULAR, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($team_id, $per_mode, $season_type);
     }
 
 }

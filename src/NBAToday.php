@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
@@ -11,7 +13,7 @@ use DateTimeZone;
 /**
  * Retrieve today's NBA games including live, upcoming, and completed games.
  */
-final class NBAToday extends NBABase
+final class NBAToday extends NBABase implements FetchableEndpoint
 {
     /** @var array Summary of today's games */
     public array $summary = [];
@@ -33,8 +35,9 @@ final class NBAToday extends NBABase
      *
      * @throws NBAApiException When the API request fails
      */
-    public function __construct()
+    public function fetch(): array
     {
+
         $games = $this->ApiCall("https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json");
 
         $live = $completed = $upcoming = 0;
@@ -64,6 +67,14 @@ final class NBAToday extends NBABase
             'completed_games' => $completed,
             'upcoming_games' => $upcoming,
         ];
+
+        return [];
+    }
+
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch();
     }
 
     /**

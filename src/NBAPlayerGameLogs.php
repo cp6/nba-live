@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Retrieve individual player game logs.
  */
-final class NBAPlayerGameLogs extends NBABase
+final class NBAPlayerGameLogs extends NBABase implements FetchableEndpoint
 {
+    public function __construct(?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+    }
+
     /** @var array Raw API response data */
     public array $data = [];
 

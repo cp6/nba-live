@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Corbpie\NBALive;
 
+use Corbpie\NBALive\Contracts\FetchableEndpoint;
+use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 /**
  * Retrieve NBA league leaders for various statistical categories.
  */
-final class NBALeagueLeaders extends NBABase
+final class NBALeagueLeaders extends NBABase implements FetchableEndpoint
 {
     // League leaders API array indices
     private const IDX_PLAYER_ID = 0;
@@ -53,12 +56,12 @@ final class NBALeagueLeaders extends NBABase
      * @param string $type Season type (Regular+Season, Playoffs, etc.)
      * @throws NBAApiException When the API request fails
      */
-    public function __construct(
-        string $stat = 'PTS',
+    public function fetch(string $stat = 'PTS',
         string $mode = self::MODE_TOTAL,
         string $season = self::CURRENT_SEASON,
-        string $type = self::TYPE_REGULAR
-    ) {
+        string $type = self::TYPE_REGULAR): array
+    {
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leagueleaders?ActiveFlag=&LeagueID=00&PerMode={$mode}&Scope=S&Season={$season}&SeasonType={$type}&StatCategory={$stat}");
 
         $rank = 0;
@@ -97,5 +100,16 @@ final class NBALeagueLeaders extends NBABase
                 ];
             }
         }
+
+        return $this->data;
+    }
+
+    public function __construct(string $stat = 'PTS',
+        string $mode = self::MODE_TOTAL,
+        string $season = self::CURRENT_SEASON,
+        string $type = self::TYPE_REGULAR, ?NbaHttpClientInterface $httpClient = null)
+    {
+        parent::__construct($httpClient);
+        $this->fetch($stat, $mode, $season, $type);
     }
 }

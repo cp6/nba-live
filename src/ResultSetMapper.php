@@ -10,8 +10,6 @@ namespace Corbpie\NBALive;
 final class ResultSetMapper
 {
     /**
-     * Map a single resultSet to an array of associative rows.
-     *
      * @param array<string, mixed> $resultSet
      * @return list<array<string, mixed>>
      */
@@ -47,8 +45,6 @@ final class ResultSetMapper
     }
 
     /**
-     * Map the first resultSet in a stats API response.
-     *
      * @param array<string, mixed> $response
      * @return list<array<string, mixed>>
      */
@@ -61,5 +57,28 @@ final class ResultSetMapper
         }
 
         return self::mapRows($resultSet);
+    }
+
+    /**
+     * @param array<string, mixed> $response
+     * @return list<array<string, mixed>>
+     */
+    public static function mapResultSetAt(array $response, int $index): array
+    {
+        $resultSet = $response['resultSets'][$index] ?? null;
+
+        if (!is_array($resultSet)) {
+            return [];
+        }
+
+        return self::mapRows($resultSet);
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     */
+    public static function pick(array $row, string $key, mixed $default = null): mixed
+    {
+        return $row[$key] ?? $default;
     }
 }
