@@ -17,6 +17,9 @@ final class NBALeaguePlayerShotPts extends NBALeagueDashFilters implements Fetch
 
     public function fetch(): array
     {
+        $this->details = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leaguedashplayerptshot?" . $this->build());
 
         if (isset($this->data['resultSets'][0]['rowSet'][0])) {

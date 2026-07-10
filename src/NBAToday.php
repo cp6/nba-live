@@ -37,6 +37,9 @@ final class NBAToday extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
+        $this->live_games = [];
+        $this->completed_games = [];
+        $this->upcoming_games = [];
 
         $games = $this->ApiCall("https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json");
 
@@ -68,7 +71,7 @@ final class NBAToday extends NBABase implements FetchableEndpoint
             'upcoming_games' => $upcoming,
         ];
 
-        return [];
+        return $games;
     }
 
     public function __construct(?NbaHttpClientInterface $httpClient = null)

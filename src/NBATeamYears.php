@@ -26,6 +26,9 @@ final class NBATeamYears extends NBABase implements FetchableEndpoint
      */
     public function fetch(string $league_id = '00'): array
     {
+        $this->teams = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/commonteamyears?LeagueID={$league_id}");
 

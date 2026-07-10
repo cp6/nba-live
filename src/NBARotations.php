@@ -26,6 +26,9 @@ final class NBARotations extends NBABase implements FetchableEndpoint
      */
     public function fetch(string $game_id = ''): array
     {
+        $this->details = [];
+
+
 
         if ($this->game_id === '') {
             $this->game_id = $game_id;

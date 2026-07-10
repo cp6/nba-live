@@ -10,6 +10,15 @@ namespace Corbpie\NBALive;
 final class Season
 {
     /**
+     * Canonical current season string for property/constructor defaults.
+     * Prefer current() when resolving relative to a specific date.
+     */
+    public const CURRENT = '2025-26';
+
+    /** Canonical previous season string for property/constructor defaults. */
+    public const PREVIOUS = '2024-25';
+
+    /**
      * Resolve the current NBA season identifier (e.g. 2025-26).
      */
     public static function current(?\DateTimeInterface $date = null): string

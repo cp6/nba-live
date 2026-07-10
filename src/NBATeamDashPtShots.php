@@ -26,6 +26,14 @@ final class NBATeamDashPtShots extends NBATeamDashFilters implements FetchableEn
 
     public function fetch(): array
     {
+        $this->general_shooting = [];
+        $this->shot_clock_shooting = [];
+        $this->dribble_shooting = [];
+        $this->closest_defender_shooting = [];
+        $this->closest_defender_10ft_shooting = [];
+        $this->touch_time_shooting = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdashptshots?" . $this->build());
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {

@@ -61,6 +61,9 @@ final class NBALeagueLeaders extends NBABase implements FetchableEndpoint
         string $season = self::CURRENT_SEASON,
         string $type = self::TYPE_REGULAR): array
     {
+        $this->details = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leagueleaders?ActiveFlag=&LeagueID=00&PerMode={$mode}&Scope=S&Season={$season}&SeasonType={$type}&StatCategory={$stat}");
 

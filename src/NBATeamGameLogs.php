@@ -22,7 +22,7 @@ final class NBATeamGameLogs extends NBABase implements FetchableEndpoint
     /** @var list<TeamGameLog> Typed game log entries */
     public array $gameLogs = [];
 
-    public int $team_id;
+    public int $team_id = 0;
 
     public string $season = NBABase::CURRENT_SEASON;
 
@@ -42,14 +42,21 @@ final class NBATeamGameLogs extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
-        if ($this->team_id <= 0) {
-            throw new \InvalidArgumentException('team_id must be set before calling fetch()');
-        }
+        $this->validatePositiveInt($this->team_id, 'team_id');
 
         $this->games = [];
         $this->gameLogs = [];
 
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamgamelog?DateFrom={$this->date_from}&DateTo={$this->date_to}&LeagueID=&Season={$this->season}&SeasonType={$this->season_type}&TeamID={$this->team_id}");
+        $params = http_build_query([
+            'DateFrom' => $this->date_from,
+            'DateTo' => $this->date_to,
+            'LeagueID' => '',
+            'Season' => $this->season,
+            'SeasonType' => $this->season_type,
+            'TeamID' => $this->team_id,
+        ], '', '&');
+
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamgamelog?{$params}");
 
         foreach (ResultSetMapper::mapFirstResultSet($this->data) as $row) {
             $entry = TeamGameLog::fromResultSetRow($row);

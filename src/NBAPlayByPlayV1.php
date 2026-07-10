@@ -21,6 +21,9 @@ final class NBAPlayByPlayV1 extends NBABase implements FetchableEndpoint
 
     public function fetch(string $game_id = '', int $start_period = 1, int $end_period = 4): array
     {
+        $this->all_plays = [];
+
+
 
         if ($this->game_id === '') {
             $this->game_id = $game_id;

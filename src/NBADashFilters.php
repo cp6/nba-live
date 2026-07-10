@@ -26,7 +26,7 @@ class NBADashFilters extends NBABase
     public string $rank = 'N';
     public string $season = NBABase::CURRENT_SEASON;
     public string $season_segment = '';
-    public string $season_type = 'Regular+Season';
+    public string $season_type = NBABase::TYPE_REGULAR;
     public string $the_team_id = '';
     public string $vs_conference = '';
     public string $vs_division = '';
@@ -64,7 +64,7 @@ class NBADashFilters extends NBABase
         ];
 
         $params = array_filter($params, static fn ($value) => $value !== '');
+
         return http_build_query($params, '', '&');
     }
-
 }

@@ -6,56 +6,69 @@ namespace Corbpie\NBALive;
 
 use Corbpie\NBALive\Contracts\FetchableEndpoint;
 use Corbpie\NBALive\Http\NbaHttpClientInterface;
+
 final class NBATeamEstimated extends NBABase implements FetchableEndpoint
 {
     public array $data = [];
 
     public array $teams = [];
 
-    public function fetch($season = NBABase::CURRENT_SEASON, $season_type = NBABase::TYPE_REGULAR): array
+    public function fetch(string $season = NBABase::CURRENT_SEASON, string $season_type = NBABase::TYPE_REGULAR): array
     {
+        $this->teams = [];
 
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamestimatedmetrics?LeagueID=00&Season={$season}&SeasonType={$season_type}");
+        $params = http_build_query([
+            'LeagueID' => '00',
+            'Season' => $season,
+            'SeasonType' => $season_type,
+        ], '', '&');
 
-        foreach ($this->data['resultSet']['rowSet'] as $t) {
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamestimatedmetrics?{$params}");
+
+        $resultSet = $this->data['resultSet'] ?? null;
+        if (!is_array($resultSet)) {
+            return $this->data;
+        }
+
+        foreach (ResultSetMapper::mapRows($resultSet) as $row) {
             $this->teams[] = [
-                'team_id' => $t[1],
-                'team_name' => $t[0],
-                'gp' => $t[2],
-                'w' => $t[3],
-                'l' => $t[4],
-                'w_pct' => $t[5],
-                'min' => $t[6],
-                'e_off_rating' => $t[7],
-                'e_def_rating' => $t[8],
-                'e_net_rating' => $t[9],
-                'e_pace' => $t[10],
-                'e_ast_ration' => $t[11],
-                'e_oreb_pct' => $t[12],
-                'e_dreb_pct' => $t[13],
-                'e_reb_pct' => $t[14],
-                'e_tm_tov_pct' => $t[15],
-                'gp_rank' => $t[16],
-                'w_rank' => $t[17],
-                'l_rank' => $t[18],
-                'w_pct_rank' => $t[19],
-                'min_rank' => $t[20],
-                'e_off_rating_rank' => $t[21],
-                'e_def_rating_rank' => $t[22],
-                'e_net_rating_rank' => $t[23],
-                'e_ast_ratio_rank' => $t[24],
-                'e_oreb_pct_rank' => $t[25],
-                'e_dreb_pct_rank' => $t[26],
-                'e_reb_pct_rank' => $t[27],
-                'e_tm_tov_pct_rank' => $t[28],
-                'e_pace_rank' => $t[29]
+                'team_id' => ResultSetMapper::pick($row, 'TEAM_ID'),
+                'team_name' => ResultSetMapper::pick($row, 'TEAM_NAME'),
+                'gp' => ResultSetMapper::pick($row, 'GP'),
+                'w' => ResultSetMapper::pick($row, 'W'),
+                'l' => ResultSetMapper::pick($row, 'L'),
+                'w_pct' => ResultSetMapper::pick($row, 'W_PCT'),
+                'min' => ResultSetMapper::pick($row, 'MIN'),
+                'e_off_rating' => ResultSetMapper::pick($row, 'E_OFF_RATING'),
+                'e_def_rating' => ResultSetMapper::pick($row, 'E_DEF_RATING'),
+                'e_net_rating' => ResultSetMapper::pick($row, 'E_NET_RATING'),
+                'e_pace' => ResultSetMapper::pick($row, 'E_PACE'),
+                'e_ast_ratio' => ResultSetMapper::pick($row, 'E_AST_RATIO'),
+                'e_oreb_pct' => ResultSetMapper::pick($row, 'E_OREB_PCT'),
+                'e_dreb_pct' => ResultSetMapper::pick($row, 'E_DREB_PCT'),
+                'e_reb_pct' => ResultSetMapper::pick($row, 'E_REB_PCT'),
+                'e_tm_tov_pct' => ResultSetMapper::pick($row, 'E_TM_TOV_PCT'),
+                'gp_rank' => ResultSetMapper::pick($row, 'GP_RANK'),
+                'w_rank' => ResultSetMapper::pick($row, 'W_RANK'),
+                'l_rank' => ResultSetMapper::pick($row, 'L_RANK'),
+                'w_pct_rank' => ResultSetMapper::pick($row, 'W_PCT_RANK'),
+                'min_rank' => ResultSetMapper::pick($row, 'MIN_RANK'),
+                'e_off_rating_rank' => ResultSetMapper::pick($row, 'E_OFF_RATING_RANK'),
+                'e_def_rating_rank' => ResultSetMapper::pick($row, 'E_DEF_RATING_RANK'),
+                'e_net_rating_rank' => ResultSetMapper::pick($row, 'E_NET_RATING_RANK'),
+                'e_ast_ratio_rank' => ResultSetMapper::pick($row, 'E_AST_RATIO_RANK'),
+                'e_oreb_pct_rank' => ResultSetMapper::pick($row, 'E_OREB_PCT_RANK'),
+                'e_dreb_pct_rank' => ResultSetMapper::pick($row, 'E_DREB_PCT_RANK'),
+                'e_reb_pct_rank' => ResultSetMapper::pick($row, 'E_REB_PCT_RANK'),
+                'e_tm_tov_pct_rank' => ResultSetMapper::pick($row, 'E_TM_TOV_PCT_RANK'),
+                'e_pace_rank' => ResultSetMapper::pick($row, 'E_PACE_RANK'),
             ];
         }
 
         return $this->data;
     }
 
-    public function __construct($season = NBABase::CURRENT_SEASON, $season_type = NBABase::TYPE_REGULAR, ?NbaHttpClientInterface $httpClient = null)
+    public function __construct(string $season = NBABase::CURRENT_SEASON, string $season_type = NBABase::TYPE_REGULAR, ?NbaHttpClientInterface $httpClient = null)
     {
         parent::__construct($httpClient);
         $this->fetch($season, $season_type);
@@ -63,14 +76,15 @@ final class NBATeamEstimated extends NBABase implements FetchableEndpoint
 
     public function sortAsc(array $team_data, string $key = 'e_off_rating'): array
     {
-        usort($team_data, fn($a, $b) => $a[$key] <=> $b[$key]);
+        usort($team_data, fn ($a, $b) => $a[$key] <=> $b[$key]);
+
         return $team_data;
     }
 
     public function sortDesc(array $team_data, string $key = 'e_def_rating'): array
     {
-        usort($team_data, fn($a, $b) => $b[$key] <=> $a[$key]);
+        usort($team_data, fn ($a, $b) => $b[$key] <=> $a[$key]);
+
         return $team_data;
     }
-
 }

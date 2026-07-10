@@ -19,6 +19,9 @@ final class NBAPlayerYearOverYear extends NBAPlayerDashFilters implements Fetcha
 
     public function fetch(): array
     {
+        $this->details = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playerdashboardbyyearoveryear?" . $this->build());
 
         if (isset($this->data['resultSets']['0']['rowSet'])) {

@@ -15,6 +15,9 @@ final class NBAPlayoffSeries extends NBABase implements FetchableEndpoint
 
     public function fetch(string $season = NBABase::CURRENT_SEASON, string $series_id = ''): array
     {
+        $this->results = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&Season=$season&SeriesID=$series_id");
 

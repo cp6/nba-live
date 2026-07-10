@@ -36,7 +36,7 @@ final class NBABoxScoreTracking extends NBABoxScoreFilters implements FetchableE
      */
     public function fetch(): array
     {
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoreplayertrackv3?GameID={$this->game_id}");
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoreplayertrackv3?{$this->filters}&GameID={$this->game_id}");
 
         if (isset($this->data['boxScorePlayerTrack'])) {
             $this->home_players = $this->data['boxScorePlayerTrack']['homeTeam']['players'] ?? [];

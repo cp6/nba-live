@@ -47,6 +47,9 @@ final class NBAPlayerIndex extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
+        $this->players = [];
+
+
         $teamFilter = $this->team_id > 0 ? "&TeamID={$this->team_id}" : "&TeamID=0";
         $countryFilter = $this->country ? "&Country={$this->country}" : "&Country=";
         $collegeFilter = $this->college ? "&College={$this->college}" : "&College=";

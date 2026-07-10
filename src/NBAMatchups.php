@@ -35,6 +35,9 @@ final class NBAMatchups extends NBABase implements FetchableEndpoint
 
     public function fetch(): array
     {
+        $this->details = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID={$this->def_player_id}&DefTeamID={$this->def_team_id}&LeagueID=00&OffPlayerID={$this->off_player_id}&OffTeamID={$this->off_team_id}&PerMode={$this->mode_type}&Season={$this->season}&SeasonType={$this->season_type}");
 
         if (isset($this->data['resultSets'][0]['rowSet'][0])) {
@@ -70,7 +73,7 @@ final class NBAMatchups extends NBABase implements FetchableEndpoint
             }
         }
 
-        return $this->details;
+        return $this->data;
     }
 
 }

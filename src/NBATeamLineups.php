@@ -20,6 +20,9 @@ final class NBATeamLineups extends NBATeamDashFilters implements FetchableEndpoi
 
     public function fetch(): array
     {
+        $this->details = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdashlineups?GroupQuantity={$this->players_amount}&" . $this->build());
 
         if (isset($this->data['resultSets']['1']['rowSet'])) {
@@ -98,7 +101,7 @@ final class NBATeamLineups extends NBATeamDashFilters implements FetchableEndpoi
             }
         }
 
-        return $this->details;
+        return $this->data;
     }
 
     public function playerOnly(int $player_id): array

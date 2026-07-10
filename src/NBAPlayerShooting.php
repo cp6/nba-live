@@ -28,6 +28,15 @@ final class NBAPlayerShooting extends NBAPlayerDashFilters implements FetchableE
 
     public function fetch(): array
     {
+        $this->shot_5ft = [];
+        $this->shot_8ft = [];
+        $this->shot_area = [];
+        $this->assisted = [];
+        $this->shot_types_summary = [];
+        $this->shot_types = [];
+        $this->assisted_by = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playerdashboardbyshootingsplits?" . $this->build());
 
         if (isset($this->data['resultSets']['1']['rowSet'])) {

@@ -16,6 +16,9 @@ final class NBAFranchisePlayers extends NBABase implements FetchableEndpoint
 
     public function fetch(int $team_id = 202331, string $per_mode = NBABase::MODE_TOTAL, string $season_type = NBABase::TYPE_REGULAR): array
     {
+        $this->players = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/franchiseplayers?LeagueID=00&PerMode={$per_mode}&SeasonType={$season_type}&TeamID={$team_id}");
 

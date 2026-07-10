@@ -36,7 +36,7 @@ final class NBABoxScoreMisc extends NBABoxScoreFilters implements FetchableEndpo
      */
     public function fetch(): array
     {
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoremiscv3?" . $this->build() . "&GameID={$this->game_id}");
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/boxscoremiscv3?{$this->filters}&GameID={$this->game_id}");
 
         if (isset($this->data['boxScoreMisc'])) {
             $this->home_players = $this->data['boxScoreMisc']['homeTeam']['players'] ?? [];

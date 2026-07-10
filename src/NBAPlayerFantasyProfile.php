@@ -31,7 +31,7 @@ final class NBAPlayerFantasyProfile extends NBABase implements FetchableEndpoint
     public array $by_opponent = [];
 
     /** @var int Player identifier */
-    public int $player_id;
+    public int $player_id = 0;
 
     /** @var string Season identifier */
     public string $season = NBABase::CURRENT_SEASON;
@@ -44,11 +44,25 @@ final class NBAPlayerFantasyProfile extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
-        if ($this->player_id <= 0) {
-            throw new \InvalidArgumentException('player_id must be set before calling fetch()');
-        }
+        $this->validatePositiveInt($this->player_id, 'player_id');
 
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00&MeasureType=Base&PaceAdjust=N&PerMode=PerGame&PlusMinus=N&PlayerID={$this->player_id}&Rank=N&Season={$this->season}&SeasonType=Regular+Season");
+        $this->overall = [];
+        $this->last_n_games = [];
+        $this->by_opponent = [];
+
+        $params = http_build_query([
+            'LeagueID' => '00',
+            'MeasureType' => 'Base',
+            'PaceAdjust' => 'N',
+            'PerMode' => 'PerGame',
+            'PlusMinus' => 'N',
+            'PlayerID' => $this->player_id,
+            'Rank' => 'N',
+            'Season' => $this->season,
+            'SeasonType' => NBABase::TYPE_REGULAR,
+        ], '', '&');
+
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/playerfantasyprofile?{$params}");
 
         // Overall stats
         if (isset($this->data['resultSets'][0]['rowSet'][0])) {

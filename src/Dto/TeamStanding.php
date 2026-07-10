@@ -165,7 +165,7 @@ final readonly class TeamStanding
             'clinched_playin' => $this->clinchedPlayin,
             'eliminated_conf' => $this->eliminatedConf,
             'ahead_at_half' => $this->aheadAtHalf,
-            'behind_at_Half' => $this->behindAtHalf,
+            'behind_at_half' => $this->behindAtHalf,
             'tied_at_half' => $this->tiedAtHalf,
             'ahead_at_third' => $this->aheadAtThird,
             'behind_at_third' => $this->behindAtThird,

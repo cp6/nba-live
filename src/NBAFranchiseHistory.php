@@ -28,6 +28,10 @@ final class NBAFranchiseHistory extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
+        $this->active = [];
+        $this->defunct = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/franchisehistory?LeagueID=00");
 
