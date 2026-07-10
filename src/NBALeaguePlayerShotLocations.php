@@ -21,6 +21,11 @@ final class NBALeaguePlayerShotLocations extends NBALeagueDashFilters implements
 
     public function fetch(): array
     {
+        $this->zone = [];
+        $this->range_5ft = [];
+        $this->range_8ft = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leaguedashplayershotlocations?" . $this->build());
 
         if (isset($this->data['resultSets']['rowSet'][0])) {

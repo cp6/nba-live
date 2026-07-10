@@ -25,13 +25,21 @@ final class NBASchedule extends NBABase implements FetchableEndpoint
      */
     public function fetch(?string $date = null): array
     {
+        $this->schedule = [];
+
         $date ??= (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d');
 
-        $games = $this->ApiCall("https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate={$date}&LeagueID=00");
+        $params = http_build_query([
+            'DayOffset' => 0,
+            'GameDate' => $date,
+            'LeagueID' => '00',
+        ], '', '&');
+
+        $games = $this->ApiCall("https://stats.nba.com/stats/scoreboardv2?{$params}");
 
         $this->process($games);
 
-        return [];
+        return $games;
     }
 
     public function __construct(?string $date = null, ?NbaHttpClientInterface $httpClient = null)
@@ -195,7 +203,13 @@ final class NBASchedule extends NBABase implements FetchableEndpoint
      */
     public function forTeam(int $team_tid = 1610612746): array
     {
-        return $this->schedule;
+        return array_values(array_filter(
+            $this->schedule,
+            static fn (array $game): bool => ($game['home_tid'] ?? null) === $team_tid
+                || ($game['away_tid'] ?? null) === $team_tid
+                || ($game['homeTeam']['teamId'] ?? null) === $team_tid
+                || ($game['awayTeam']['teamId'] ?? null) === $team_tid
+        ));
     }
 
     /**

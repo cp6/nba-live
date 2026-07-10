@@ -41,6 +41,12 @@ final class NBAShotChart extends NBABase implements FetchableEndpoint
         string $season = self::CURRENT_SEASON,
         string $season_type = self::TYPE_REGULAR): array
     {
+        $this->shots = [];
+        $this->made_shots = [];
+        $this->missed_shots = [];
+        $this->league_averages = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/shotchartdetail?AheadBehind=&ClutchTime=&ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&EndPeriod=10&EndRange=28800&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID={$player_id}&PlayerPosition=&PointDiff=&Position=&RangeType=0&RookieYear=&Season={$season}&SeasonSegment=&SeasonType={$season_type}&StartPeriod=1&StartRange=0&TeamID={$team_id}&VsConference=&VsDivision=");
 

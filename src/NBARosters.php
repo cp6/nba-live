@@ -30,6 +30,10 @@ final class NBARosters extends NBABase implements FetchableEndpoint
      */
     public function fetch(int $team_id = 0, string $season = self::CURRENT_SEASON): array
     {
+        $this->players = [];
+        $this->coaches = [];
+
+
 
         if ($team_id <= 0) {
             throw new \InvalidArgumentException('team_id is required');

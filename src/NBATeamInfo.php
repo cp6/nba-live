@@ -32,6 +32,9 @@ final class NBATeamInfo extends NBABase implements FetchableEndpoint
      */
     public function fetch(int $team_id = 0): array
     {
+        $this->seasons = [];
+
+
 
         if ($this->team_id <= 0) {
             $this->team_id = $team_id;

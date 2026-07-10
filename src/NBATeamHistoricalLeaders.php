@@ -29,6 +29,9 @@ final class NBATeamHistoricalLeaders extends NBABase implements FetchableEndpoin
      */
     public function fetch(int $team_id = 0): array
     {
+        $this->career_leaders = [];
+
+
 
         if ($team_id <= 0) {
             return [];

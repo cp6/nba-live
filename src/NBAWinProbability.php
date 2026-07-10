@@ -29,6 +29,9 @@ final class NBAWinProbability extends NBABase implements FetchableEndpoint
      */
     public function fetch(string $game_id = ''): array
     {
+        $this->probabilities = [];
+
+
 
         if (empty($game_id)) {
             return [];

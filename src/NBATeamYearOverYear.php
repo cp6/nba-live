@@ -16,6 +16,9 @@ final class NBATeamYearOverYear extends NBABase implements FetchableEndpoint
 
     public function fetch(int $team_id = 0, string $per_mode = 'Totals', string $season_type = 'Regular+Season'): array
     {
+        $this->details = [];
+
+
 
         if ($team_id <= 0) {
             throw new \InvalidArgumentException('team_id is required');

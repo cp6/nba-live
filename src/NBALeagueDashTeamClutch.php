@@ -41,6 +41,9 @@ final class NBALeagueDashTeamClutch extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
+        $this->teams = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leaguedashteamclutch?ClutchTime=Last+5+Minutes&AheadBehind=Ahead+or+Behind&Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode={$this->per_mode}&Period=0&PlusMinus=N&PointDiff=5&Rank=N&Season={$this->season}&SeasonSegment=&SeasonType={$this->season_type}&ShotClockRange=&TeamID=0&VsConference=&VsDivision=");
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {

@@ -41,6 +41,9 @@ final class NBALeagueHustleStats extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
+        $this->players = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leaguehustlestatsplayer?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode={$this->per_mode}&PlayerExperience=&PlayerPosition=&Season={$this->season}&SeasonSegment=&SeasonType={$this->season_type}&TeamID=0&VsConference=&VsDivision=&Weight=");
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {

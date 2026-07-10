@@ -32,6 +32,9 @@ final class NBAAllTimeLeaders extends NBABase implements FetchableEndpoint
         int $top_x = 10,
         string $season_type = self::TYPE_REGULAR): array
     {
+        $this->leaders = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode={$per_mode}&SeasonType={$season_type}&TopX={$top_x}");
 

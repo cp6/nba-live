@@ -26,6 +26,9 @@ final class NBAFranchiseLeaders extends NBABase implements FetchableEndpoint
      */
     public function fetch(int $team_id = 0): array
     {
+        $this->leaders = [];
+
+
 
         if ($team_id <= 0) {
             return [];

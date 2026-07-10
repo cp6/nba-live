@@ -56,6 +56,9 @@ final class NBAPlayer extends NBABase implements FetchableEndpoint
      */
     public function fetch(int $player_id = 0): array
     {
+        $this->seasons = [];
+
+
 
         if ($this->player_id <= 0) {
             $this->player_id = $player_id;

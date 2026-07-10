@@ -14,6 +14,9 @@ final class NBALeagueGameLog extends NBABase implements FetchableEndpoint
 
     public function fetch(string $season = NBABase::CURRENT_SEASON, string $season_type = NBABase::TYPE_REGULAR, string $sorter = 'DATE', string $date_from = '', string $date_to = '', $direction = 'ASC'): array
     {
+        $this->games = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom={$date_from}&DateTo={$date_to}&Direction={$direction}&LeagueID=00&PlayerOrTeam=T&Season={$season}&SeasonType={$season_type}&Sorter={$sorter}");
 

@@ -37,6 +37,20 @@ final class NBAPlayerCareer extends NBABase implements FetchableEndpoint
 
     public function fetch(int $player_id = 202331, string $per_mode = NBABase::MODE_TOTAL): array
     {
+        $this->season_totals_regular = [];
+        $this->career_totals_regular = [];
+        $this->season_totals_post = [];
+        $this->career_totals_post = [];
+        $this->season_totals_all_star = [];
+        $this->career_totals_all_star = [];
+        $this->season_totals_college = [];
+        $this->career_totals_college = [];
+        $this->season_totals_showcase = [];
+        $this->career_totals_showcase = [];
+        $this->season_rankings_regular = [];
+        $this->season_rankings_post = [];
+
+
 
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playercareerstats?LeagueID=&PerMode={$per_mode}&PlayerID={$player_id}");
 

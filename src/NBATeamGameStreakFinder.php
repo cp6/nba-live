@@ -25,7 +25,7 @@ final class NBATeamGameStreakFinder extends NBABase implements FetchableEndpoint
     public array $streaks = [];
 
     /** @var int Team identifier */
-    public int $team_id;
+    public int $team_id = 0;
 
     /** @var string Season identifier */
     public string $season = NBABase::CURRENT_SEASON;
@@ -47,9 +47,9 @@ final class NBATeamGameStreakFinder extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
-        if ($this->team_id <= 0) {
-            throw new \InvalidArgumentException('team_id must be set before calling fetch()');
-        }
+        $this->validatePositiveInt($this->team_id, 'team_id');
+
+        $this->streaks = [];
 
         $wStreak = $this->streak_type === 'W' ? $this->min_games : 0;
         $lStreak = $this->streak_type === 'L' ? $this->min_games : 0;

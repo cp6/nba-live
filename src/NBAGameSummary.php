@@ -59,6 +59,10 @@ final class NBAGameSummary extends NBABase implements FetchableEndpoint
      */
     public function fetch(string $game_id = ''): array
     {
+        $this->refs = [];
+        $this->inactive = [];
+
+
 
         if ($this->game_id === '') {
             $this->game_id = $game_id;

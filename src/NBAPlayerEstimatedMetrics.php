@@ -38,6 +38,9 @@ final class NBAPlayerEstimatedMetrics extends NBABase implements FetchableEndpoi
      */
     public function fetch(): array
     {
+        $this->players = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/playerestimatedmetrics?LeagueID=00&Season={$this->season}&SeasonType={$this->season_type}");
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {

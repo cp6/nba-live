@@ -22,13 +22,13 @@ class NBAPlayerDashFilters extends NBABase
     public string $pace_adjust = 'N';
     public string $per_mode = 'Totals';
     public int $period = 0;
-    public int $player_id;
+    public int $player_id = 0;
     public string $plus_minus = 'N';
     public string $rank = 'N';
 
     public string $season = NBABase::CURRENT_SEASON;
     public string $season_segment = '';
-    public string $season_type = 'Regular Season';
+    public string $season_type = NBABase::TYPE_REGULAR;
     public string $shot_clock_range = '';
     public string $vs_conference = '';
     public string $vs_division = '';
@@ -70,5 +70,4 @@ class NBAPlayerDashFilters extends NBABase
 
         return http_build_query($params, '', '&');
     }
-
 }

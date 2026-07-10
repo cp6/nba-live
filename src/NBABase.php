@@ -15,11 +15,11 @@ use JsonException;
  */
 class NBABase
 {
-    /** @var string Current NBA season identifier */
-    public const CURRENT_SEASON = '2025-26';
+    /** @var string Current NBA season identifier (updated for the 2025-26 season) */
+    public const CURRENT_SEASON = Season::CURRENT;
 
     /** @var string Previous NBA season identifier */
-    public const PREVIOUS_SEASON = '2024-25';
+    public const PREVIOUS_SEASON = Season::PREVIOUS;
 
     /** @var string Per game statistics mode */
     public const MODE_PER_GAME = 'PerGame';

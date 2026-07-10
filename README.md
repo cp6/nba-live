@@ -303,26 +303,6 @@ foreach ($logs->games as $game) {
 }
 ```
 
-### Custom HTTP client
-
-Inject a custom client for testing or to swap the transport layer:
-
-```php
-use Corbpie\NBALive\Http\CachingNbaHttpClient;
-use Corbpie\NBALive\Http\CurlNbaHttpClient;
-use Corbpie\NBALive\NBABoxScore;
-use Psr\SimpleCache\CacheInterface;
-
-$boxScore = new NBABoxScore();
-$boxScore->fetch('0022500123');
-
-$cachedClient = new CachingNbaHttpClient(
-    inner: new CurlNbaHttpClient(),
-    cache: $cacheImplementation,
-    defaultTtl: 300,
-);
-```
-
 ### Explicit fetch()
 
 All endpoints now expose a `fetch()` method. Constructors still auto-fetch for backward compatibility when parameters are provided, but you can also configure properties and call `fetch()` manually:
@@ -381,7 +361,7 @@ NBABase::secondsToFormattedGameTime(800);
 ### Testing & development
 
 ```bash
-composer test     # Run PHPUnit (31 tests)
+composer test     # Run PHPUnit
 composer analyse  # Run PHPStan static analysis (level 5)
 ```
 
@@ -652,7 +632,7 @@ $bs->fetch(true);
 
 //Preset filter (Qtr 4)
 $bs->game_id = '0022300372';
-$bs->filter = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
+$bs->filters = $bs->buildQ4();//buildQ1(), buildQ2(), buildH1() etc.
 $bs->fetch();
 
 //Custom filter
@@ -662,7 +642,7 @@ $bs->start_period = 4;
 $bs->start_range = 0;
 $bs->end_range = 28800;
 $bs->end_period = 4;
-$bs->filter = $bs->build();
+$bs->filters = $bs->build();
 $bs->fetch();
 
 //Creates the arrays
@@ -946,13 +926,13 @@ $rotations = new NBALive\NBARotations("0022301203");
 $rotations->game_id = "0022301203";
 
 //Creates the array
-$pbp->details;
+$rotations->details;
 
 //Player only rotation
-$pbp->playerOnly(202331);
+$rotations->playerOnly(202331);
 
 //Team only rotation
-$pbp->teamOnly(1610612746);
+$rotations->teamOnly(1610612746);
 ```
 
 Outputs
@@ -1396,11 +1376,11 @@ $on_off->team_id = 1610612746;
 $on_off->season = '2023-24';
 
 //Must run fetch()
-$yoy->fetch();
+$on_off->fetch();
 
 //Creates the arrays
-$yoy->on;
-$yoy->off;
+$on_off->on;
+$on_off->off;
 
 //Get a specific player on and off
 $on_off->player(201587);
@@ -1612,27 +1592,27 @@ Details:
 $awards = new NBALive\NBAPlayerAwards(202331);
 
 //Creates the array
-$player->awards;
+$awards->awards;
 ```
 
 ### Player career
 
 ```php
-$awards = new NBALive\NBAPlayerCareer(202331, 'Totals');
+$career = new NBALive\NBAPlayerCareer(202331, 'Totals');
 
 //Creates the arrays
-$player->season_totals_regular;
-$player->career_totals_regular;
-$player->season_totals_post;
-$player->career_totals_post;
-$player->season_totals_all_star;
-$player->career_totals_all_star;
-$player->season_totals_college;
-$player->career_totals_college;
-$player->season_totals_showcase;
-$player->career_totals_showcase;
-$player->season_rankings_regular;
-$player->season_rankings_post;
+$career->season_totals_regular;
+$career->career_totals_regular;
+$career->season_totals_post;
+$career->career_totals_post;
+$career->season_totals_all_star;
+$career->career_totals_all_star;
+$career->season_totals_college;
+$career->career_totals_college;
+$career->season_totals_showcase;
+$career->career_totals_showcase;
+$career->season_rankings_regular;
+$career->season_rankings_post;
 ```
 
 ### Playoff brackets

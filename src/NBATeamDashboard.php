@@ -37,7 +37,7 @@ final class NBATeamDashboard extends NBABase implements FetchableEndpoint
     public array $by_season_segment = [];
 
     /** @var int Team identifier */
-    public int $team_id;
+    public int $team_id = 0;
 
     /** @var string Season identifier */
     public string $season = NBABase::CURRENT_SEASON;
@@ -53,11 +53,41 @@ final class NBATeamDashboard extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
-        if ($this->team_id <= 0) {
-            throw new \InvalidArgumentException('team_id must be set before calling fetch()');
-        }
+        $this->validatePositiveInt($this->team_id, 'team_id');
 
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode={$this->per_mode}&Period=0&PlusMinus=N&Rank=N&Season={$this->season}&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID={$this->team_id}&VsConference=&VsDivision=");
+        $this->overall = [];
+        $this->by_location = [];
+        $this->by_outcome = [];
+        $this->by_month = [];
+        $this->by_season_segment = [];
+
+        $params = http_build_query([
+            'DateFrom' => '',
+            'DateTo' => '',
+            'GameSegment' => '',
+            'LastNGames' => 0,
+            'LeagueID' => '00',
+            'Location' => '',
+            'MeasureType' => 'Base',
+            'Month' => 0,
+            'OpponentTeamID' => 0,
+            'Outcome' => '',
+            'PORound' => 0,
+            'PaceAdjust' => 'N',
+            'PerMode' => $this->per_mode,
+            'Period' => 0,
+            'PlusMinus' => 'N',
+            'Rank' => 'N',
+            'Season' => $this->season,
+            'SeasonSegment' => '',
+            'SeasonType' => NBABase::TYPE_REGULAR,
+            'ShotClockRange' => '',
+            'TeamID' => $this->team_id,
+            'VsConference' => '',
+            'VsDivision' => '',
+        ], '', '&');
+
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/teamdashboardbygeneralsplits?{$params}");
 
         // Overall stats
         if (isset($this->data['resultSets'][0]['rowSet'][0])) {

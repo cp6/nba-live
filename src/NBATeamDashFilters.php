@@ -26,7 +26,7 @@ class NBATeamDashFilters extends NBABase
     public string $rank = 'N';
     public string $season = NBABase::CURRENT_SEASON;
     public string $season_segment = '';
-    public string $season_type = 'Regular Season';//(Regular Season)|(Pre Season)|(Playoffs)|(All Star)
+    public string $season_type = NBABase::TYPE_REGULAR;//(Regular Season)|(Pre Season)|(Playoffs)|(All Star)
     public string $shot_clock_range = '';
     public string $vs_conference = '';
     public string $vs_division = '';
@@ -68,5 +68,4 @@ class NBATeamDashFilters extends NBABase
 
         return http_build_query($params, '', '&');
     }
-
 }

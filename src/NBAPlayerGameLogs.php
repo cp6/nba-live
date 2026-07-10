@@ -25,7 +25,7 @@ final class NBAPlayerGameLogs extends NBABase implements FetchableEndpoint
     public array $games = [];
 
     /** @var int Player identifier */
-    public int $player_id;
+    public int $player_id = 0;
 
     /** @var string Season identifier */
     public string $season = NBABase::CURRENT_SEASON;
@@ -41,11 +41,37 @@ final class NBAPlayerGameLogs extends NBABase implements FetchableEndpoint
      */
     public function fetch(): array
     {
-        if ($this->player_id <= 0) {
-            throw new \InvalidArgumentException('player_id must be set before calling fetch()');
-        }
+        $this->validatePositiveInt($this->player_id, 'player_id');
 
-        $this->data = $this->ApiCall("https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID={$this->player_id}&PlusMinus=N&Rank=N&Season={$this->season}&SeasonSegment=&SeasonType={$this->season_type}&ShotClockRange=&VsConference=&VsDivision=");
+        $this->games = [];
+
+        $params = http_build_query([
+            'DateFrom' => '',
+            'DateTo' => '',
+            'GameSegment' => '',
+            'LastNGames' => 0,
+            'LeagueID' => '00',
+            'Location' => '',
+            'MeasureType' => 'Base',
+            'Month' => 0,
+            'OpponentTeamID' => 0,
+            'Outcome' => '',
+            'PORound' => 0,
+            'PaceAdjust' => 'N',
+            'PerMode' => 'Totals',
+            'Period' => 0,
+            'PlayerID' => $this->player_id,
+            'PlusMinus' => 'N',
+            'Rank' => 'N',
+            'Season' => $this->season,
+            'SeasonSegment' => '',
+            'SeasonType' => $this->season_type,
+            'ShotClockRange' => '',
+            'VsConference' => '',
+            'VsDivision' => '',
+        ], '', '&');
+
+        $this->data = $this->ApiCall("https://stats.nba.com/stats/playergamelogs?{$params}");
 
         if (isset($this->data['resultSets'][0]['rowSet'])) {
             foreach ($this->data['resultSets'][0]['rowSet'] as $g) {

@@ -26,6 +26,9 @@ final class NBADraftCombine extends NBABase implements FetchableEndpoint
      */
     public function fetch(string $season = self::CURRENT_SEASON): array
     {
+        $this->players = [];
+
+
 
         // Extract year from season format (e.g., "2024-25" -> "2024")
         $year = explode('-', $season)[0];

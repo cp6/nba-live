@@ -23,6 +23,13 @@ final class NBAPlayoffBracket extends NBABase implements FetchableEndpoint
 
     public function fetch(string $season = '2023'): array
     {
+        $this->results = [];
+        $this->east = [];
+        $this->west = [];
+        $this->completed = [];
+        $this->in_progress = [];
+
+
 
         $this->data = $this->ApiCall("https://cdn.nba.com/static/json/staticData/brackets/{$season}/PlayoffBracket.json");
 

@@ -28,6 +28,9 @@ final class NBAPlayerNextGames extends NBABase implements FetchableEndpoint
      */
     public function fetch(int $player_id = 0, int $num_games = 5, string $season = self::CURRENT_SEASON): array
     {
+        $this->games = [];
+
+
 
         if ($player_id <= 0) {
             return [];

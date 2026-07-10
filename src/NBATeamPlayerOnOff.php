@@ -22,6 +22,10 @@ final class NBATeamPlayerOnOff extends NBATeamDashFilters implements FetchableEn
 
     public function fetch(): array
     {
+        $this->on = [];
+        $this->off = [];
+
+
         $this->data = $this->ApiCall("https://stats.nba.com/stats/teamplayeronoffdetails?" . $this->build());
 
         if (isset($this->data['resultSets'][1]['rowSet'])){

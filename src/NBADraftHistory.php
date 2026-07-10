@@ -28,6 +28,9 @@ final class NBADraftHistory extends NBABase implements FetchableEndpoint
      */
     public function fetch(?string $season = null, ?int $team_id = null, ?string $college = null): array
     {
+        $this->picks = [];
+
+
 
         $seasonFilter = $season ?? '';
         $teamFilter = $team_id ?? '';
