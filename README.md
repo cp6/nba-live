@@ -22,8 +22,10 @@ A PHP 8.3+ library for accessing NBA API endpoints — live games, box scores, p
 - [Response caching](#response-caching)
 - [Typed DTOs](#typed-dtos)
 - [Helpers](#helpers)
+- [Static teams catalog](#static-teams-catalog)
 - [Testing & development](#testing--development)
 - [Today's games](#todays-games)
+- [Scoreboard](#scoreboard)
 - [Game time seconds formatted](#game-time-seconds-formatted)
 - [Box score](#boxscore)
 - [Play by play](#play-by-play)
@@ -81,6 +83,10 @@ A PHP 8.3+ library for accessing NBA API endpoints — live games, box scores, p
 - [All-time leaders](#all-time-leaders)
 - [Team historical leaders](#team-historical-leaders)
 - [Team dashboard](#team-dashboard)
+- [Team player dashboard](#team-player-dashboard)
+- [League dash player stats](#league-dash-player-stats)
+- [League dash team stats](#league-dash-team-stats)
+- [Common player info](#common-player-info)
 - [Win probability](#win-probability)
 - [Player clutch stats](#player-clutch-stats)
 - [Team clutch stats](#team-clutch-stats)
@@ -217,6 +223,7 @@ Available HTTP classes:
 |-------|---------|
 | `CurlNbaHttpClient` | Default cURL transport (10s connect / 30s total timeout) |
 | `CachingNbaHttpClient` | PSR-16 caching decorator (see below) |
+| `RetryNbaHttpClient` | Retries transient transport/HTTP failures with backoff |
 | `NbaHttpResponse` | Immutable response DTO returned by the client |
 
 For unit tests, mock the client:
@@ -241,6 +248,22 @@ final class MockClient implements NbaHttpClientInterface
 }
 
 $today = new NBAToday(new MockClient());
+```
+
+Retry flaky network/API responses:
+
+```php
+use Corbpie\NBALive\Http\CurlNbaHttpClient;
+use Corbpie\NBALive\Http\RetryNbaHttpClient;
+use Corbpie\NBALive\NBAStandings;
+
+$client = new RetryNbaHttpClient(
+    inner: new CurlNbaHttpClient(),
+    maxAttempts: 3,
+    baseDelayMs: 250,
+);
+
+$standings = new NBAStandings('2025-26', $client);
 ```
 
 ### Response caching
@@ -358,6 +381,21 @@ NBABase::OT_DURATION_SECONDS;      // 300 (5 minutes)
 NBABase::secondsToFormattedGameTime(800);
 ```
 
+### Static teams catalog
+
+Lookup the 30 NBA teams without an API call:
+
+```php
+use Corbpie\NBALive\NBATeams;
+
+NBATeams::all();
+NBATeams::findById(1610612754);      // Pacers
+NBATeams::findByAbbreviation('LAL'); // Lakers
+NBATeams::find('celtics');           // name/city/abbr/full_name
+NBATeams::byConference('West');
+NBATeams::byDivision('Pacific');
+```
+
 ### Testing & development
 
 ```bash
@@ -388,6 +426,26 @@ $today->summary; // date, all_games, live_games, completed_games, upcoming_games
 $formatted = $today->gameFormatter($today->live_games);
 ```
 
+### Scoreboard
+<span id="scoreboard"></span>
+
+Daily scoreboard with games, quarter line scores, and conference standings:
+
+```php
+use Corbpie\NBALive\NBAScoreboard;
+
+$board = new NBAScoreboard('2026-01-15');
+// Or configure then fetch:
+// $board = new NBAScoreboard();
+// $board->game_date = '2026-01-15';
+// $board->fetch();
+
+$board->games;
+$board->line_scores;
+$board->lineScoresForGame('0022500999');
+$board->east_standings;
+$board->west_standings;
+```
 
 ### Game time seconds formatted (Helper function)
 <span id="game-time-seconds-formatted"></span>
@@ -1929,6 +1987,65 @@ $dashboard->by_location; // Home vs Away
 $dashboard->by_outcome;  // Wins vs Losses
 $dashboard->by_month;
 $dashboard->by_season_segment; // Pre/Post All-Star
+```
+
+### Team player dashboard
+<span id="team-player-dashboard"></span>
+
+```php
+use Corbpie\NBALive\NBATeamPlayerDashboard;
+
+$dashboard = new NBATeamPlayerDashboard();
+$dashboard->team_id = 1610612754;
+$dashboard->season = '2025-26';
+$dashboard->fetch();
+
+$dashboard->team_overall;
+$dashboard->players;
+$dashboard->leaders('pts', 5);
+```
+
+### League dash player stats
+<span id="league-dash-player-stats"></span>
+
+```php
+use Corbpie\NBALive\NBALeagueDashPlayerStats;
+
+$stats = new NBALeagueDashPlayerStats();
+$stats->season = '2025-26';
+$stats->per_mode = 'PerGame';
+$stats->fetch();
+
+$stats->players;
+$stats->leaders('pts', 10);
+```
+
+### League dash team stats
+<span id="league-dash-team-stats"></span>
+
+```php
+use Corbpie\NBALive\NBALeagueDashTeamStats;
+
+$stats = new NBALeagueDashTeamStats();
+$stats->season = '2025-26';
+$stats->conference = 'East';
+$stats->fetch();
+
+$stats->teams;
+$stats->leaders('plus_minus', 5);
+```
+
+### Common player info
+<span id="common-player-info"></span>
+
+```php
+use Corbpie\NBALive\NBACommonPlayerInfo;
+
+$info = new NBACommonPlayerInfo(203999);
+
+$info->info;              // bio, draft, team
+$info->headline_stats;    // pts/ast/reb/pie snapshot
+$info->available_seasons;
 ```
 
 ### Win probability
