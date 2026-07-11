@@ -75,6 +75,25 @@ final class ResultSetMapper
     }
 
     /**
+     * @param array<string, mixed> $response
+     * @return list<array<string, mixed>>
+     */
+    public static function mapResultSetByName(array $response, string $name): array
+    {
+        foreach ($response['resultSets'] ?? [] as $resultSet) {
+            if (!is_array($resultSet)) {
+                continue;
+            }
+
+            if (($resultSet['name'] ?? null) === $name) {
+                return self::mapRows($resultSet);
+            }
+        }
+
+        return [];
+    }
+
+    /**
      * @param array<string, mixed> $row
      */
     public static function pick(array $row, string $key, mixed $default = null): mixed

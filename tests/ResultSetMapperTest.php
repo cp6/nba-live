@@ -43,6 +43,29 @@ final class ResultSetMapperTest extends TestCase
         $this->assertSame(1610612754, $rows[0]['TEAM_ID']);
     }
 
+    public function testMapResultSetByName(): void
+    {
+        $response = [
+            'resultSets' => [
+                [
+                    'name' => 'Other',
+                    'headers' => ['A'],
+                    'rowSet' => [[1]],
+                ],
+                [
+                    'name' => 'CommonPlayerInfo',
+                    'headers' => ['PERSON_ID'],
+                    'rowSet' => [[203999]],
+                ],
+            ],
+        ];
+
+        $rows = ResultSetMapper::mapResultSetByName($response, 'CommonPlayerInfo');
+
+        $this->assertSame(203999, $rows[0]['PERSON_ID']);
+        $this->assertSame([], ResultSetMapper::mapResultSetByName($response, 'Missing'));
+    }
+
     public function testSeasonCurrentInJuly(): void
     {
         $date = new \DateTimeImmutable('2026-07-02', new \DateTimeZone('UTC'));
